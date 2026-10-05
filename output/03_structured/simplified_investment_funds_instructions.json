@@ -1,0 +1,2352 @@
+{
+ "doc_id": "simplified_investment_funds_instructions",
+ "title": "تعليمات صناديق الاستثمار المبسطة",
+ "title_en": "Instructions of Simplified Investment Funds",
+ "doc_type": "تعليمات",
+ "issuer": "مجلس هيئة السوق المالية",
+ "issued_by_decision": "1-26-2026",
+ "issued_hijri": "1447/09/13",
+ "issued_gregorian": "2026-03-02",
+ "last_amended_decision": null,
+ "last_amended_hijri": null,
+ "last_amended_gregorian": null,
+ "legal_basis": "نظام السوق المالية الصادر بالمرسوم الملكي رقم م/30 وتاريخ 1424/06/02هـ",
+ "source_file": "Instructions_of_Simplified_Investment_Funds_AR.pdf",
+ "body_font_size": 14.0,
+ "sections": [
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 1,
+    "label": "الفصل الأول",
+    "title": "أحكام عامة"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) تهدف هذه التعليمات إلى تنظيم تسجيل صناديق الاستثمار المبسطة وطرح وحداتها وإدارتها وعملياتها والإشراف على جميع النشاطات المرتبطة بها في المملكة.",
+     "pages": [
+      4
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) تخضع صناديق الاستثمار المبسطة لأحكام هذه التعليمات، ولا تخضع للائحة صناديق الاستثمار، ما لم يرد نص خاص في هذه التعليمات بخلاف ذلك.",
+     "pages": [
+      4
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) لا تخل هذه التعليمات بأحكام النظام أو لوائحه التنفيذية بما في ذلك الأحكام الواردة في لائحة سلوكيات السوق، ولائحة مؤسسات السوق المالية، ولائحة أعمال الأوراق المالية، والقواعد المنظمة للمنشآت ذات الأغراض الخاصة.",
+     "pages": [
+      4
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    4
+   ],
+   "heading_footnotes": [],
+   "number": 1,
+   "label": "المادة الأولى",
+   "title": "أحكام تمهيدية",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 1,
+    "label": "الفصل الأول",
+    "title": "أحكام عامة"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يقصد بكلمة \"النظام\" أينما وردت في هذه التعليمات نظام السوق المالية الصادر بالمرسوم الملكي رقم م/30 وتاريخ 1424/6/2هـ.",
+     "pages": [
+      4
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يقصد بالكلمات والعبارات الواردة في هذه التعليمات المعاني الموضحة لها في النظام وفي قائمة المصطلحات المستخدمة في لوائح هيئة السوق المالية وقواعدها، ويقصد بكلمة \"الصندوق\" أينما وردت في هذه التعليمات صندوق الاستثمار المبسط، ما لم يقض سياق النص بغير ذلك.",
+     "pages": [
+      4
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    4
+   ],
+   "heading_footnotes": [],
+   "number": 2,
+   "label": "المادة الثانية",
+   "title": "تعريفات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 1,
+    "label": "الفصل الأول",
+    "title": "أحكام عامة"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "يجب على أي شخص يرغب في طرح وحدات صندوق استثمار مبسط ومدير الصندوق ومشغل الصندوق وأمين الحفظ والموزع ومقدم المشورة في المملكة الالتزام بأحكام هذه التعليمات والأحكام الواردة في القواعد المنظمة للمنشآت ذات الأغراض الخاصة (حيثما ينطبق).",
+     "pages": [
+      4
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    4
+   ],
+   "heading_footnotes": [],
+   "number": 3,
+   "label": "المادة الثالثة",
+   "title": "الالتزام بأحكام التعليمات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 1,
+    "label": "الفصل الأول",
+    "title": "أحكام عامة"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "للهيئة إعفاء أي شخص خاضع لهذه التعليمات من تطبيق أي من أحكامها كليا أو جزئيا بناء على طلب تتلقاه منه أو بمبادرة منها.",
+     "pages": [
+      4
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    4
+   ],
+   "heading_footnotes": [],
+   "number": 4,
+   "label": "المادة الرابعة",
+   "title": "الإعفاءات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 1,
+    "label": "الفصل الأول",
+    "title": "أحكام عامة"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "للهيئة فرض مقابل مالي على مدير الصندوق والموزع وفقا لما تحدده.",
+     "pages": [
+      5
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    5
+   ],
+   "heading_footnotes": [],
+   "number": 5,
+   "label": "المادة الخامسة",
+   "title": "المقابل المالي",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 1,
+    "label": "الفصل الأول",
+    "title": "أحكام عامة"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "يحق لأي شخص خاضع لأحكام هذه التعليمات تقديم تظلم إلى اللجنة في شأن أي قرار أو إجراء تتخذه الهيئة وفقا لأحكام هذه التعليمات.",
+     "pages": [
+      5
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    5
+   ],
+   "heading_footnotes": [],
+   "number": 6,
+   "label": "المادة السادسة",
+   "title": "حق التظلم",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "يجب أن يكون مدير الصندوق مؤسسة سوق مالية مرخصا لها في ممارسة نشاط إدارة الاستثمارات وتشغيل الصناديق أو نشاط إدارة الاستثمارات.",
+     "pages": [
+      5
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    5
+   ],
+   "heading_footnotes": [],
+   "number": 7,
+   "label": "المادة السابعة",
+   "title": "متطلبات الأهلية",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجب على مدير الصندوق أن يعمل لمصلحة مالكي الوحدات بموجب أحكام هذه التعليمات ولائحة مؤسسات السوق المالية وشروط وأحكام الصندوق، ويعد مسؤولا تجاههم عن خسائر الصندوق بسبب احتياله أو تعمده الإهمال أو سوء التصرف أو التقصير.",
+     "pages": [
+      5
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يجب على مدير الصندوق الالتزام بالأنظمة واللوائح ذات الصلة بمهامه ومسؤولياته، والالتزام بجميع المبادئ والواجبات التي نصت عليها لائحة مؤسسات السوق المالية ويعد مسؤولا عن الالتزام بأحكام هذه التعليمات، سواء أأدى مسؤولياته وواجباته بشكل مباشر أم كلف بها جهة خارجية.",
+     "pages": [
+      5
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) يكون مدير الصندوق مسؤولا عن الآتي:",
+     "pages": [
+      5
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1. إدارة الصندوق، وطرح وحداته.",
+     "pages": [
+      5
+     ],
+     "level": 2,
+     "path": "(ج)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2. التأكد من دقة شروط وأحكام الصندوق وجميع إفصاحاته وأنها كاملة وواضحة وصحيحة وغير مضللة.",
+     "pages": [
+      5
+     ],
+     "level": 2,
+     "path": "(ج)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "3",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "3. تقييم أصول الصندوق والتسعير والتعامل في وحدات الصندوق بموجب سياسة واضحة.",
+     "pages": [
+      5
+     ],
+     "level": 2,
+     "path": "(ج)(3)",
+     "footnotes": []
+    },
+    {
+     "marker": "4",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "4. وضع السياسات والإجراءات لرصد المخاطر التي تؤثر في استثمارات الصندوق، وضمان سرعة التعامل معها، على أن تتضمن تلك السياسات والإجراءات القيام بعملية تقييم المخاطر بشكل سنوي على الأقل.",
+     "pages": [
+      5
+     ],
+     "level": 2,
+     "path": "(ج)(4)",
+     "footnotes": []
+    },
+    {
+     "marker": "5",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "5. تطبيق برنامج مراقبة المطابقة والالتزام للصندوق، وأن يزود الهيئة بنتائج التطبيق عند طلبها.",
+     "pages": [
+      5
+     ],
+     "level": 2,
+     "path": "(ج)(5)",
+     "footnotes": []
+    },
+    {
+     "marker": "6",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "6. التعاون مع جميع الأشخاص المعنيين بأداء مهام الصندوق بما في ذلك أمين الحفظ (حيثما ينطبق) ومراجع الحسابات، وتزويدهم بجميع ما يلزم لأداء واجباتهم ومهامهم.",
+     "pages": [
+      6
+     ],
+     "level": 2,
+     "path": "(ج)(6)",
+     "footnotes": []
+    },
+    {
+     "marker": "7",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "7. توثيق جميع التعديلات التي تتم على شروط وأحكام الصندوق.",
+     "pages": [
+      6
+     ],
+     "level": 2,
+     "path": "(ج)(7)",
+     "footnotes": []
+    },
+    {
+     "marker": "8",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "8. الالتزام بما ورد في الملحق (3) من هذه التعليمات عند تقديم الإشعارات إلى الهيئة.",
+     "pages": [
+      6
+     ],
+     "level": 2,
+     "path": "(ج)(8)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    5,
+    6
+   ],
+   "heading_footnotes": [],
+   "number": 8,
+   "label": "المادة الثامنة",
+   "title": "إدارة الصندوق وواجبات مدير الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجب على مدير الصندوق أن يحتفظ بدفاتر وسجلات الصندوق، وذلك لمدة عشر سنوات ما لم تحدد الهيئة خلاف ذلك، وفي حال وجود دعوى قضائية أو مطالبة (بما في ذلك أي دعوى قائمة أو مهدد بإقامتها) أو أي إجراءات تحقيق قائمة تتعلق بتلك الدفاتر والسجلات، يجب على مدير الصندوق أن يحتفظ بتلك الدفاتر والسجلات مدة أطول وذلك إلى حين انتهاء تلك الدعوى القضائية أو المطالبة أو إجراءات التحقيق القائمة.",
+     "pages": [
+      6
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يجب على مدير الصندوق أن يحتفظ في جميع الأوقات بسجل لجميع الوحدات الصادرة والملغاة، وبسجل محدث يوضح رصيد الوحدات القائمة للصندوق.",
+     "pages": [
+      6
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    6
+   ],
+   "heading_footnotes": [],
+   "number": 9,
+   "label": "المادة التاسعة",
+   "title": "الاحتفاظ بالدفاتر والسجلات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجب إعداد القوائم المالية السنوية للصندوق وفقا لمعايير المحاسبة المعتمدة من الهيئة السعودية للمراجعين والمحاسبين، ويجب مراجعتها بشكل سنوي وفقا لمعايير المراجعة المعتمدة من الهيئة السعودية للمراجعين والمحاسبين، كذلك يجب على مراجع الحسابات - من خلال مراجعته للقوائم المالية السنوية للصندوق، وبناء على ما يقدم إليه من معلومات - أن يضمن في تقريره ما قد يتبين له من مخالفات لأحكام تعليمات صناديق الاستثمار المبسطة أو شروط وأحكام الصندوق.",
+     "pages": [
+      6
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يجب على مدير الصندوق تعيين مراجع حسابات فور تأسيس الصندوق لمراجعة القوائم المالية للصندوق.",
+     "pages": [
+      6
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) يجب أن يكون مراجع الحسابات للصندوق مسجلا لدى الهيئة وفقا لقواعد تسجيل مراجعي حسابات المنشآت الخاضعة لإشراف الهيئة، ومستقلا وفقا لمعيار الاستقلالية المحدد في نظام مهنة المحاسبة والمراجعة ولائحته التنفيذية.",
+     "pages": [
+      6
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    },
+    {
+     "marker": "د",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "د) يجب على مدير الصندوق تزويد مالكي الوحدات بالقوائم المالية السنوية عند الطلب دون أي مقابل.",
+     "pages": [
+      6
+     ],
+     "level": 1,
+     "path": "(د)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    6
+   ],
+   "heading_footnotes": [],
+   "number": 10,
+   "label": "المادة العاشرة",
+   "title": "القوائم المالية",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجب على مدير الصندوق إعداد سجل بمالكي الوحدات وحفظه في المملكة.",
+     "pages": [
+      6
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يجوز لمدير الصندوق تكليف طرف ثالث بإعداد وحفظ السجل المنصوص عليه في الفقرة (أ) من هذه المادة، شريطة استيفاء الآتي:",
+     "pages": [
+      6
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1. أن يكون التكليف بموجب عقد مكتوب.",
+     "pages": [
+      6
+     ],
+     "level": 2,
+     "path": "(ب)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2. أن يكون الطرف المكلف مؤسسة سوق مالية مرخصا لها في نشاط إدارة الاستثمارات وتشغيل الصناديق.",
+     "pages": [
+      7
+     ],
+     "level": 2,
+     "path": "(ب)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) يعد سجل مالكي الوحدات دليلا قاطعا على ملكية الوحدات المثبتة فيه.",
+     "pages": [
+      7
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    },
+    {
+     "marker": "د",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "د) يجب على مدير الصندوق أن يحفظ في سجل مالكي الوحدات المعلومات الآتية بحد أدنى:",
+     "pages": [
+      7
+     ],
+     "level": 1,
+     "path": "(د)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1. اسم مالك الوحدات، وعنوانه، وأرقام التواصل.",
+     "pages": [
+      7
+     ],
+     "level": 2,
+     "path": "(د)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2. رقم الهوية الوطنية لمالك الوحدات أو رقم إقامته أو رقم جواز سفره أو رقم سجله التجاري بحسب الحال، أو أي وسيلة تعريف أخرى تحددها الهيئة.",
+     "pages": [
+      7
+     ],
+     "level": 2,
+     "path": "(د)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "3",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "3. جنسية مالك الوحدات.",
+     "pages": [
+      7
+     ],
+     "level": 2,
+     "path": "(د)(3)",
+     "footnotes": []
+    },
+    {
+     "marker": "4",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "4. تاريخ تسجيل مالك الوحدات في السجل.",
+     "pages": [
+      7
+     ],
+     "level": 2,
+     "path": "(د)(4)",
+     "footnotes": []
+    },
+    {
+     "marker": "5",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "5. بيانات جميع الصفقات المتعلقة بالوحدات التي أجراها كل مالك وحدات.",
+     "pages": [
+      7
+     ],
+     "level": 2,
+     "path": "(د)(5)",
+     "footnotes": []
+    },
+    {
+     "marker": "6",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "6. الرصيد الحالي لعدد الوحدات (بما في ذلك أجزاء الوحدات) المملوكة لكل مالك وحدات.",
+     "pages": [
+      7
+     ],
+     "level": 2,
+     "path": "(د)(6)",
+     "footnotes": []
+    },
+    {
+     "marker": "7",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "7. أي قيد أو حق على الوحدات المملوكة لكل مالك وحدات.",
+     "pages": [
+      7
+     ],
+     "level": 2,
+     "path": "(د)(7)",
+     "footnotes": []
+    },
+    {
+     "marker": "ه",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ه) يجب إتاحة سجل مالكي الوحدات لمعاينة الهيئة عند طلبها، ويجب أن يقدم مدير الصندوق إلى أي مالك للوحدات مجانا عند الطلب ملخصا يظهر جميع المعلومات المرتبطة بمالك الوحدات المعني فقط.",
+     "pages": [
+      7
+     ],
+     "level": 1,
+     "path": "(ه)",
+     "footnotes": []
+    },
+    {
+     "marker": "و",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "و) يجب على مدير الصندوق تحديث سجل مالكي الوحدات فورا بحيث يعكس التغييرات في المعلومات المشار إليها في الفقرة (د) من هذه المادة.",
+     "pages": [
+      7
+     ],
+     "level": 1,
+     "path": "(و)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    6,
+    7
+   ],
+   "heading_footnotes": [],
+   "number": 11,
+   "label": "المادة الحادية عشرة",
+   "title": "سجل مالكي الوحدات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجب على مدير الصندوق التعامل مع حالات تعارض المصالح وفق أحكام لائحة مؤسسات السوق المالية، ودون الإخلال بأحكام الفقرة (ب) من هذه المادة.",
+     "pages": [
+      7
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) تطبق الأحكام المنظمة لحالات تعارض المصالح والإفصاح عنها الواردة في لائحة صناديق الاستثمار، وذلك فيما لم يرد به نص في شروط وأحكام الصندوق.",
+     "pages": [
+      7
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    7
+   ],
+   "heading_footnotes": [],
+   "number": 12,
+   "label": "المادة الثانية عشرة",
+   "title": "تعارض المصالح",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "يجب أن تكون قرارات الاستثمار التي يتخذها مدير الصندوق منسجمة مع الأهداف الاستثمارية للصندوق المحددة في شروط وأحكام الصندوق.",
+     "pages": [
+      7
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    7
+   ],
+   "heading_footnotes": [],
+   "number": 13,
+   "label": "المادة الثالثة عشرة",
+   "title": "سياسات الاستثمار وممارساته",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجوز لمدير الصندوق وتابعيه الاشتراك لحسابهم الخاص في وحدات الصندوق الذي يديره مدير الصندوق، في حال نصت شروط وأحكام الصندوق على جواز ذلك.",
+     "pages": [
+      8
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) لا يجوز لمدير الصندوق وتابعيه ممارسة حقوق التصويت المرتبطة بالوحدات التي يملكونها، ما لم تنص شروط وأحكام الصندوق على خلاف ذلك.",
+     "pages": [
+      8
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    8
+   ],
+   "heading_footnotes": [],
+   "number": 14,
+   "label": "المادة الرابعة عشرة",
+   "title": "اشتراكات الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجوز لمدير الصندوق تكليف طرف ثالث أو أكثر أو أي من تابعيه بالعمل مديرا للصندوق من الباطن لإدارة استثمارات الصندوق داخل المملكة، شريطة استيفاء الآتي:",
+     "pages": [
+      8
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1. أن يكلف بموجب عقد مكتوب.",
+     "pages": [
+      8
+     ],
+     "level": 2,
+     "path": "(أ)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2. أن يكون الطرف المكلف مؤسسة سوق مالية مرخصا لها في نشاط إدارة الاستثمارات وتشغيل الصناديق أو نشاط إدارة الاستثمارات.",
+     "pages": [
+      8
+     ],
+     "level": 2,
+     "path": "(أ)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يجوز لمدير الصندوق تكليف طرف ثالث أو أكثر أو أي من تابعيه بالعمل مشغلا للصندوق، أو تكليف طرف ثالث أو أكثر بالقيام بعمليات الصندوق بما في ذلك الخدمات الإدارية للصندوق، شريطة استيفاء الآتي:",
+     "pages": [
+      8
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1. أن يكلف بموجب عقد مكتوب.",
+     "pages": [
+      8
+     ],
+     "level": 2,
+     "path": "(ب)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2. أن يكون المشغل أو الطرف المكلف مؤسسة سوق مالية مرخصا لها في نشاط إدارة الاستثمارات وتشغيل الصناديق.",
+     "pages": [
+      8
+     ],
+     "level": 2,
+     "path": "(ب)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) يجوز تكليف مدير صندوق من الباطن خارج المملكة بإدارة استثمارات الصندوق الخارجية، أو تكليف طرف ثالث أو أكثر بالقيام بعمليات الصندوق خارج المملكة فيما يتعلق باستثمارات الصندوق الخارجية، على أن يكون مؤسسا ومرخصا له وخاضعا لإشراف جهة رقابية وفق معايير ومتطلبات تنظيمية مماثلة على الأقل لتلك التي تطبقها الهيئة، ويجب أن يكلف بموجب عقد مكتوب. وللهيئة وفقا لتقديرها المحض تقييم ما إذا كانت المعايير والمتطلبات التنظيمية المطبقة على مدير الصندوق من الباطن خارج المملكة أو الطرف المكلف بالقيام بعمليات الصندوق الذي يعمل خارج المملكة مماثلة على الأقل لتلك التي تطبقها الهيئة.",
+     "pages": [
+      8
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    },
+    {
+     "marker": "د",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "د) يجوز لمدير الصندوق تكليف طرف ثالث أو أكثر أو أي من تابعيه بالعمل موزعا لوحدات الصندوق، ويجب أن يكلف بموجب عقد مكتوب، وأن يكون الموزع المكلف في المملكة مؤسسة سوق مالية مرخصا لها في ممارسة نشاط التعامل أو نشاط تقديم المشورة، ويجوز لمدير الصندوق تكليف طرف خارج المملكة للقيام بمهام التوزيع خارج المملكة.",
+     "pages": [
+      8
+     ],
+     "level": 1,
+     "path": "(د)",
+     "footnotes": []
+    },
+    {
+     "marker": "ه",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ه) يجوز لمدير الصندوق الاعتماد على الموزع المكلف بموجب الفقرة (د) من هذ المادة في اتخاذ تدابير العناية الواجبة تجاه العميل وفقا للأحكام ذات العلاقة الواردة في نظام مكافحة غسل الأموال ولائحته التنفيذية.",
+     "pages": [
+      8
+     ],
+     "level": 1,
+     "path": "(ه)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    8
+   ],
+   "heading_footnotes": [],
+   "number": 15,
+   "label": "المادة الخامسة عشرة",
+   "title": "التكليف من قبل مدير الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "لا يجوز في أي حال من الأحوال زيادة مقابل الخدمات والعمولات وأتعاب الإدارة فوق الحد المسموح به في شروط وأحكام الصندوق.",
+     "pages": [
+      9
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    9
+   ],
+   "heading_footnotes": [],
+   "number": 16,
+   "label": "المادة السادسة عشرة",
+   "title": "مقابل الخدمات والعمولات وأتعاب الإدارة",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "تطبق الأحكام المنظمة لعزل مدير الصندوق واستبداله والانسحاب الطوعي لمدير الصندوق الواردة في لائحة صناديق الاستثمار، وذلك فيما لم يرد به نص في شروط وأحكام الصندوق.",
+     "pages": [
+      9
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    9
+   ],
+   "heading_footnotes": [],
+   "number": 17,
+   "label": "المادة السابعة عشرة",
+   "title": "عزل مدير الصندوق واستبداله والانسحاب الطوعي لمدير الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 2,
+    "label": "الفصل الثاني",
+    "title": "إدارة الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) تطبق الأحكام المنظمة لإنهاء الصندوق وتصفيته الواردة في لائحة صناديق الاستثمار، وذلك فيما لم يرد به نص في شروط وأحكام الصندوق.",
+     "pages": [
+      9
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يجب على مدير الصندوق إشعار الهيئة كتابيا عند إنهاء الصندوق أو تصفيته وفقا لمتطلبات الملحق (3) من هذه التعليمات.",
+     "pages": [
+      9
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    9
+   ],
+   "heading_footnotes": [],
+   "number": 18,
+   "label": "المادة الثامنة عشرة",
+   "title": "إنهاء الصندوق وتصفيته",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 3,
+    "label": "الفصل الثالث",
+    "title": "الحفظ"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجب على مدير الصندوق تعيين أمين حفظ واحد أو أكثر في المملكة ليتولى حفظ أصول الصندوق الذي يديره مدير الصندوق، ويجب أن يعين بموجب عقد مكتوب.",
+     "pages": [
+      9
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يجب أن لا يكون أمين الحفظ المعين وفقا للفقرة (أ) من هذه المادة مديرا للصندوق ذي العلاقة، أو مديرا للصندوق ذي العلاقة من الباطن، أو تابعا لمدير الصندوق أو لمدير الصندوق من الباطن.",
+     "pages": [
+      9
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) يجب أن يكون أمين الحفظ المعين وفقا للفقرة (أ) من هذه المادة مؤسسة سوق مالية مرخصا لها في ممارسة نشاط الحفظ، ويجوز له تعيين أمين حفظ من الباطن، على أن يستوفي أمين الحفظ من الباطن المتطلبات الواردة في هذه المادة.",
+     "pages": [
+      9
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    },
+    {
+     "marker": "د",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "د) يستثنى مدير الصندوق الذي يتخذ شكل المنشأة ذات الأغراض الخاصة من متطلب تعيين أمين الحفظ الوارد في الفقرة (أ) من هذه المادة والقواعد المنظمة للمنشآت ذات الأغراض الخاصة.",
+     "pages": [
+      9
+     ],
+     "level": 1,
+     "path": "(د)",
+     "footnotes": []
+    },
+    {
+     "marker": "ه",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ه) في حال كان الصندوق المبسط صندوقا مغذيا؛ يستثنى أمين حفظ الصندوق من أحكام الفقرة (ب) من هذه المادة عند استيفاء المعايير الواردة في المادة الخامسة والعشرين من لائحة صناديق الاستثمار.",
+     "pages": [
+      9
+     ],
+     "level": 1,
+     "path": "(ه)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    9
+   ],
+   "heading_footnotes": [],
+   "number": 19,
+   "label": "المادة التاسعة عشرة",
+   "title": "تعيين أمين الحفظ",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 3,
+    "label": "الفصل الثالث",
+    "title": "الحفظ"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجب على أمين الحفظ ومدير الصندوق (حسبما ينطبق) فصل أصول الصندوق عن أصولهما وعن أصول عملائهما الآخرين.",
+     "pages": [
+      10
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) تطبق الأحكام المنظمة لفصل أصول الصندوق ومسؤوليات حفظها الواردة في لائحة صناديق الاستثمار، وذلك فيما لم يرد به نص في شروط وأحكام الصندوق.",
+     "pages": [
+      10
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    10
+   ],
+   "heading_footnotes": [],
+   "number": 20,
+   "label": "المادة العشرون",
+   "title": "فصل أصول الصندوق ومسؤوليات أمين الحفظ أو مدير الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 4,
+    "label": "الفصل الرابع",
+    "title": "طرح الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يكون طرح وحدات الصندوق طرحا خاصا على المستثمرين من فئة العملاء المؤسسيين، ولا يجوز نقل ملكية وحدات الصندوق في السوق الثانوية لغير المستثمرين من تلك الفئة.",
+     "pages": [
+      10
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) للهيئة في غير الحالة الواردة في الفقرة (أ) من هذه المادة، وبناء على طلب من مؤسسة سوق مالية ترغب في طرح وحدات صندوق استثمار مبسط، الموافقة على الطرح الخاص شريطة الالتزام بالضوابط التي تفرضها الهيئة.",
+     "pages": [
+      10
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) في حال كان مدير الصندوق مرخصا له في ممارسة نشاط إدارة الاستثمارات دون تشغيل الصناديق، لا يجوز أن يكون الصندوق صندوقا عقاريا أو يستثمر في أصول عقارية.",
+     "pages": [
+      10
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    10
+   ],
+   "heading_footnotes": [],
+   "number": 21,
+   "label": "المادة الحادية والعشرون",
+   "title": "طرح الصندوق وفئته وأهلية المستثمرين",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 4,
+    "label": "الفصل الرابع",
+    "title": "طرح الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) لا يجوز لمدير الصندوق طرح وحدات الصندوق إلا بعد القيام بالآتي:",
+     "pages": [
+      10
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1. إشعار الهيئة كتابيا، قبل التاريخ المقترح للطرح.",
+     "pages": [
+      10
+     ],
+     "level": 2,
+     "path": "(أ)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2. تقديم إقرار إلى الهيئة وفقا للصيغة الواردة في الملحق (1) من هذه التعليمات.",
+     "pages": [
+      10
+     ],
+     "level": 2,
+     "path": "(أ)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "3",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "3. تقديم نسخ من شروط وأحكام الصندوق ومستندات الطرح إلى الهيئة، ويجب أن تتضمن تلك المستندات بيانا وفقا للصيغة الواردة في الملحق (2) من هذه التعليمات.",
+     "pages": [
+      10
+     ],
+     "level": 2,
+     "path": "(أ)(3)",
+     "footnotes": []
+    },
+    {
+     "marker": "4",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "4. سداد المقابل المالي للتسجيل حسبما تحدده الهيئة.",
+     "pages": [
+      10
+     ],
+     "level": 2,
+     "path": "(أ)(4)",
+     "footnotes": []
+    },
+    {
+     "marker": "5",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "5. تقديم أي معلومات أخرى تطلبها الهيئة.",
+     "pages": [
+      10
+     ],
+     "level": 2,
+     "path": "(أ)(5)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) إذا رأت الهيئة بعد تلقي إشعار الطرح الخاص والمعلومات والوثائق ذات العلاقة وفقا للفقرة (أ) من هذه المادة أن الطرح المقترح للوحدات قد لا يتناسب مع قدرة مدير الصندوق أو يمكن أن ينتج عنه إخلال بالنظام أو لوائحه التنفيذية، فيجوز لها اتخاذ أي من الآتي:",
+     "pages": [
+      10
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1. إجراء أي استقصاءات تراها مناسبة بما في ذلك طلب حضور الشخص المعني أو من يمثله أمام الهيئة للإجابة عن أسئلة الهيئة، وشرح المسائل التي ترى الهيئة أن لها علاقة بالطرح.",
+     "pages": [
+      11
+     ],
+     "level": 2,
+     "path": "(ب)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2. أن تطلب من الشخص المعني أو غيره تقديم معلومات إضافية، أو تأكيد صحة المعلومات المقدمة بالطريقة التي تحددها الهيئة.",
+     "pages": [
+      11
+     ],
+     "level": 2,
+     "path": "(ب)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) يجوز للهيئة تعليق الطرح إلى حين الانتهاء من الإجراءات المتخذة الواردة في الفقرة (ب) من هذه المادة.",
+     "pages": [
+      11
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    },
+    {
+     "marker": "د",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "د) إذا قررت الهيئة أن الطرح لا يتناسب مع قدرة مدير الصندوق، أو يمكن أن ينتج عنه إخلال بالنظام أو لوائحه التنفيذية، فيجوز لها إصدار \"تبليغ\" لمدير الصندوق بعدم جواز القيام بالطرح، أو أن تنشر \"إخطارا\" يحظر الطرح.",
+     "pages": [
+      11
+     ],
+     "level": 1,
+     "path": "(د)",
+     "footnotes": []
+    },
+    {
+     "marker": "ه",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ه) إذا لم تتخذ الهيئة أيا من الإجراءات المنصوص عليها في الفقرة (ب) من هذه المادة، فتصدر الهيئة إشعارا لمدير الصندوق بناء على طلبه يبين عدم ممانعتها طرح وحدات الصندوق.",
+     "pages": [
+      11
+     ],
+     "level": 1,
+     "path": "(ه)",
+     "footnotes": []
+    },
+    {
+     "marker": "و",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "و) يجب على مدير الصندوق أن يقدم إلى الهيئة خلال (10) أيام من انتهاء فترة الطرح للصندوق بيانا لنتائج الطرح وفقا للصيغة الواردة في الملحق (3) من هذه التعليمات.",
+     "pages": [
+      11
+     ],
+     "level": 1,
+     "path": "(و)",
+     "footnotes": []
+    },
+    {
+     "marker": "ز",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ز) إذا لم يكتمل الطرح، فيجب على مدير الصندوق تزويد الهيئة خلال (10) أيام من نهاية فترة الطرح بإشعار كتابي يؤكد فيه عدم اكتمال الطرح، بالإضافة إلى إعادة مبالغ الاشتراك وأي عوائد ناتجة عن استثمارها دون أي حسم إلى مالكي الوحدات.",
+     "pages": [
+      11
+     ],
+     "level": 1,
+     "path": "(ز)",
+     "footnotes": []
+    },
+    {
+     "marker": "ح",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ح) يجب على مدير الصندوق إشعار الهيئة بتشغيل الصندوق خلال (10) أيام من تاريخ تشغيله.",
+     "pages": [
+      11
+     ],
+     "level": 1,
+     "path": "(ح)",
+     "footnotes": []
+    },
+    {
+     "marker": "ط",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ط) في حال اتخذ الصندوق شكل المنشأة ذات الأغراض الخاصة، فلا يجوز طرح وحداته إلا بعد توثيق النظام الأساسي للمنشأة.",
+     "pages": [
+      11
+     ],
+     "level": 1,
+     "path": "(ط)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    10,
+    11
+   ],
+   "heading_footnotes": [],
+   "number": 22,
+   "label": "المادة الثانية والعشرون",
+   "title": "متطلبات طرح الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 4,
+    "label": "الفصل الرابع",
+    "title": "طرح الصندوق"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "لا يجوز لمدير الصندوق الإعلان عن الصندوق والترويج له إلا في حال كان الإعلان مرسلا فقط إلى الأشخاص من فئة العملاء الذين يجوز طرح وحدات الصندوق عليهم وفقا لأحكام المادة الحادية والعشرين من هذه التعليمات.",
+     "pages": [
+      11
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    11
+   ],
+   "heading_footnotes": [],
+   "number": 23,
+   "label": "المادة الثالثة والعشرون",
+   "title": "الإعلان عن الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 5,
+    "label": "الفصل الخامس",
+    "title": "الشكل التعاقدي للصندوق ومستنداته"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يؤسس الصندوق بقبول أول مالكي وحدات محتملين لشروط وأحكام الصندوق.",
+     "pages": [
+      12
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) تنشأ العلاقة التعاقدية بين مالك الوحدات المحتمل ومدير الصندوق بقبول مالك الوحدات لشروط وأحكام الصندوق.",
+     "pages": [
+      12
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) يجب على مدير الصندوق تضمين شروط وأحكام الصندوق المتطلبات ذات العلاقة في هذه التعليمات، ويجب عليه -إضافة إلى ذلك- تضمين أحكام وشروط الصندوق المتطلبات والمعلومات الآتية بحد أدنى:",
+     "pages": [
+      12
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1. تاريخ بداية فترة الطرح المقترحة، وتاريخ نهايتها.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2. رأس مال الصندوق المستهدف، والقيمة الاسمية للوحدة، وأي حد أدنى للمبلغ الذي ينوي مدير الصندوق جمعه، والإجراء المتخذ في حال عدم الوصول إلى ذلك الحد الأدنى في الصندوق.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "3",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "3. تاريخ إصدار الشروط والأحكام.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(3)",
+     "footnotes": []
+    },
+    {
+     "marker": "4",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "4. اسم مدير الصندوق وعنوانه، وإفادة بأن مدير الصندوق مؤسسة سوق مالية تخضع لإشراف الهيئة ورقابتها.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(4)",
+     "footnotes": []
+    },
+    {
+     "marker": "5",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "5. اسم الصندوق وفئته ونوعه.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(5)",
+     "footnotes": []
+    },
+    {
+     "marker": "6",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "6. استراتيجية الصندوق، وأهدافه الاستثمارية.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(6)",
+     "footnotes": []
+    },
+    {
+     "marker": "7",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "7. الخدمات التي سوف يقدمها كل من مدير الصندوق والأطراف الأخرى للصندوق، والمسؤوليات ذات الصلة.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(7)",
+     "footnotes": []
+    },
+    {
+     "marker": "8",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "8. تفصيل لأي مدفوعات يتم سدادها لمدير الصندوق والأطراف التي تقدم خدمات للصندوق، مع تضمين آلية احتساب الرسوم وتوقيتها.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(8)",
+     "footnotes": []
+    },
+    {
+     "marker": "9",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "9. مخاطر الاستثمار المحتملة للاستثمار في الصندوق.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(9)",
+     "footnotes": []
+    },
+    {
+     "marker": "10",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "10. كيفية التقدم بشكوى إلى مدير الصندوق.",
+     "pages": [
+      12
+     ],
+     "level": 2,
+     "path": "(ج)(10)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    12
+   ],
+   "heading_footnotes": [],
+   "number": 24,
+   "label": "المادة الرابعة والعشرون",
+   "title": "الشكل التعاقدي للصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 5,
+    "label": "الفصل الخامس",
+    "title": "الشكل التعاقدي للصندوق ومستنداته"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجب على مدير الصندوق أن يتقيد في جميع الأوقات بشروط وأحكام الصندوق ومستندات الطرح الخاصة به. كما يجب عليه إشعار الهيئة عند إجراء تغيير في مستندات الصندوق، وأن يقدم نسخة محدثة منها إلى الهيئة.",
+     "pages": [
+      12
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يلتزم مدير الصندوق بتقديم التقارير الخاصة بالصندوق ومستنداته إلى الهيئة عند طلبها خلال مدة لا تتجاوز (5) أيام.",
+     "pages": [
+      12
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    12
+   ],
+   "heading_footnotes": [],
+   "number": 25,
+   "label": "المادة الخامسة والعشرون",
+   "title": "مستندات الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 6,
+    "label": "الفصل السادس",
+    "title": "وحدات الصندوق واجتماع مالكيها"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) يجوز للصندوق أن يصدر أكثر من فئة واحدة من الوحدات، على أن تتضمن شروط وأحكام الصندوق بيان خصائصها.",
+     "pages": [
+      13
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) لا يكون مالك الوحدات مسؤولا عن ديون والتزامات الصندوق عدا خسارته لاستثماره في الصندوق أو جزء منه.",
+     "pages": [
+      13
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    13
+   ],
+   "heading_footnotes": [],
+   "number": 26,
+   "label": "المادة السادسة والعشرون",
+   "title": "الوحدات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 6,
+    "label": "الفصل السادس",
+    "title": "وحدات الصندوق واجتماع مالكيها"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) تعد أصول الصندوق مملوكة لمالكي الوحدات في ذلك الصندوق مجتمعين، ولا يجوز أن يكون لمدير الصندوق أو مدير الصندوق من الباطن أو مشغل الصندوق أو أمين الحفظ أو أمين الحفظ من الباطن أو مقدم المشورة أو الموزع أي مصلحة في أصول الصندوق أو أي مطالبة فيها، إلا إذا كانوا مالكين لوحدات في الصندوق، وذلك في حدود ملكيتهم، أو كان مسموحا بهذه المطالبات بموجب أحكام هذه التعليمات وأفصح عنها في شروط وأحكام الصندوق.",
+     "pages": [
+      13
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) لا يجوز أن يكون لدائني مدير الصندوق أو مدير الصندوق من الباطن أو مشغل الصندوق أو أمين الحفظ أو أمين الحفظ من الباطن أو مقدم المشورة أو الموزع أي حق في أي مطالبة أو مستحقات في أموال الصندوق أو أصوله إلا في حدود وحدات الصندوق المملوكة لهم.",
+     "pages": [
+      13
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    13
+   ],
+   "heading_footnotes": [],
+   "number": 27,
+   "label": "المادة السابعة والعشرون",
+   "title": "ملكية وحدات الصندوق والمطالبات على أصول الصندوق",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 6,
+    "label": "الفصل السادس",
+    "title": "وحدات الصندوق واجتماع مالكيها"
+   },
+   "paragraphs": [
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) تطبق الأحكام المنظمة لاجتماعات مالكي الوحدات الواردة في المادة الثالثة والتسعين من لائحة صناديق الاستثمار، وذلك فيما لم يرد به نص في شروط وأحكام الصندوق.",
+     "pages": [
+      13
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) يجب على مدير الصندوق الدعوة لاجتماع مالكي الوحدات عند طلب الهيئة، وذلك خلال مدة لا تتجاوز (10) أيام من تاريخ طلبها.",
+     "pages": [
+      13
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    13
+   ],
+   "heading_footnotes": [],
+   "number": 28,
+   "label": "المادة الثامنة والعشرون",
+   "title": "اجتماعات مالكي الوحدات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 6,
+    "label": "الفصل السادس",
+    "title": "وحدات الصندوق واجتماع مالكيها"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "تطبق الأحكام المنظمة لموافقة مالكي الوحدات على التغييرات الواردة في المادة الرابعة والتسعين من لائحة صناديق الاستثمار، وذلك فيما لم يرد به نص في شروط وأحكام الصندوق.",
+     "pages": [
+      13
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    13
+   ],
+   "heading_footnotes": [],
+   "number": 29,
+   "label": "المادة التاسعة والعشرون",
+   "title": "موافقة مالكي الوحدات على التغييرات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 6,
+    "label": "الفصل السادس",
+    "title": "وحدات الصندوق واجتماع مالكيها"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "تطبق الأحكام المنظمة لتقديم التقارير إلى مالكي الوحدات الواردة في المادة الخامسة والتسعين من لائحة صناديق الاستثمار، وذلك فيما لم يرد به نص في شروط وأحكام الصندوق.",
+     "pages": [
+      14
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    14
+   ],
+   "heading_footnotes": [],
+   "number": 30,
+   "label": "المادة الثلاثون",
+   "title": "تقديم التقارير إلى مالكي الوحدات",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "article",
+   "part": null,
+   "chapter": {
+    "number": 7,
+    "label": "الفصل السابع",
+    "title": "النفاذ"
+   },
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "تكون هذه التعليمات نافذة من تاريخ نشرها.",
+     "pages": [
+      14
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    14
+   ],
+   "heading_footnotes": [],
+   "number": 31,
+   "label": "المادة الحادية والثلاثون",
+   "title": "النفاذ",
+   "repaired_heading": false,
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "annex",
+   "part": null,
+   "chapter": null,
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "[يقدم على الأوراق الرسمية الخاصة بمدير الصندوق] إلى: هيئة السوق المالية نحن، بصفتنا _____________ (اسم مدير الصندوق)، نقر مجتمعين ومنفردين، بأن المعلومات الموضحة في إشعار الطرح الخاص لـ (اسم الصندوق) ومستندات الطرح كاملة وواضحة وصحيحة وغير مضللة وليس فيها أي قصور من شأنه التأثير في فحوى تلك المعلومات.",
+     "pages": [
+      15
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    },
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "ونقر أيضا بأنه قد تم استيفاء جميع الشروط ذات العلاقة للقيام بالطرح الخاص، وأنه قد جرى تقديم أو سوف يجري تقديم جميع المعلومات والمستندات المطلوب تقديمها إلى الهيئة بموجب تعليمات صناديق الاستثمار المبسطة. وبهذا الإقرار نفوض إلى الهيئة الحق في طلب أو تبادل أي معلومات ذات علاقة مع الهيئات والجهات والوكالات المسؤولة عن الإشراف على الخدمات المالية وأي جهات أخرى ذات علاقة.",
+     "pages": [
+      15
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    },
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "الاسم: _____________ التوقيع: _____________ التاريخ: _____________",
+     "pages": [
+      15
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    15
+   ],
+   "heading_footnotes": [],
+   "number": "1",
+   "label": "الملحق 1",
+   "title": "إقرار الصندوق للهيئة",
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "annex",
+   "part": null,
+   "chapter": null,
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "يجب أن تحتوي مستندات الطرح الخاص البيان الآتي:",
+     "pages": [
+      16
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    },
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "\"لا يجوز توزيع هذا المستند في المملكة إلا على الأشخاص المحددين في تعليمات صناديق الاستثمار المبسطة الصادرة عن هيئة السوق المالية.",
+     "pages": [
+      16
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    },
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "ولا تعطي هيئة السوق المالية أي تأكيد يتعلق بدقة هذا المستند أو اكتماله، وتخلي الهيئة نفسها من أي مسؤولية أو أي خسارة تنتج عما ورد في هذا المستند أو الاعتماد على أي جزء منه. ويجب على الراغبين في الاشتراك في الأوراق المالية المطروحة بموجب هذا المستند تحري مدى صحة المعلومات المتعلقة بالأوراق المالية محل الطرح. وفي حال تعذر فهم محتويات هذا المستند، يجب عليهم الأخذ بمشورة مستشار مالي مرخص له\".",
+     "pages": [
+      16
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    16
+   ],
+   "heading_footnotes": [],
+   "number": "2",
+   "label": "الملحق 2",
+   "title": "البيان الواجب تضمينه في مستندات الطرح",
+   "footnotes": [],
+   "binding_status": "mandatory"
+  },
+  {
+   "type": "annex",
+   "part": null,
+   "chapter": null,
+   "paragraphs": [
+    {
+     "marker": null,
+     "marker_kind": null,
+     "is_subheading": false,
+     "text": "ترسل الإشعارات بالطريقة التي تحددها الهيئة وذلك بحسب الآتي:",
+     "pages": [
+      17
+     ],
+     "level": 0,
+     "path": "",
+     "footnotes": []
+    },
+    {
+     "marker": "أ",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "أ) الإشعارات التي تتطلب تغييرات في مستندات الصندوق:",
+     "pages": [
+      17
+     ],
+     "level": 1,
+     "path": "(أ)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1) اسم الصندوق.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(أ)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2) موضوع الإشعار.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(أ)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "3",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "3) تذكر الصيغة الحالية والصيغة المقترحة.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(أ)(3)",
+     "footnotes": []
+    },
+    {
+     "marker": "4",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "4) إن كان التغيير يتطلب موافقة أطراف غير مدير الصندوق، يجب أخذ موافقتهم قبل إرسال الإشعار مع ضرورة الإشارة إلى ذلك في محتوى الخطاب.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(أ)(4)",
+     "footnotes": []
+    },
+    {
+     "marker": "5",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "5) إقرار من مدير الصندوق بأن التغيير المقترح لا يتعارض مع هذه التعليمات واللوائح التنفيذية الأخرى وأي نظام معمول به في المملكة.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(أ)(5)",
+     "footnotes": []
+    },
+    {
+     "marker": "6",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "6) أي مستندات أخرى مؤيدة للطلب.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(أ)(6)",
+     "footnotes": []
+    },
+    {
+     "marker": "ب",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ب) الإشعارات المتعلقة بانتهاء فترة الطرح:",
+     "pages": [
+      17
+     ],
+     "level": 1,
+     "path": "(ب)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1) اسم الصندوق.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ب)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2) موضوع الإشعار.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ب)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "3",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "3) تاريخ نهاية فترة الطرح.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ب)(3)",
+     "footnotes": []
+    },
+    {
+     "marker": "4",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "4) المبلغ الذي تم جمعه.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ب)(4)",
+     "footnotes": []
+    },
+    {
+     "marker": "5",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "5) قائمة بأسماء جميع المستثمرين والمبلغ المدفوع من كل مستثمر وفئاتهم.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ب)(5)",
+     "footnotes": []
+    },
+    {
+     "marker": "6",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "6) تاريخ تشغيل الصندوق.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ب)(6)",
+     "footnotes": []
+    },
+    {
+     "marker": "ج",
+     "marker_kind": "letter",
+     "is_subheading": false,
+     "text": "ج) الإشعار المتعلق بإنهاء الصندوق أو تصفيته:",
+     "pages": [
+      17
+     ],
+     "level": 1,
+     "path": "(ج)",
+     "footnotes": []
+    },
+    {
+     "marker": "1",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "1) اسم الصندوق.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ج)(1)",
+     "footnotes": []
+    },
+    {
+     "marker": "2",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "2) تاريخ توزيع مبالغ الاستثمار على مالكي الوحدات.",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ج)(2)",
+     "footnotes": []
+    },
+    {
+     "marker": "3",
+     "marker_kind": "number",
+     "is_subheading": false,
+     "text": "3) عائد الاستثمار كنسبة مئوية (حيثما ينطبق).",
+     "pages": [
+      17
+     ],
+     "level": 2,
+     "path": "(ج)(3)",
+     "footnotes": []
+    }
+   ],
+   "pages": [
+    17
+   ],
+   "heading_footnotes": [],
+   "number": "3",
+   "label": "الملحق 3",
+   "title": "الإشعارات المقدمة للهيئة",
+   "footnotes": [],
+   "binding_status": "mandatory"
+  }
+ ]
+}

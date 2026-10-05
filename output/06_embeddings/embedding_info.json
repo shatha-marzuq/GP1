@@ -1,0 +1,13 @@
+{
+ "model": "BAAI/bge-m3",
+ "dim": 1024,
+ "normalized": true,
+ "count": 524,
+ "max_seq_tokens": 1024,
+ "device": "mps:0",
+ "seconds": 29.5,
+ "tokens_max": 740,
+ "tokens_mean": 258,
+ "truncated_chunks": 0,
+ "content_sha256": "94920e16e629b6fd5fae42ce5cebd7a8069654365dd35f18281a333bbc5b5cdc"
+}

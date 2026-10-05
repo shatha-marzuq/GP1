@@ -1,0 +1,46 @@
+{
+ "capital_market_institutions_regulations": {
+  "chunks": 142,
+  "articles": 99,
+  "annexes": 11,
+  "split_sections": 17,
+  "words_min": 22,
+  "words_median": 185.5,
+  "words_mean": 180,
+  "words_max": 329
+ },
+ "corporate_governance_regulations": {
+  "chunks": 109,
+  "articles": 95,
+  "annexes": 1,
+  "split_sections": 9,
+  "words_min": 22,
+  "words_median": 124,
+  "words_mean": 149,
+  "words_max": 419
+ },
+ "investment_funds_regulations": {
+  "chunks": 238,
+  "articles": 113,
+  "annexes": 14,
+  "split_sections": 31,
+  "words_min": 19,
+  "words_median": 142.0,
+  "words_mean": 152,
+  "words_max": 339
+ },
+ "simplified_investment_funds_instructions": {
+  "chunks": 35,
+  "articles": 31,
+  "annexes": 3,
+  "split_sections": 1,
+  "words_min": 20,
+  "words_median": 66,
+  "words_mean": 100,
+  "words_max": 307
+ },
+ "_total": {
+  "chunks": 524,
+  "max_words_setting": 300
+ }
+}

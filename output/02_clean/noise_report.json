@@ -1,0 +1,57 @@
+{
+ "capital_market_institutions_regulations": {
+  "pages": 111,
+  "body_start_page": 8,
+  "body_lines": 2355,
+  "toc_entries": 138,
+  "footnotes": 0,
+  "removed": {
+   "cover_page_lines": 13,
+   "page_number": 110,
+   "toc_lines": 139,
+   "empty_table_rows": 2,
+   "kashida_artifacts_repaired": 16
+  }
+ },
+ "corporate_governance_regulations": {
+  "pages": 65,
+  "body_start_page": 7,
+  "body_lines": 1313,
+  "toc_entries": 121,
+  "footnotes": 28,
+  "removed": {
+   "cover_page_lines": 12,
+   "page_number": 64,
+   "toc_lines": 122,
+   "footnote_lines_separated": 66,
+   "empty_table_rows": 36
+  }
+ },
+ "investment_funds_regulations": {
+  "pages": 181,
+  "body_start_page": 9,
+  "body_lines": 3278,
+  "toc_entries": 139,
+  "footnotes": 1,
+  "removed": {
+   "internal_label": 181,
+   "cover_page_lines": 11,
+   "page_number": 180,
+   "toc_lines": 140,
+   "empty_table_rows": 1,
+   "footnote_lines_separated": 1
+  }
+ },
+ "simplified_investment_funds_instructions": {
+  "pages": 17,
+  "body_start_page": 4,
+  "body_lines": 301,
+  "toc_entries": 41,
+  "footnotes": 0,
+  "removed": {
+   "cover_page_lines": 10,
+   "page_number": 16,
+   "toc_lines": 42
+  }
+ }
+}

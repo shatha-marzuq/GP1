@@ -1,0 +1,51 @@
+{
+ "records": 524,
+ "content_sha256": "94920e16e629b6fd5fae42ce5cebd7a8069654365dd35f18281a333bbc5b5cdc",
+ "by_doc": {
+  "capital_market_institutions_regulations": 142,
+  "corporate_governance_regulations": 109,
+  "investment_funds_regulations": 238,
+  "simplified_investment_funds_instructions": 35
+ },
+ "by_section_type": {
+  "annex": 126,
+  "article": 398
+ },
+ "chars_max": 2612,
+ "metadata_fields": [
+  "annex_number",
+  "article_label",
+  "article_number",
+  "binding_status",
+  "breadcrumb",
+  "chapter_number",
+  "chapter_title",
+  "char_count",
+  "chunk_count",
+  "chunk_index",
+  "citation",
+  "doc_id",
+  "doc_title",
+  "doc_title_en",
+  "doc_type",
+  "footnotes",
+  "fund_scope",
+  "guidance_paragraphs",
+  "has_footnotes",
+  "has_guidance_paragraphs",
+  "issuer",
+  "paragraphs",
+  "part_number",
+  "part_title",
+  "pdf_page_start",
+  "pdf_pages",
+  "section_key",
+  "section_title",
+  "section_type",
+  "source_file",
+  "text_search",
+  "version_date_gregorian",
+  "version_decision",
+  "word_count"
+ ]
+}

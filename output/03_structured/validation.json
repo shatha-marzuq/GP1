@@ -1,0 +1,44 @@
+{
+ "capital_market_institutions_regulations": {
+  "toc_articles": 99,
+  "extracted_articles": 99,
+  "article_sequence_continuous": true,
+  "missing_from_body": [],
+  "title_mismatches": [],
+  "toc_annexes": 11,
+  "extracted_annexes": 11,
+  "repaired_headings": []
+ },
+ "corporate_governance_regulations": {
+  "toc_articles": 95,
+  "extracted_articles": 95,
+  "article_sequence_continuous": true,
+  "missing_from_body": [],
+  "title_mismatches": [],
+  "toc_annexes": 1,
+  "extracted_annexes": 1,
+  "repaired_headings": [
+   88
+  ]
+ },
+ "investment_funds_regulations": {
+  "toc_articles": 113,
+  "extracted_articles": 113,
+  "article_sequence_continuous": true,
+  "missing_from_body": [],
+  "title_mismatches": [],
+  "toc_annexes": 14,
+  "extracted_annexes": 14,
+  "repaired_headings": []
+ },
+ "simplified_investment_funds_instructions": {
+  "toc_articles": 31,
+  "extracted_articles": 31,
+  "article_sequence_continuous": true,
+  "missing_from_body": [],
+  "title_mismatches": [],
+  "toc_annexes": 3,
+  "extracted_annexes": 3,
+  "repaired_headings": []
+ }
+}

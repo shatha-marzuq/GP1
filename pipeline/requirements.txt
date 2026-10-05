@@ -1,0 +1,6 @@
+pdfminer.six>=20231228
+# steps 9-12 (embedding, vector store, retrieval)
+torch>=2.4
+sentence-transformers>=3.0
+chromadb>=1.0
+numpy

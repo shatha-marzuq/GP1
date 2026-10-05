@@ -1,0 +1,2327 @@
+{
+ "summary": {
+  "dense": {
+   "all": {
+    "hit@1": 0.861,
+    "hit@3": 0.944,
+    "hit@5": 1.0,
+    "hit@10": 1.0,
+    "mrr@10": 0.917,
+    "recall@10": 0.958,
+    "n": 36
+   },
+   "clause": {
+    "hit@1": 0.833,
+    "hit@3": 0.933,
+    "hit@5": 1.0,
+    "hit@10": 1.0,
+    "mrr@10": 0.9,
+    "recall@10": 0.949,
+    "n": 30
+   },
+   "question": {
+    "hit@1": 1.0,
+    "hit@3": 1.0,
+    "hit@5": 1.0,
+    "hit@10": 1.0,
+    "mrr@10": 1.0,
+    "recall@10": 1.0,
+    "n": 6
+   }
+  },
+  "bm25": {
+   "all": {
+    "hit@1": 0.833,
+    "hit@3": 0.944,
+    "hit@5": 0.944,
+    "hit@10": 0.972,
+    "mrr@10": 0.884,
+    "recall@10": 0.854,
+    "n": 36
+   },
+   "clause": {
+    "hit@1": 0.8,
+    "hit@3": 0.933,
+    "hit@5": 0.933,
+    "hit@10": 0.967,
+    "mrr@10": 0.861,
+    "recall@10": 0.824,
+    "n": 30
+   },
+   "question": {
+    "hit@1": 1.0,
+    "hit@3": 1.0,
+    "hit@5": 1.0,
+    "hit@10": 1.0,
+    "mrr@10": 1.0,
+    "recall@10": 1.0,
+    "n": 6
+   }
+  },
+  "hybrid": {
+   "all": {
+    "hit@1": 0.889,
+    "hit@3": 0.972,
+    "hit@5": 0.972,
+    "hit@10": 1.0,
+    "mrr@10": 0.929,
+    "recall@10": 0.92,
+    "n": 36
+   },
+   "clause": {
+    "hit@1": 0.867,
+    "hit@3": 0.967,
+    "hit@5": 0.967,
+    "hit@10": 1.0,
+    "mrr@10": 0.915,
+    "recall@10": 0.904,
+    "n": 30
+   },
+   "question": {
+    "hit@1": 1.0,
+    "hit@3": 1.0,
+    "hit@5": 1.0,
+    "hit@10": 1.0,
+    "mrr@10": 1.0,
+    "recall@10": 1.0,
+    "n": 6
+   }
+  },
+  "dense+rerank": {
+   "all": {
+    "hit@1": 0.889,
+    "hit@3": 0.972,
+    "hit@5": 1.0,
+    "hit@10": 1.0,
+    "mrr@10": 0.933,
+    "recall@10": 0.963,
+    "n": 36
+   },
+   "clause": {
+    "hit@1": 0.867,
+    "hit@3": 0.967,
+    "hit@5": 1.0,
+    "hit@10": 1.0,
+    "mrr@10": 0.919,
+    "recall@10": 0.956,
+    "n": 30
+   },
+   "question": {
+    "hit@1": 1.0,
+    "hit@3": 1.0,
+    "hit@5": 1.0,
+    "hit@10": 1.0,
+    "mrr@10": 1.0,
+    "recall@10": 1.0,
+    "n": 6
+   }
+  }
+ },
+ "queries": [
+  {
+   "id": "q01",
+   "style": "clause",
+   "query": "يحق لمدير الصندوق تأجيل طلبات الاسترداد إلى يوم التعامل التالي إذا بلغت نسبة طلبات الاسترداد 10% أو أكثر من صافي قيمة أصول الصندوق",
+   "expected": [
+    "IFR-art068"
+   ]
+  },
+  {
+   "id": "q02",
+   "style": "clause",
+   "query": "يجوز لمدير الصندوق تعليق الاشتراك والاسترداد في حال تعليق التداول في السوق الرئيسة",
+   "expected": [
+    "IFR-art069"
+   ]
+  },
+  {
+   "id": "q03",
+   "style": "clause",
+   "query": "في حال حدوث خطأ في تسعير الوحدات يقوم مدير الصندوق بتعويض مالكي الوحدات المتضررين",
+   "expected": [
+    "IFR-art075"
+   ]
+  },
+  {
+   "id": "q04",
+   "style": "question",
+   "query": "متى يجب على مدير الصندوق إبلاغ الهيئة عن خطأ في التقييم أو التسعير؟",
+   "expected": [
+    "IFR-art075"
+   ]
+  },
+  {
+   "id": "q05",
+   "style": "clause",
+   "query": "يحتفظ مدير الصندوق بحق تعديل هذه الشروط والأحكام في أي وقت دون الحاجة للحصول على موافقة مالكي الوحدات",
+   "expected": [
+    "IFR-art064",
+    "IFR-art065",
+    "IFR-art094",
+    "SIFI-art029"
+   ]
+  },
+  {
+   "id": "q06",
+   "style": "clause",
+   "query": "سيتم إشعار مالكي الوحدات بأي تغييرات غير أساسية قبل عشرة أيام من سريانها",
+   "expected": [
+    "IFR-art065"
+   ]
+  },
+  {
+   "id": "q07",
+   "style": "clause",
+   "query": "مدة الطرح الأولي للصندوق 60 يوما وسعر الوحدة عند الطرح الأولي 10 ريالات سعودية",
+   "expected": [
+    "IFR-art066"
+   ]
+  },
+  {
+   "id": "q08",
+   "style": "clause",
+   "query": "يتم احتساب سعر الوحدة بناء على صافي قيمة الأصول عند نقطة التقييم وينشر في الموقع الإلكتروني لمدير الصندوق",
+   "expected": [
+    "IFR-art074"
+   ]
+  },
+  {
+   "id": "q09",
+   "style": "clause",
+   "query": "يجوز لمدير الصندوق الاقتراض لتغطية طلبات الاسترداد عند عدم كفاية السيولة",
+   "expected": [
+    "IFR-art071"
+   ]
+  },
+  {
+   "id": "q10",
+   "style": "clause",
+   "query": "تدفع عوائد الاسترداد لمالك الوحدات خلال خمسة أيام عمل من نقطة التقييم التي حدد عندها سعر الاسترداد",
+   "expected": [
+    "IFR-art067"
+   ]
+  },
+  {
+   "id": "q11",
+   "style": "clause",
+   "query": "يتقاضى مدير الصندوق رسوم إدارة سنوية بنسبة 1.5% من صافي قيمة أصول الصندوق بالإضافة إلى رسوم اشتراك",
+   "expected": [
+    "IFR-art019",
+    "IFR-art036",
+    "SIFI-art016"
+   ]
+  },
+  {
+   "id": "q12",
+   "style": "clause",
+   "query": "يحق لمدير الصندوق إنهاء الصندوق وتصفية أصوله وتوزيع المستحقات على مالكي الوحدات",
+   "expected": [
+    "IFR-art023",
+    "SIFI-art018"
+   ]
+  },
+  {
+   "id": "q13",
+   "style": "clause",
+   "query": "تلتزم الشركة بالمحافظة على سرية معلومات العميل ولا تفصح عنها إلا بموافقته الصريحة أو بطلب من الجهات الرسمية",
+   "expected": [
+    "CMIR-art029"
+   ]
+  },
+  {
+   "id": "q14",
+   "style": "clause",
+   "query": "يمكن للعميل تقديم شكوى عبر البريد الإلكتروني وستقوم الشركة بمعالجتها والرد عليها",
+   "expected": [
+    "CMIR-art063"
+   ]
+  },
+  {
+   "id": "q15",
+   "style": "clause",
+   "query": "تفصح الشركة للعميل عن جميع الأتعاب والعمولات قبل تقديم الخدمة",
+   "expected": [
+    "CMIR-art046"
+   ]
+  },
+  {
+   "id": "q16",
+   "style": "clause",
+   "query": "تقوم الشركة بتقييم مدى ملاءمة المنتج الاستثماري للعميل بناء على وضعه المالي وأهدافه الاستثمارية ومعرفته بالمخاطر",
+   "expected": [
+    "CMIR-art043",
+    "CMIR-art039"
+   ]
+  },
+  {
+   "id": "q17",
+   "style": "clause",
+   "query": "يلتزم العميل بتحديث بياناته ومعلوماته الشخصية وفق متطلبات اعرف عميلك",
+   "expected": [
+    "CMIR-art039"
+   ]
+  },
+  {
+   "id": "q18",
+   "style": "clause",
+   "query": "تصنف الشركة العميل كعميل تجزئة أو عميل مؤسسي أو طرف نظير",
+   "expected": [
+    "CMIR-art036"
+   ]
+  },
+  {
+   "id": "q19",
+   "style": "clause",
+   "query": "تحتفظ الشركة بأموال العملاء في حساب بنكي منفصل باسم العملاء لدى بنك محلي",
+   "expected": [
+    "CMIR-art073",
+    "CMIR-art075",
+    "CMIR-art070",
+    "CMIR-art071"
+   ]
+  },
+  {
+   "id": "q20",
+   "style": "clause",
+   "query": "يحق للشركة تصفية مراكز العميل في الصفقات بهامش تغطية إذا انخفضت قيمة الضمان عن الحد المطلوب",
+   "expected": [
+    "CMIR-art045"
+   ]
+  },
+  {
+   "id": "q21",
+   "style": "clause",
+   "query": "سترسل الشركة للعميل إشعارا بتنفيذ الصفقة وكشف حساب دوري بالمحفظة",
+   "expected": [
+    "CMIR-art047",
+    "CMIR-art048",
+    "CMIR-art091"
+   ]
+  },
+  {
+   "id": "q22",
+   "style": "clause",
+   "query": "يتم تسجيل المكالمات الهاتفية مع العميل والاحتفاظ بالتسجيلات",
+   "expected": [
+    "CMIR-art051"
+   ]
+  },
+  {
+   "id": "q23",
+   "style": "clause",
+   "query": "قد تحصل الشركة على عمولات أو حوافز من أطراف ثالثة مقابل تقديم الخدمة للعميل",
+   "expected": [
+    "CMIR-art027",
+    "CMIR-art028"
+   ]
+  },
+  {
+   "id": "q24",
+   "style": "clause",
+   "query": "في حال وجود تعارض في المصالح بين الشركة والعميل تلتزم الشركة بالإفصاح عنه للعميل",
+   "expected": [
+    "CMIR-art041",
+    "IFR-art013",
+    "SIFI-art012"
+   ]
+  },
+  {
+   "id": "q25",
+   "style": "question",
+   "query": "ما هي حقوق العملاء في حالة إفلاس مؤسسة السوق المالية؟",
+   "expected": [
+    "CMIR-art096",
+    "CMIR-art098",
+    "CMIR-art095"
+   ]
+  },
+  {
+   "id": "q26",
+   "style": "clause",
+   "query": "يحق للشركة إقراض الأوراق المالية المملوكة للعميل لأطراف أخرى",
+   "expected": [
+    "CMIR-art086"
+   ]
+  },
+  {
+   "id": "q27",
+   "style": "clause",
+   "query": "يتم حفظ أصول الصندوق لدى أمين حفظ مستقل وفصلها عن أصول مدير الصندوق",
+   "expected": [
+    "IFR-art026",
+    "IFR-art027",
+    "IFR-art025",
+    "SIFI-art020"
+   ]
+  },
+  {
+   "id": "q28",
+   "style": "question",
+   "query": "ما هي اختصاصات لجنة المراجعة ومسؤولياتها؟",
+   "expected": [
+    "CGR-art052"
+   ]
+  },
+  {
+   "id": "q29",
+   "style": "question",
+   "query": "ما هي الحالات التي تنتفي فيها صفة الاستقلال عن عضو مجلس الإدارة؟",
+   "expected": [
+    "CGR-art019"
+   ]
+  },
+  {
+   "id": "q30",
+   "style": "question",
+   "query": "كيف تفصح الشركة عن مكافآت أعضاء مجلس الإدارة والإدارة التنفيذية؟",
+   "expected": [
+    "CGR-art090",
+    "CGR-art059",
+    "CGR-art087"
+   ]
+  },
+  {
+   "id": "q31",
+   "style": "clause",
+   "query": "يدعو مدير الصندوق لاجتماع مالكي الوحدات خلال عشرة أيام من تسلم طلب كتابي من أمين الحفظ",
+   "expected": [
+    "IFR-art077",
+    "IFR-art093",
+    "SIFI-art028"
+   ]
+  },
+  {
+   "id": "q32",
+   "style": "clause",
+   "query": "يرسل مدير الصندوق التقارير السنوية والقوائم المالية المراجعة لمالكي الوحدات",
+   "expected": [
+    "IFR-art078",
+    "IFR-art095",
+    "SIFI-art030",
+    "IFR-art011",
+    "SIFI-art010"
+   ]
+  },
+  {
+   "id": "q33",
+   "style": "clause",
+   "query": "يقتصر الاشتراك في هذا الصندوق الخاص على المستثمرين المؤهلين ولا يطرح للعموم",
+   "expected": [
+    "IFR-art082",
+    "IFR-art083",
+    "SIFI-art021"
+   ]
+  },
+  {
+   "id": "q34",
+   "style": "question",
+   "query": "ما الحد الأقصى لاستثمار الصندوق العام في أوراق مالية صادرة عن مصدر واحد؟",
+   "expected": [
+    "IFR-art043"
+   ]
+  },
+  {
+   "id": "q35",
+   "style": "clause",
+   "query": "تلتزم الشركة بأنظمة مكافحة غسل الأموال وتمويل الإرهاب ويحق لها رفض أي عملية مشبوهة",
+   "expected": [
+    "CMIR-art037",
+    "CMIR-art064"
+   ]
+  },
+  {
+   "id": "q36",
+   "style": "clause",
+   "query": "يجب ألا تتضمن إعلانات الصندوق والمواد الترويجية أي معلومات مضللة",
+   "expected": [
+    "IFR-art072",
+    "IFR-art090",
+    "IFR-art103",
+    "SIFI-art023",
+    "CMIR-art033"
+   ]
+  }
+ ],
+ "results": {
+  "dense": [
+   {
+    "id": "q01",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art068",
+     "IFR-art071",
+     "IFR-art081",
+     "IFR-art083",
+     "IFR-art077"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q02",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art069",
+     "IFR-art015",
+     "IFR-art067",
+     "IFR-art065",
+     "IFR-art104"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q03",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art075",
+     "IFR-art074",
+     "SIFI-art008",
+     "IFR-art092",
+     "IFR-art094"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q04",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "IFR-art075",
+     "IFR-art061",
+     "IFR-art065",
+     "IFR-art092",
+     "IFR-art009"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q05",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art094",
+     "IFR-art063",
+     "IFR-art064",
+     "IFR-art065",
+     "SIFI-art029"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q06",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art065",
+     "IFR-art077",
+     "IFR-art093",
+     "IFR-art094",
+     "IFR-art064"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q07",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art066",
+     "IFR-art082",
+     "IFR-art050",
+     "IFR-art049",
+     "IFR-art100"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q08",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art074",
+     "IFR-anx1",
+     "IFR-anx5",
+     "IFR-anx11",
+     "IFR-art075"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q09",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art071",
+     "IFR-art081",
+     "IFR-art083",
+     "IFR-art020",
+     "IFR-art023"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q10",
+    "style": "clause",
+    "rank": 4,
+    "top5": [
+     "IFR-art074",
+     "IFR-art083",
+     "IFR-art096",
+     "IFR-art067",
+     "CMIR-art075"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q11",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "IFR-anx11",
+     "IFR-art036",
+     "IFR-art074",
+     "IFR-art015",
+     "SIFI-art008"
+    ],
+    "recall10": 0.6666666666666666
+   },
+   {
+    "id": "q12",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art023",
+     "SIFI-art008",
+     "SIFI-art020",
+     "IFR-art009",
+     "IFR-art037"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q13",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art029",
+     "CMIR-art068",
+     "CGR-art094",
+     "CGR-art006",
+     "CMIR-art089"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q14",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art063",
+     "IFR-anx1",
+     "CGR-art081",
+     "CGR-art055",
+     "CMIR-art023"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q15",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art046",
+     "CMIR-art088",
+     "CMIR-art039",
+     "IFR-anx1",
+     "IFR-anx11"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q16",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art043",
+     "IFR-art014",
+     "CMIR-art042",
+     "CMIR-anx35ب",
+     "CMIR-art041"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q17",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "CMIR-anx35أ",
+     "CMIR-art039",
+     "CMIR-art091",
+     "CGR-art094",
+     "CMIR-art088"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q18",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art036",
+     "CMIR-anx35أ",
+     "CGR-art001",
+     "CMIR-art071",
+     "CMIR-art035"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q19",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art073",
+     "CMIR-art071",
+     "CMIR-art075",
+     "CMIR-art069",
+     "CMIR-art085"
+    ],
+    "recall10": 0.75
+   },
+   {
+    "id": "q20",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art045",
+     "CMIR-art093",
+     "CMIR-art080",
+     "CMIR-art043",
+     "CMIR-art094"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q21",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art047",
+     "CMIR-art075",
+     "CMIR-anx75",
+     "CMIR-art074",
+     "CMIR-art091"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q22",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art051",
+     "CMIR-art049",
+     "CMIR-art085",
+     "CMIR-art016",
+     "CMIR-art068"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q23",
+    "style": "clause",
+    "rank": 4,
+    "top5": [
+     "CGR-art082",
+     "CMIR-art077",
+     "IFR-art019",
+     "CMIR-art028",
+     "CMIR-anx75"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q24",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art041",
+     "CGR-art041",
+     "CGR-art043",
+     "CGR-art040",
+     "IFR-anx11"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q25",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CMIR-art096",
+     "CMIR-art093",
+     "CMIR-art098",
+     "CMIR-art097",
+     "CMIR-art070"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q26",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art086",
+     "CMIR-art044",
+     "CMIR-art071",
+     "CMIR-art094",
+     "CMIR-art077"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q27",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "SIFI-art020",
+     "IFR-anx1",
+     "IFR-art027",
+     "SIFI-art019",
+     "CMIR-art089"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q28",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art052",
+     "CGR-art056",
+     "CGR-art051",
+     "CGR-art077",
+     "CGR-art073"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q29",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art019",
+     "CGR-art029",
+     "CGR-art042",
+     "CGR-art051",
+     "CGR-art023"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q30",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art090",
+     "CGR-anx1",
+     "CMIR-anx16",
+     "CGR-art059",
+     "CGR-art089"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q31",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art077",
+     "IFR-art093",
+     "SIFI-art028",
+     "SIFI-art011",
+     "IFR-anx1"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q32",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "IFR-anx1",
+     "IFR-art078",
+     "IFR-anx11",
+     "IFR-art096",
+     "SIFI-art030"
+    ],
+    "recall10": 0.6
+   },
+   {
+    "id": "q33",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "SIFI-art021",
+     "IFR-art082",
+     "IFR-anx9",
+     "IFR-art080",
+     "IFR-art100"
+    ],
+    "recall10": 0.6666666666666666
+   },
+   {
+    "id": "q34",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "IFR-art043",
+     "IFR-art041",
+     "IFR-art056",
+     "IFR-art038",
+     "IFR-art058"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q35",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art037",
+     "CMIR-art064",
+     "CMIR-art020",
+     "CMIR-art055",
+     "CMIR-art066"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q36",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art072",
+     "SIFI-art023",
+     "IFR-art103",
+     "IFR-art090",
+     "IFR-anx1"
+    ],
+    "recall10": 0.8
+   }
+  ],
+  "bm25": [
+   {
+    "id": "q01",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art068",
+     "IFR-art074",
+     "IFR-art067",
+     "IFR-art043",
+     "IFR-anx1"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q02",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art069",
+     "IFR-art067",
+     "SIFI-art014",
+     "IFR-art048",
+     "IFR-anx1"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q03",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art075",
+     "IFR-anx1",
+     "IFR-anx11",
+     "IFR-art092",
+     "IFR-art023"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q04",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "IFR-art075",
+     "IFR-anx1",
+     "IFR-anx11",
+     "IFR-art092",
+     "IFR-art073"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q05",
+    "style": "clause",
+    "rank": 3,
+    "top5": [
+     "IFR-art093",
+     "IFR-art077",
+     "IFR-art064",
+     "IFR-art094",
+     "IFR-art065"
+    ],
+    "recall10": 0.75
+   },
+   {
+    "id": "q06",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art065",
+     "IFR-art064",
+     "IFR-art105",
+     "IFR-anx11",
+     "IFR-art094"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q07",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art066",
+     "IFR-art050",
+     "IFR-art049",
+     "IFR-art020",
+     "IFR-anx1"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q08",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art074",
+     "IFR-anx4",
+     "IFR-anx5",
+     "IFR-anx3",
+     "IFR-art078"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q09",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art071",
+     "IFR-art068",
+     "IFR-art067",
+     "IFR-anx1",
+     "IFR-art014"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q10",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art067",
+     "IFR-art074",
+     "IFR-anx1",
+     "CGR-art017",
+     "CGR-art047"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q11",
+    "style": "clause",
+    "rank": 6,
+    "top5": [
+     "IFR-anx1",
+     "IFR-anx5",
+     "IFR-anx14",
+     "IFR-art074",
+     "IFR-anx4"
+    ],
+    "recall10": 0.3333333333333333
+   },
+   {
+    "id": "q12",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art023",
+     "IFR-anx1",
+     "IFR-anx11",
+     "SIFI-art027",
+     "IFR-art094"
+    ],
+    "recall10": 0.5
+   },
+   {
+    "id": "q13",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art029",
+     "CMIR-anx45",
+     "IFR-art054",
+     "CGR-art080",
+     "IFR-anx8"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q14",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "IFR-anx1",
+     "CMIR-art063",
+     "CMIR-art088",
+     "CMIR-anx35أ",
+     "CMIR-anx25"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q15",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art046",
+     "IFR-anx11",
+     "CMIR-art088",
+     "IFR-anx1",
+     "CMIR-art072"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q16",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art039",
+     "CMIR-art043",
+     "CMIR-art077",
+     "CMIR-anx55",
+     "CMIR-anx35ب"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q17",
+    "style": "clause",
+    "rank": null,
+    "top5": [
+     "CGR-art018",
+     "CMIR-anx35أ",
+     "CMIR-art050",
+     "IFR-art048",
+     "CGR-art004"
+    ],
+    "recall10": 0.0
+   },
+   {
+    "id": "q18",
+    "style": "clause",
+    "rank": 3,
+    "top5": [
+     "CMIR-art093",
+     "CMIR-art043",
+     "CMIR-art036",
+     "CMIR-art088",
+     "CMIR-anx25"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q19",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art073",
+     "IFR-art027",
+     "CMIR-art074",
+     "CMIR-art075",
+     "CMIR-art077"
+    ],
+    "recall10": 0.5
+   },
+   {
+    "id": "q20",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art045",
+     "CMIR-anx25",
+     "CMIR-art044",
+     "CMIR-art086",
+     "CMIR-art093"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q21",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art047",
+     "CMIR-art045",
+     "CMIR-anx65",
+     "CMIR-anx25",
+     "CMIR-anx55"
+    ],
+    "recall10": 0.3333333333333333
+   },
+   {
+    "id": "q22",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art051",
+     "CMIR-art085",
+     "CMIR-art093",
+     "CMIR-art073",
+     "CMIR-art091"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q23",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "CMIR-anx25",
+     "CMIR-art027",
+     "CMIR-art088",
+     "IFR-anx11",
+     "IFR-art019"
+    ],
+    "recall10": 0.5
+   },
+   {
+    "id": "q24",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art041",
+     "CGR-art043",
+     "CGR-art041",
+     "CMIR-anx45",
+     "IFR-art013"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q25",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CMIR-art096",
+     "CMIR-art098",
+     "CMIR-art097",
+     "CMIR-art095",
+     "CMIR-art086"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q26",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art086",
+     "CMIR-art094",
+     "CMIR-anx25",
+     "CMIR-art044",
+     "CMIR-art093"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q27",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art027",
+     "CMIR-art089",
+     "CMIR-art084",
+     "IFR-anx1",
+     "CMIR-art087"
+    ],
+    "recall10": 0.75
+   },
+   {
+    "id": "q28",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art052",
+     "IFR-anx1",
+     "IFR-anx11",
+     "CGR-art068",
+     "CGR-art058"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q29",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art019",
+     "CGR-art032",
+     "CMIR-art053",
+     "IFR-art049",
+     "CGR-art001"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q30",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art090",
+     "CGR-art058",
+     "CGR-art059",
+     "CGR-anx1",
+     "CGR-art057"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q31",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art077",
+     "IFR-art093",
+     "IFR-art031",
+     "SIFI-art028",
+     "IFR-art020"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q32",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art095",
+     "IFR-art096",
+     "IFR-anx1",
+     "IFR-art079",
+     "SIFI-art010"
+    ],
+    "recall10": 0.8
+   },
+   {
+    "id": "q33",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art082",
+     "IFR-art048",
+     "IFR-art049",
+     "IFR-art100",
+     "IFR-anx9"
+    ],
+    "recall10": 0.6666666666666666
+   },
+   {
+    "id": "q34",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "IFR-art043",
+     "IFR-art038",
+     "IFR-art100",
+     "IFR-art107",
+     "IFR-art059"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q35",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art064",
+     "CMIR-art037",
+     "CMIR-art020",
+     "CMIR-art029",
+     "CMIR-anx13"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q36",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art103",
+     "IFR-art090",
+     "IFR-art072",
+     "IFR-art109",
+     "CMIR-art034"
+    ],
+    "recall10": 0.6
+   }
+  ],
+  "hybrid": [
+   {
+    "id": "q01",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art068",
+     "IFR-art071",
+     "IFR-art069",
+     "IFR-art067",
+     "IFR-anx1"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q02",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art069",
+     "IFR-art067",
+     "IFR-art048",
+     "IFR-art068",
+     "SIFI-art014"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q03",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art075",
+     "IFR-art092",
+     "IFR-art074",
+     "IFR-art037",
+     "IFR-art093"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q04",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "IFR-art075",
+     "IFR-art092",
+     "IFR-anx1",
+     "IFR-art074",
+     "IFR-art073"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q05",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art094",
+     "IFR-art064",
+     "IFR-art093",
+     "IFR-art077",
+     "IFR-art065"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q06",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art065",
+     "IFR-art064",
+     "IFR-art077",
+     "IFR-art093",
+     "IFR-art094"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q07",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art066",
+     "IFR-art050",
+     "IFR-anx2",
+     "IFR-art049",
+     "IFR-art101"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q08",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art074",
+     "IFR-anx5",
+     "IFR-anx1",
+     "IFR-anx11",
+     "IFR-art075"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q09",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art071",
+     "IFR-art068",
+     "IFR-art060",
+     "IFR-art081",
+     "IFR-art069"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q10",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "IFR-art074",
+     "IFR-art067",
+     "IFR-art096",
+     "IFR-anx1",
+     "IFR-art073"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q11",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "IFR-art074",
+     "IFR-art036",
+     "IFR-anx11",
+     "IFR-anx1",
+     "IFR-anx4"
+    ],
+    "recall10": 0.3333333333333333
+   },
+   {
+    "id": "q12",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art023",
+     "IFR-anx11",
+     "SIFI-art027",
+     "IFR-art094",
+     "IFR-art037"
+    ],
+    "recall10": 0.5
+   },
+   {
+    "id": "q13",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art029",
+     "CMIR-anx45",
+     "CGR-art080",
+     "CMIR-art044",
+     "CGR-art086"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q14",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art063",
+     "IFR-anx1",
+     "CGR-art081",
+     "CMIR-art077",
+     "CMIR-art088"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q15",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art046",
+     "CMIR-art088",
+     "IFR-anx11",
+     "IFR-anx1",
+     "IFR-art019"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q16",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art043",
+     "CMIR-anx35ب",
+     "CMIR-art077",
+     "CMIR-art039",
+     "CGR-art068"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q17",
+    "style": "clause",
+    "rank": 8,
+    "top5": [
+     "CMIR-anx35أ",
+     "CMIR-art038",
+     "CGR-art006",
+     "CMIR-art073",
+     "CMIR-art091"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q18",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art036",
+     "CMIR-art043",
+     "CMIR-art035",
+     "CMIR-art093",
+     "CMIR-anx25"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q19",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art073",
+     "CMIR-art075",
+     "CMIR-art071",
+     "CMIR-art074",
+     "IFR-art027"
+    ],
+    "recall10": 0.75
+   },
+   {
+    "id": "q20",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art045",
+     "CMIR-art093",
+     "CMIR-anx25",
+     "CMIR-art094",
+     "CMIR-art044"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q21",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art047",
+     "CMIR-anx55",
+     "CMIR-art074",
+     "CMIR-art075",
+     "CMIR-art071"
+    ],
+    "recall10": 0.6666666666666666
+   },
+   {
+    "id": "q22",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art051",
+     "CMIR-art085",
+     "CMIR-art016",
+     "CMIR-art073",
+     "CMIR-art049"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q23",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art027",
+     "IFR-art019",
+     "CMIR-art077",
+     "CMIR-anx25",
+     "CMIR-art028"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q24",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art041",
+     "CGR-art041",
+     "CGR-art043",
+     "SIFI-art012",
+     "IFR-art013"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q25",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CMIR-art096",
+     "CMIR-art098",
+     "CMIR-art097",
+     "CMIR-art093",
+     "CMIR-art086"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q26",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art086",
+     "CMIR-art044",
+     "CMIR-art094",
+     "CMIR-art093",
+     "CMIR-art071"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q27",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art027",
+     "IFR-anx1",
+     "CMIR-art089",
+     "SIFI-art020",
+     "IFR-art029"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q28",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art052",
+     "CGR-art051",
+     "CGR-art068",
+     "CGR-art073",
+     "IFR-anx1"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q29",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art019",
+     "IFR-art049",
+     "CGR-art032",
+     "CGR-art042",
+     "CMIR-art053"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q30",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art090",
+     "CGR-anx1",
+     "CGR-art059",
+     "CGR-art058",
+     "CGR-art057"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q31",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art077",
+     "IFR-art093",
+     "SIFI-art028",
+     "IFR-art031",
+     "IFR-art063"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q32",
+    "style": "clause",
+    "rank": 3,
+    "top5": [
+     "IFR-anx1",
+     "IFR-art096",
+     "IFR-art095",
+     "IFR-art078",
+     "IFR-art079"
+    ],
+    "recall10": 0.6
+   },
+   {
+    "id": "q33",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art082",
+     "SIFI-art021",
+     "IFR-anx9",
+     "IFR-art049",
+     "IFR-art100"
+    ],
+    "recall10": 0.6666666666666666
+   },
+   {
+    "id": "q34",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "IFR-art043",
+     "IFR-art038",
+     "IFR-art056",
+     "IFR-art100",
+     "IFR-art107"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q35",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art037",
+     "CMIR-art064",
+     "CMIR-art020",
+     "CMIR-art029",
+     "CMIR-art055"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q36",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art072",
+     "IFR-art103",
+     "IFR-art090",
+     "CMIR-anx15",
+     "CMIR-art035"
+    ],
+    "recall10": 0.6
+   }
+  ],
+  "dense+rerank": [
+   {
+    "id": "q01",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art068",
+     "IFR-art071",
+     "IFR-art069",
+     "IFR-art060",
+     "IFR-art094"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q02",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art069",
+     "IFR-art015",
+     "IFR-art067",
+     "IFR-art068",
+     "SIFI-art014"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q03",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art075",
+     "SIFI-art008",
+     "IFR-art009",
+     "IFR-art092",
+     "SIFI-art011"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q04",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "IFR-art075",
+     "IFR-art092",
+     "SIFI-art025",
+     "IFR-art065",
+     "IFR-art061"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q05",
+    "style": "clause",
+    "rank": 3,
+    "top5": [
+     "IFR-art077",
+     "IFR-art093",
+     "IFR-art094",
+     "IFR-art063",
+     "IFR-art049"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q06",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art065",
+     "IFR-art064",
+     "IFR-art094",
+     "IFR-art077",
+     "IFR-art093"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q07",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art066",
+     "IFR-art050",
+     "IFR-art049",
+     "IFR-anx1",
+     "IFR-art082"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q08",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art074",
+     "IFR-anx5",
+     "IFR-anx4",
+     "IFR-art051",
+     "IFR-anx11"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q09",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art071",
+     "IFR-art068",
+     "IFR-art060",
+     "IFR-art069",
+     "IFR-anx11"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q10",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art067",
+     "IFR-art074",
+     "IFR-art092",
+     "IFR-art085",
+     "IFR-art073"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q11",
+    "style": "clause",
+    "rank": 4,
+    "top5": [
+     "IFR-anx11",
+     "IFR-art005",
+     "SIFI-art008",
+     "IFR-art036",
+     "IFR-anx4"
+    ],
+    "recall10": 0.3333333333333333
+   },
+   {
+    "id": "q12",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art023",
+     "SIFI-art027",
+     "IFR-art037",
+     "SIFI-art018",
+     "IFR-anx11"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q13",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art029",
+     "CMIR-anx45",
+     "CMIR-art039",
+     "CMIR-art044",
+     "CMIR-art089"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q14",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "CGR-art081",
+     "CMIR-art063",
+     "IFR-anx1",
+     "CMIR-art091",
+     "SIFI-art006"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q15",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art046",
+     "CMIR-art088",
+     "IFR-anx11",
+     "CMIR-art038",
+     "IFR-anx1"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q16",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art043",
+     "CMIR-art039",
+     "CMIR-anx35ب",
+     "CMIR-art042",
+     "CMIR-art077"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q17",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art039",
+     "CMIR-anx35أ",
+     "CMIR-art043",
+     "CMIR-art038",
+     "CMIR-anx75"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q18",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art036",
+     "CMIR-art043",
+     "CMIR-art093",
+     "CMIR-anx35أ",
+     "CMIR-anx25"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q19",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art073",
+     "CMIR-art077",
+     "IFR-art027",
+     "CMIR-art074",
+     "CMIR-art071"
+    ],
+    "recall10": 0.75
+   },
+   {
+    "id": "q20",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art045",
+     "CMIR-anx25",
+     "CMIR-art093",
+     "CMIR-art044",
+     "CMIR-art080"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q21",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art047",
+     "CMIR-anx55",
+     "CMIR-art091",
+     "CMIR-art048",
+     "CMIR-anx75"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q22",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art051",
+     "CMIR-art016",
+     "CMIR-art085",
+     "CMIR-art049",
+     "CMIR-art039"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q23",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art027",
+     "CMIR-art077",
+     "CMIR-art028",
+     "CMIR-art093",
+     "CMIR-art046"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q24",
+    "style": "clause",
+    "rank": 2,
+    "top5": [
+     "CGR-art041",
+     "CMIR-art041",
+     "CMIR-anx45",
+     "CGR-art043",
+     "IFR-art013"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q25",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CMIR-art096",
+     "CMIR-art098",
+     "CMIR-art097",
+     "CMIR-art095",
+     "CMIR-art070"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q26",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art086",
+     "CMIR-art044",
+     "CMIR-art071",
+     "CMIR-anx25",
+     "CMIR-art093"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q27",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "SIFI-art020",
+     "IFR-anx1",
+     "IFR-art027",
+     "IFR-art026",
+     "SIFI-art019"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q28",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art052",
+     "CGR-art056",
+     "CGR-art088",
+     "CGR-art051",
+     "CGR-art068"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q29",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art019",
+     "CGR-art018",
+     "CGR-art029",
+     "IFR-art049",
+     "CGR-art032"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q30",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "CGR-art090",
+     "CGR-art087",
+     "CGR-art059",
+     "CGR-art058",
+     "CGR-anx1"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q31",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art077",
+     "IFR-art093",
+     "SIFI-art028",
+     "IFR-art031",
+     "IFR-art023"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q32",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art078",
+     "IFR-art095",
+     "IFR-art096",
+     "IFR-anx11",
+     "IFR-anx1"
+    ],
+    "recall10": 0.8
+   },
+   {
+    "id": "q33",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art082",
+     "IFR-art100",
+     "SIFI-art021",
+     "IFR-art049",
+     "IFR-art083"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q34",
+    "style": "question",
+    "rank": 1,
+    "top5": [
+     "IFR-art043",
+     "IFR-art038",
+     "IFR-art059",
+     "IFR-art056",
+     "IFR-art041"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q35",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "CMIR-art064",
+     "CMIR-art037",
+     "CMIR-art055",
+     "CMIR-art020",
+     "CMIR-art029"
+    ],
+    "recall10": 1.0
+   },
+   {
+    "id": "q36",
+    "style": "clause",
+    "rank": 1,
+    "top5": [
+     "IFR-art072",
+     "IFR-art103",
+     "IFR-art054",
+     "IFR-art090",
+     "IFR-art009"
+    ],
+    "recall10": 0.8
+   }
+  ]
+ }
+}
