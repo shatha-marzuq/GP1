@@ -32,7 +32,7 @@ Document (PDF/DOCX)  ──►  mithaq_docproc  ──►  JSON: items (عناو
 pip install -r requirements.txt
 ```
 
-### Tesseract (محرك OCR احتياطي — مطلوب)
+### Tesseract (محرك OCR احتياطي مطلوب)
 1. ثبّت Tesseract لويندوز من: https://github.com/UB-Mannheim/tesseract/wiki (فعّل Arabic أثناء التثبيت).
 2. **مهم للدقة:** استبدل نماذج اللغة بنسخة tessdata_best (أدق بكثير من النسخة الافتراضية):
    ```powershell
@@ -45,7 +45,7 @@ pip install -r requirements.txt
 3. الكود يلقى Tesseract تلقائياً في `C:\Program Files\Tesseract-OCR`. لو مثبت بمكان ثاني:
    `$env:TESSERACT_CMD = "المسار\tesseract.exe"`
 
-### LibreOffice (لأرقام الصفحات في ملفات Word — مطلوب لو بتدعمون Word)
+### LibreOffice (لأرقام الصفحات في ملفات Word مطلوب لو بتدعمون Word)
 ثبّته من https://www.libreoffice.org/download (مجاني، التثبيت "نمطي"). الكود يلقاه تلقائياً في
 `C:\Program Files\LibreOffice`. لو مثبت بمكان ثاني: `$env:LIBREOFFICE_PATH = "المسار\soffice.exe"`.
 بدونه: النص يطلع كامل، بس بدون أرقام صفحات (تحذير `NO_PAGE_NUMBERS`).
@@ -60,7 +60,7 @@ pip install "transformers>=4.56,<5"                    # Surya 0.17 ما يشت�
 تحقق: `python -c "from mithaq_docproc.ocr import SuryaEngine; print(SuryaEngine()._mode)"` يطبع `foundation`.
 أول تشغيل ينزّل النماذج (1–2 GB، مرة وحدة). لو Surya مو مثبت، النظام يستخدم Tesseract تلقائياً.
 
-> ⚠️ لا تشغّلوا `pip install -U transformers` بعدها — يرجع نسخة 5 ويخرب Surya.
+> ⚠️ لا تشغّلون  `pip install -U transformers` بعدها — يرجع نسخة 5 ويخرب Surya.
 
 ---
 
@@ -159,7 +159,7 @@ uvicorn mithaq_docproc.api:app
 3b. OCR (ocr.py + scan_tables.py + lexicon.py)
       Surya أو Tesseract، كشف الجداول خلية خلية، إعادة قراءة الأرقام، تصحيح بالقاموس
 4. التنظيف (cleaning.py + layout.py)
-      حذف الترويسات والتذييلات، إصلاح الكلمات المنقسمة، توحيد الأشكال
+      حذف والتذييلات، إصلاح الكلمات المنقسمة، توحيد الأشكال
 5. التنظيم (structure.py)
       عناوين / بنود / فقرات / جداول + رقم البند والمستوى
 6. الإخراج (output.py)  →  JSON + TXT + Markdown
@@ -294,5 +294,4 @@ mithaq_docproc/
   data/lexicon_seed.txt   بذرة القاموس
   tools/             أدوات التشخيص
   tests/             67 اختبار
-lexicon/             ← ضعوا هنا نصوص لوائح هيئة السوق المالية
 ```
