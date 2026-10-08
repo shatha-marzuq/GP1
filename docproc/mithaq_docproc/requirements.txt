@@ -1,0 +1,15 @@
+pymupdf>=1.24
+python-docx>=1.1
+pillow
+numpy
+pytesseract        # احتياطي (يحتاج تثبيت Tesseract + حزمة ara على النظام)
+rapidfuzz          # لحساب CER/WER بسرعة
+fastapi
+uvicorn
+python-multipart
+# المحرك الأساسي حسب التقرير (ثقيل، ثبّته بشكل منفصل):
+# paddlepaddle
+# paddleocr
+pytest             # للاختبارات
+# OCR أدق للملفات الممسوحة (اختياري، مجاني):
+# surya-ocr

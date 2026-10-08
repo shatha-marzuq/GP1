@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.log
+tmp/
+.DS_Store
+
+docproc/out/
