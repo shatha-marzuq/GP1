@@ -1,4 +1,4 @@
-# mithaq_docproc — Document Processing & OCR
+# mithaq_docproc, Document Processing & OCR
 
 **MITHAQ · وكيل معالجة المستندات (Document Processing Agent)**
 
