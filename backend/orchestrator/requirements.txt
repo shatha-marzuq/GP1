@@ -1,0 +1,5 @@
+langgraph>=1.0
+langchain>=1.0          # init_chat_model for the verifier LLM
+langchain-openai        # for MITHAQ_LLM=azure_openai:… or openai:…
+pydantic>=2
+pytest
