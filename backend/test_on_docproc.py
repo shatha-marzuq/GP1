@@ -1,4 +1,5 @@
 import json
+import os
 import statistics
 import sys
 from collections import Counter
@@ -6,7 +7,13 @@ from collections import Counter
 from segmentation import segment_clauses
 
 # how to run:  python test_on_docproc.py ../docproc/test_items.json
-path = sys.argv[1] if len(sys.argv) > 1 else "../docproc/test_items.json"
+# (the default path is relative to this file, so it works from any folder)
+this_folder = os.path.dirname(os.path.abspath(__file__))
+path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(this_folder, "..", "docproc", "test_items.json")
+if not os.path.exists(path):
+    print("file not found:", path)
+    print("make it first:  cd docproc && python -m mithaq_docproc testset/test.pdf --json -o test_items.json  (or pass a docproc JSON path)")
+    sys.exit(1)
 with open(path, encoding="utf-8") as f:
     data = json.load(f)
 items = data["items"]

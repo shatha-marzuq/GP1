@@ -8,3 +8,9 @@ tmp/
 .DS_Store
 
 docproc/out/
+.pytest_cache/
+
+# test T&C files stay local (not in the repo)
+docproc/testset/
+docproc/test_items.json
+backend/segmentation_output/
