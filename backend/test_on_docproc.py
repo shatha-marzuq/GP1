@@ -1,30 +1,73 @@
-import json, statistics, sys
+import json
+import os
+import statistics
+import sys
 from collections import Counter
+
 from segmentation import segment_clauses
 
-path = sys.argv[1] if len(sys.argv) > 1 else "../docproc/out/test.json"
-data = json.load(open(path, encoding="utf-8"))
+# how to run:  python test_on_docproc.py ../docproc/test_items.json
+# (the default path is relative to this file, so it works from any folder)
+this_folder = os.path.dirname(os.path.abspath(__file__))
+path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(this_folder, "..", "docproc", "test_items.json")
+if not os.path.exists(path):
+    print("file not found:", path)
+    print("make it first:  cd docproc && python -m mithaq_docproc testset/test.pdf --json -o test_items.json  (or pass a docproc JSON path)")
+    sys.exit(1)
+with open(path, encoding="utf-8") as f:
+    data = json.load(f)
 items = data["items"]
 print("items:", len(items), dict(Counter(i["type"] for i in items)))
-print("with marker:", sum(1 for i in items if i.get("marker")))
 
 clauses = segment_clauses(items)
 words = [c["word_count"] for c in clauses]
 print("clauses:", len(clauses),
-      "| front matter:", sum(c["is_front_matter"] for c in clauses),
+      "| intro:", sum(c["section_type"] == "front" for c in clauses),
+      "| annex:", sum(c["section_type"] == "annex" for c in clauses),
       "| median words:", statistics.median(words),
       "| max words:", max(words),
       "| oversize:", sum(c["oversize"] for c in clauses))
+print()
 
-# فحوصات تلقائية
-ids = [i for c in clauses for i in c["item_ids"]]
-src = [i["id"] for i in items if (i.get("text") or "").strip() or i.get("table")]
-print("ما ضاع ولا تكرر أي عنصر:", ids == src)
-print("كل بند له صفحة:", all(c["page_start"] for c in clauses))
-print("الصفحات مرتبة:", all(c["page_start"] <= c["page_end"] for c in clauses))
+# ---------- automatic checks ----------
+
+# 1) no item is lost and the order is the same
+#    (ids ending with "-t" are titles we cut from a glued paragraph,
+#     and a long item can be in two parts, so we remove repeats)
+ids = []
+for c in clauses:
+    for i in c["item_ids"]:
+        if i.endswith("-t"):
+            continue
+        if len(ids) == 0 or ids[-1] != i:
+            ids.append(i)
+source_ids = [i["id"] for i in items if (i.get("text") or "").strip() or i.get("table")]
+print("no item lost, same order:", ids == source_ids)
+
+# 2) main clause numbers come in order 1, 2, 3, ... with nothing missing
+numbers = []
+for c in clauses:
+    if c["clause_number"] is not None and c["clause_number"] not in numbers:
+        numbers.append(c["clause_number"])
+expected = list(range(1, len(numbers) + 1))
+print("main clauses found:", len(numbers), "| in order with none missing:", numbers == expected)
+if numbers != expected:
+    print("   found:", numbers)
+
+# 3) pages
+if any(c["page_start"] for c in clauses):
+    print("every clause has a page:", all(c["page_start"] for c in clauses))
+    print("pages in order:", all(c["page_start"] <= c["page_end"] for c in clauses if c["page_start"]))
+else:
+    print("no page numbers in this file (Word file without LibreOffice)")
+
+# 4) titles that were glued to the paragraph before them (docproc problem)
+glued = [i for c in clauses for i in c["item_ids"] if i.endswith("-t")]
+if glued:
+    print("titles fixed (glued to the paragraph before):", glued)
 
 print()
-for c in clauses[:20]:
-    tag = "مقدمة" if c["is_front_matter"] else ""
-    print(c["clause_id"], c["marker"], f'ص{c["page_start"]}-{c["page_end"]}',
-          f'{c["word_count"]}كلمة', f'جزء {c["part"]}/{c["parts"]}', tag, "|", c["title"][:40])
+for c in clauses:
+    if c["section_type"] == "clause" and c["part"] == 1:
+        print(c["clause_number"], "|", c["parts"], "parts | pages", c["page_start"], "-", c["page_end"],
+              "|", c["section_title"][:45])

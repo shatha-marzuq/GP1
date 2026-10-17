@@ -36,7 +36,7 @@ SCALAR = ["doc_id", "doc_title", "doc_title_en", "doc_type", "issuer", "source_f
           "chunk_index", "chunk_count", "binding_status", "citation", "breadcrumb", "word_count", "char_count"]
 REQUIRED = ["chunk_id", "doc_id", "doc_title", "section_type", "citation", "text", "content", "binding_status"]
 
-
+# انواع الصناديق وكل chunk تتطبق على اي صندوق؟
 # Which fund regime a chunk governs — lets the T&C analyser drop look-alike provisions of other regimes
 # (e.g. public-fund meetings art 77 vs private-fund meetings art 93, which embed almost identically).
 #   general     : CMIR — applies to every fund manager
@@ -79,7 +79,7 @@ def to_metadata(c):
     m["text_search"] = c["text_search"]                           # lets the BM25 side rebuild from Chroma alone
     return m
 
-
+#يتاكد من صحة كل قطعة من البيانات ويحول بياناتها الوصفية إلى صيغ متوافقة مع Chroma . إذا كانت هناك مشاكل، فإنه يرفع خطأ ويخرج من البرنامج
 def prepare():
     chunks = [json.loads(l) for l in CHUNKS.read_text(encoding="utf-8").splitlines() if l.strip()]
     problems = []
@@ -99,7 +99,7 @@ def prepare():
     for r in records:
         bad = {k: type(v).__name__ for k, v in r["metadata"].items() if not isinstance(v, (str, int, float, bool))}
         assert not bad, (r["id"], bad)
-
+# الاوتبت بيكون في مجلد output/05_embedding_input/records.jsonl و prep_report.json
     PREP.mkdir(parents=True, exist_ok=True)
     with open(PREP / "records.jsonl", "w", encoding="utf-8") as o:
         for r in records:
@@ -128,7 +128,7 @@ def pick_device(pref=None):
         return "mps"
     return "cpu"
 
-
+# اقصى طول للمودل هو توكنز ١٠٢٤ واطول قطعه عندنا ٧٤٠
 def load_model(device=None):
     from sentence_transformers import SentenceTransformer
     # the official repo ships pytorch_model.bin; skip transformers' slow lookup of a safetensors conversion PR
@@ -171,7 +171,12 @@ def embed(records, digest, batch_size, device, force):
     print(f"[10] embedded {len(records)} chunks on {model.device} in {secs}s "
           f"(max {max(tok_lens)} tokens, {truncated} truncated)")
     return out
-
+"""
+الاوتبت بيكون هون
+embeddings.npy: مصفوفة 524 × 1024
+ids.json: أي صف لأي قطعة
+embedding_info.json: اشتغل على ماك (mps) في 29.5 ثانية
+"""
 
 # ───────────────────────────── step 11: store ─────────────────────────────
 def chroma_client():

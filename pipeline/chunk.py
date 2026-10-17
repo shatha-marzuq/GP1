@@ -47,7 +47,7 @@ def units_of(section):
             units[-1].append(p)
     return units
 
-
+# يقسم  النص إلى جمل، ثم يحاول تجميع الجمل في أجزاء بحيث لا يتجاوز كل جزء الحد الأقصى للكلمات المحدد. إذا كان هناك جزء لا يمكن تقسيمه على أساس الجمل، فإنه يقوم بتقسيمه على أساس الكلمات.
 def split_sentences(text, max_words):
     parts = re.split(r"(?<=[.؛])\s+", text)
     out, cur = [], ""
@@ -68,7 +68,7 @@ def split_sentences(text, max_words):
             final.append(" ".join(w[k:k + max_words]))
     return final
 
-
+# يقسم القسم إلى أجزاء بحيث لا يتجاوز كل جزء الحد الأقصى للكلمات المحدد. إذا كان هناك جزء لا يمكن تقسيمه على أساس الفقرات، فإنه يقوم بتقسيمه على أساس الجمل.
 def pieces_of(section, max_words):
     """Yield pieces: dict(paras=[...], lead=optional lead-in text). Each piece ≤ max_words when possible."""
     pieces = []
@@ -97,7 +97,7 @@ def pieces_of(section, max_words):
                     pieces.append({"paras": [{**p, "text": s}], "lead": None})
     return pieces, intro
 
-
+# يوزع الحجم بالتساوي، يعني بدال قطعة كبيرة وقطعة صغيرة مرة يطلع قطعتين متقاربات
 def pack(pieces, max_words, intro):
     # balance chunk sizes: aim for equal parts instead of one full chunk + a small remainder
     total = sum(words(p["text"]) for pc in pieces for p in pc["paras"])
@@ -122,11 +122,11 @@ def pack(pieces, max_words, intro):
             cur["leads"].add(pc["lead"])
     return chunks
 
-
-# Annexes that are checklists of T&C disclosure requirements: each numbered item "N) …" is one requirement
-# and becomes its own chunk, so a T&C clause retrieves the matching requirement (e.g. fees ↔ item 11).
-# Their levels are inverted (items at level 2, their أ/ب sub-items at level 1), so the generic
-# paragraph grouping would glue each item onto the previous item's last sub-item.
+""" 
+الملحق 1 والملحق 11 في لائحة صناديق الاستثمار عبارة عن قائمة متطلبات
+ (وش لازم يكون مذكور في الشروط والأحكام) كل بند مرقم فيها 1) 2) 3) يصير قطعة لحاله،
+ عشان مثلاً بند "الرسوم" في الشروط يلقى بالضبط البند (11) "الرسوم" في الملحق.
+"""
 CHECKLIST_ANNEXES = {("investment_funds_regulations", "1"), ("investment_funds_regulations", "11")}
 ITEM = re.compile(r"^(\d+)\)\s*(.*)")
 
