@@ -45,7 +45,7 @@ def tokenize(text):
             toks.append(t)
     return toks
 
-
+# بحث بالكلمات المشتركة يشيل التشكيل ويشيل "ال، وال، بال، لل" من أول الكلمة عشان "الصندوق" و"بالصندوق" تصير نفس الكلمة.
 class BM25:
     def __init__(self, docs, k1=1.5, b=0.75):
         self.k1, self.b = k1, b
@@ -110,7 +110,7 @@ class RegulationRetriever:
         return ((not doc_ids or m["doc_id"] in doc_ids) and (not section_types or m["section_type"] in section_types)
                 and (not binding_status or m["binding_status"] == binding_status)
                 and (not fund_type or m["fund_scope"] in FUND_TYPE_SCOPES[fund_type]))
-
+#يحول البند لمتجه بـ BGE-M3 ويسأل Chroma عن الأقرب. يفهم المعنى حتى لو الكلمات مختلفة.
     def dense(self, query, n, where=None, qvec=None):
         qvec = self.embed_queries([query])[0] if qvec is None else qvec
         res = self.col.query(query_embeddings=[qvec.tolist()], n_results=n, where=where, include=["distances"])

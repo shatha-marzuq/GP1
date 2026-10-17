@@ -18,21 +18,21 @@ from typing import Callable
 
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import Send
-
+# شكل البيانات نجيبه من ملف ال state 
 from .state import ClauseTask, ReviewState
 
-
+#  بعدين لما نسوي FastAPI. بنبدلها بدالة تحفظ الحالة في قاعدة البيانات، والواجهة تعرض للمستخدم "جاري الاستخراج..." مثلاً 
 def print_status(review_id: str, status: str, **info):
     print(f"[{review_id}] {status}", info or "")
 
-
+# ocr شذي يربطه مع الاوركسترا
 def docproc_extract(path: str) -> dict:
     """Document Processing Agent: the team's docproc pipeline (PDF/Word -> items with page numbers)."""
     from . import paths  # noqa: F401
     from mithaq_docproc import build_output, process_document
     return build_output(process_document(path), path)
 
-
+# نفس الشي لكود جواهر حق التقسيم 
 def default_segment(items: list[dict]) -> list[dict]:
     from . import paths  # noqa: F401
     from segmentation import segment_clauses
@@ -68,14 +68,14 @@ def build_graph(retriever, *,
 
     def after_extract(state: ReviewState):
         return "failed" if state.get("error") or not state.get("items") else "segment"
-
+# بعد السقمنت هنا نبدا نرسل البند مع  ال retrieve
     def fan_out(state: ReviewState):
         clauses = state.get("clauses") or []
         if not clauses:
             return "failed"
         on_status(state["review_id"], "retrieving", done=0, total=len(clauses))
         return [Send("retrieve", {"review_id": state["review_id"], "clause": c}) for c in clauses]
-
+#تاخذ البند، وتبحث بنصه في قاعدة الأنظمة  كود الرتريف
     def retrieve_node(task: ClauseTask):
         clause = task["clause"]
         hits = retriever.search(clause["text"], k=k, **search_kwargs)
@@ -99,7 +99,7 @@ def build_graph(retriever, *,
         }
         on_status(rid, "done", clauses=len(results))
         return {"output": output}
-
+# سوينا قراف جديد
     g = StateGraph(ReviewState)
     g.add_node("extract", extract_node)
     g.add_node("segment", segment_node)
@@ -114,7 +114,7 @@ def build_graph(retriever, *,
     g.add_edge("failed", END)
     return g.compile(checkpointer=checkpointer)
 
-
+# نرتب النواتج 
 def _result(clause: dict, hits: list[dict]) -> dict:
     return {
         "clause_id": clause["clause_id"],
