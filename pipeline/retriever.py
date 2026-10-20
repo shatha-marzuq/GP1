@@ -20,7 +20,7 @@ On 33 clauses of a real private-fund T&C: dense 0.39 Hit@1 → +fund_type 0.67 �
 CLI:  python3 retriever.py "نص البند أو السؤال" [--k 5] [--mode dense|hybrid|bm25] [--doc DOC_ID]
                                               [--fund-type private] [--rerank]
 """
-import argparse, json, math, re
+import argparse, json, math, re, threading
 from collections import Counter
 
 from chunk import search_normalize
@@ -72,6 +72,9 @@ class RegulationRetriever:
     def __init__(self, device=None, model=None):
         self.col = chroma_client().get_collection(COLLECTION)
         self._model, self._device, self._reranker = model, device, None
+        # one copy of each model even when the orchestrator searches clauses in parallel threads;
+        # inference is serialized too, since both models share one device
+        self._lock = threading.RLock()
         data = self.col.get(include=["metadatas", "documents"])
         self.ids, self.docs, self.metas = data["ids"], data["documents"], data["metadatas"]
         self.index = {i: n for n, i in enumerate(self.ids)}
@@ -79,19 +82,22 @@ class RegulationRetriever:
 
     @property
     def model(self):
-        if self._model is None:
-            self._model = load_model(self._device)
-        return self._model
+        with self._lock:
+            if self._model is None:
+                self._model = load_model(self._device)
+            return self._model
 
     @property
     def reranker(self):
-        if self._reranker is None:
-            from sentence_transformers import CrossEncoder
-            self._reranker = CrossEncoder(RERANK_MODEL, device=pick_device(self._device), max_length=1024)
-        return self._reranker
+        with self._lock:
+            if self._reranker is None:
+                from sentence_transformers import CrossEncoder
+                self._reranker = CrossEncoder(RERANK_MODEL, device=pick_device(self._device), max_length=1024)
+            return self._reranker
 
     def embed_queries(self, queries):
-        return self.model.encode(queries, normalize_embeddings=True, convert_to_numpy=True)
+        with self._lock:
+            return self.model.encode(queries, normalize_embeddings=True, convert_to_numpy=True)
 
     @staticmethod
     def _where(doc_ids, section_types, binding_status, fund_type=None):
@@ -158,7 +164,8 @@ class RegulationRetriever:
                         "citation": m["citation"], "binding_status": m["binding_status"],
                         "pdf_pages": m["pdf_pages"], "text": self.docs[self.index[i]], "metadata": m})
         if rerank and out:
-            scores = self.reranker.predict([(query, h["text"]) for h in out], batch_size=8)
+            with self._lock:
+                scores = self.reranker.predict([(query, h["text"]) for h in out], batch_size=8)
             for h, s in zip(out, scores):
                 h["first_stage_score"], h["score"] = h["score"], round(float(s), 4)
             out.sort(key=lambda h: -h["score"])
