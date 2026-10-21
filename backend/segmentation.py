@@ -70,8 +70,12 @@ def is_contents_line(text):
     return bool(re.search(r"\.{4,}|-{4,}|…", text) or re.search(r"\s\d{1,3}$", text))
 
 
-# find the main clauses of the document
-# every company writes them in a different way, so we look for a list of titles written in the same way that covers most of the file
+# clause title does not end with a full stop, a list item usually does
+def is_sentence(text):
+    return text.rstrip().endswith((".", "؛"))
+
+
+# find the main clauses of the document, we look for a list of titles written in the same way that covers most of the file
 def find_main_clauses(items):
     candidates = []
     for index in range(len(items)):
@@ -83,29 +87,56 @@ def find_main_clauses(items):
             continue
         marker = read_marker(text)
         if marker:
-            is_short = count_words(text) <= 15
-            candidates.append((index, marker, is_short))
+            # a short line that does not end like a sentence looks like a clause title
+            # a sentence ex: "1) التغيير المهم في أهداف الصندوق." is usually a point inside a list
+            is_title = count_words(text) <= 15 and not is_sentence(text)
+            candidates.append((index, marker, is_title))
 
     best_chain = []
     best_style = None
     best_score = 0
     for a in range(len(candidates)):
-        start_index, start_marker, start_is_short = candidates[a]
-        if start_marker[2] != 1 or not start_is_short:
+        start_index, start_marker, start_is_title = candidates[a]
+        if start_marker[2] != 1 or not start_is_title:
             continue
 
         # after 1 we look for 2 (we allow up to 2 missing numbers)
         chain = [(start_index, 1)]
         expected = 2
-        for index, marker, is_short in candidates[a + 1:]:
-            same_style = marker[0] == start_marker[0] and marker[1] == start_marker[1]
-            if not same_style:
-                continue
-            # a short title can skip up to 2 missing numbers,
-            # a long one (title glued with its text) must be exactly the next number
-            if (is_short and expected <= marker[2] <= expected + 2) or marker[2] == expected:
-                chain.append((index, marker[2]))
-                expected = marker[2] + 1
+        position = a + 1
+        while position < len(candidates):
+            # a title with exactly the next number
+            # or the first of a long line / sentence with exactly the next number
+            # or a title that skips up to 2 missing numbers
+            title_exact = None
+            title_skip = None
+            not_title_exact = None
+            for b in range(position, len(candidates)):
+                index, marker, is_title = candidates[b]
+                if marker[0] != start_marker[0] or marker[1] != start_marker[1]:
+                    continue
+                if is_title and marker[2] == expected and title_exact is None:
+                    title_exact = b
+                if is_title and expected < marker[2] <= expected + 2 and title_skip is None:
+                    title_skip = b
+                if not is_title and marker[2] == expected and not_title_exact is None:
+                    not_title_exact = b
+
+            # a title with the next number wins, unless a title with a bigger number comes before it
+            if title_exact is not None and (title_skip is None or title_exact < title_skip):
+                found = title_exact
+            elif title_skip is not None and not_title_exact is not None:
+                found = min(title_skip, not_title_exact)
+            elif title_skip is not None:
+                found = title_skip
+            elif not_title_exact is not None:
+                found = not_title_exact
+            else:
+                break
+            index, marker, is_title = candidates[found]
+            chain.append((index, marker[2]))
+            expected = marker[2] + 1
+            position = found + 1
 
         score = len(chain) * (chain[-1][0] - chain[0][0])
         if len(chain) >= 5 and score > best_score:
@@ -146,15 +177,23 @@ def label_pattern(style, number):
 
 
 # fix a clause title that is glued to the end of the paragraph before it
-def split_glued_title(item, style, next_number):
+# after_title=True: the item is itself a clause title, and the next title is glued to it
+def split_glued_title(item, style, next_number, after_title=False):
     text = get_item_text(item)
-    pattern = r"^(.*[.:؛)])\s*(" + label_pattern(style, next_number) + r")(\S[^.:؛]{1,60})$"
+    # the title can end with ":"
+    title_part = r"(\S[^.:؛]{1,60}(?::\s*)?)$"
+    if after_title:
+        pattern = r"^(.*\S)\s+(" + label_pattern(style, next_number) + r")" + title_part
+    else:
+        pattern = r"^(.*[.:؛)])\s*(" + label_pattern(style, next_number) + r")" + title_part
     match = re.match(pattern, text, re.DOTALL)
     if not match:
         return None
 
     title = match.group(3).strip()
     if count_words(title) > 8:
+        return None
+    if after_title and count_words(match.group(1)) > 15:
         return None
 
     before = dict(item)
@@ -170,6 +209,46 @@ def split_glued_title(item, style, next_number):
     title_item["text_norm"] = title_item["text"]
 
     return before, title_item
+
+
+# sometimes the OCR puts a clause title inside a table, as a row with only one filled cell, we take it out of the table
+def split_table_title(item, style, next_number):
+    if item.get("type") != "table" or not item.get("table"):
+        return None
+    rows = item["table"]["rows"]
+    pattern = r"^(" + label_pattern(style, next_number) + r")(\S.*)$"
+
+    for r in range(len(rows)):
+        cells = [cell.strip() for cell in rows[r] if cell.strip()]
+        if len(cells) != 1:
+            continue
+        match = re.match(pattern, cells[0])
+        if not match or count_words(cells[0]) > 15 or is_sentence(cells[0]):
+            continue
+
+        title_item = dict(item)
+        title_item["id"] = item["id"] + "-t"
+        title_item["type"] = "heading"
+        title_item["table"] = None
+        title_item["marker"] = match.group(1).strip()
+        title_item["level"] = 1
+        title_item["text"] = cells[0]
+        title_item["text_norm"] = cells[0]
+
+        # the rows before the title stay with the clause before, the rows after go with the new clause
+        before = None
+        if r > 0:
+            before = dict(item)
+            before["table"] = dict(item["table"])
+            before["table"]["rows"] = rows[:r]
+        after = None
+        if r < len(rows) - 1:
+            after = dict(item)
+            after["id"] = item["id"] + "-b"
+            after["table"] = dict(item["table"])
+            after["table"]["rows"] = rows[r + 1:]
+        return before, title_item, after
+    return None
 
 
 def new_section(kind, number=None):
@@ -245,6 +324,16 @@ def break_big_unit(unit, max_words):
             small_units.append([item])
         elif item.get("type") == "table":
             rows = text.split("\n")
+
+            # one row can also be too long, then we cut it by sentences
+            short_rows = []
+            for row in rows:
+                if count_words(row) > max_words:
+                    short_rows += split_sentences(row, max_words)
+                else:
+                    short_rows.append(row)
+            rows = short_rows
+
             current_rows = []
             for row in rows:
                 if current_rows and count_words("\n".join(current_rows + [row])) > max_words:
@@ -306,11 +395,27 @@ def pack_units(units, max_words):
 
 
 # main function: items from docproc -> list of clauses
-def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأحكام"):
+def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأحكام", document=None, main_starts=None):
     items = [item for item in items if get_item_text(item)]
+
+    # info about the uploaded file (from docproc)
+    if document is None:
+        document = {}
+    source_file = document.get("filename")
+    doc_id = os.path.splitext(source_file)[0] if source_file else None
 
     # find how this file writes its main clauses
     main, style = find_main_clauses(items)
+
+    # the segmentation agent can give the clause starts itself
+    if main_starts is not None:
+        main = dict(main_starts)
+        if style is None:
+            for index in sorted(main):
+                found = read_marker(get_item_text(items[index]))
+                if found:
+                    style = found[:2]
+                    break
 
     # group the items by main clause
     sections = []
@@ -326,7 +431,18 @@ def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأ
             current_number = main[index]
             current = new_section("clause", current_number)
             sections.append(current)
-            current["items"].append(item)
+
+            # the next clause title can be glued to this title
+            glued = split_glued_title(item, style, current_number + 1, after_title=True)
+            if glued and (current_number + 1) not in main.values():
+                before, title_item = glued
+                current["items"].append(before)
+                current_number += 1
+                current = new_section("clause", current_number)
+                sections.append(current)
+                current["items"].append(title_item)
+            else:
+                current["items"].append(item)
 
         elif is_annex_heading(item) and current_number > 0:
             in_annex = True
@@ -336,10 +452,24 @@ def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأ
 
         else:
             glued = None
-            if style and not in_annex and current_number > 0:
+            in_table = None
+            # only when the next clause title was not already found by find_main_clauses
+            if style and not in_annex and current_number > 0 and (current_number + 1) not in main.values():
                 glued = split_glued_title(item, style, current_number + 1)
+                in_table = split_table_title(item, style, current_number + 1)
 
-            if glued:
+            if in_table:
+                before, title_item, after = in_table
+                if before:
+                    current["items"].append(before)
+                current_number += 1
+                current = new_section("clause", current_number)
+                sections.append(current)
+                current["items"].append(title_item)
+                if after:
+                    current["items"].append(after)
+
+            elif glued:
                 before, title_item = glued
                 current["items"].append(before)
                 current_number += 1
@@ -411,6 +541,13 @@ def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأ
                 "has_table": has_table,
                 "from_ocr": from_ocr,
                 "is_front_matter": section["kind"] == "front",
+                "doc_id": doc_id,
+                "doc_title": doc_title,
+                "doc_type": "شروط وأحكام",
+                "source_file": source_file,
+                "citation": doc_title + "، " + section_title,
+                "breadcrumb": header[1:-1],
+                "char_count": len(text),
             }
             result.append(clause)
             part_number += 1
