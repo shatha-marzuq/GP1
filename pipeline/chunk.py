@@ -1,42 +1,39 @@
-"""
-Step 7 — Split the regulations into meaningful chunks (RAG-ready).
-
-Strategy (structure-aware, never cuts across articles):
-  • one article / annex = one chunk when it fits in MAX_WORDS
-  • longer articles are split on paragraph boundaries (أ، ب، ج …), keeping each paragraph with
-    its sub-paragraphs (1، 2، 3 …); a paragraph that is itself too long is split between its
-    sub-paragraphs, and the paragraph's lead-in sentence ("… الآتي:") is repeated as context
-  • a single block that is still too long is split on sentence boundaries (last resort)
-  • every chunk starts with a breadcrumb header (document › part › chapter › article) so it is
-    self-contained for embedding and citation; footnotes that apply to the chunk are appended
-
-Input : output/03_structured/<doc_id>.json
-Output: output/04_chunks/chunks.jsonl (all documents) + <doc_id>.jsonl + chunk_stats.json
-"""
 import argparse, json, re
 from pathlib import Path
 from statistics import mean, median
-
+#القطعة ما تقطع مادة أبدًا. مادة كاملة = قطعة وحدة إذا حجمها أقل من 300 كلمة.
+#والـ300 كلمة عربية تقريبًا تناسب نماذج embedding اللي حدها 512 token.
 ROOT = Path(__file__).resolve().parent.parent
 IN = ROOT / "output" / "03_structured"
 OUT = ROOT / "output" / "04_chunks"
-
+#اختصارات المستندات
 SHORT = {"investment_funds_regulations": "IFR", "capital_market_institutions_regulations": "CMIR",
          "corporate_governance_regulations": "CGR", "simplified_investment_funds_instructions": "SIFI"}
 FOOT = re.compile(r"\s*\[\^(\d+)\]")
+EXTRACTED = ROOT / "output" / "01_extracted"
 
+#رقم الصفحة المكتوب في مستند الهيئة (أسفل الصفحة) لكل صفحة PDF
+#الغلاف ما عليه رقم، فالصفحة المكتوبة = صفحة الـ PDF ناقص 1
+def printed_page_numbers(doc_id):
+    numbers = {}
+    for p in json.loads((EXTRACTED / f"{doc_id}.json").read_text(encoding="utf-8"))["pages"]:
+        digits = [l["text"].strip() for l in p["lines"] if l["text"].strip().isdigit()]
+        if digits:
+            numbers[p["page"]] = int(digits[-1])
+    return numbers
 
+#عدد الكلمات
 def words(t):
     return len(t.split())
 
-
+#توحيد للبحث النصي (BM25)
 def search_normalize(t):
     t = re.sub(r"[إأآٱ]", "ا", t)
     t = t.replace("ى", "ي").replace("ة", "ه").replace("ؤ", "و").replace("ئ", "ي")
     t = re.sub(r"[^\w\s]", " ", t)
     return re.sub(r"\s+", " ", t).strip()
 
-
+#تجمع كل فقرة رئيسية (مستوى 1 أو أقل) مع فقراتها الفرعية في وحدة وحدة.
 def units_of(section):
     """Group paragraphs: a top-level paragraph (level ≤ 1) + its deeper sub-paragraphs."""
     units = []
@@ -47,7 +44,7 @@ def units_of(section):
             units[-1].append(p)
     return units
 
-# يقسم  النص إلى جمل، ثم يحاول تجميع الجمل في أجزاء بحيث لا يتجاوز كل جزء الحد الأقصى للكلمات المحدد. إذا كان هناك جزء لا يمكن تقسيمه على أساس الجمل، فإنه يقوم بتقسيمه على أساس الكلمات.
+#تقسم عند . أو ؛، وتجمع الجمل لين توصل الحد.
 def split_sentences(text, max_words):
     parts = re.split(r"(?<=[.؛])\s+", text)
     out, cur = [], ""
@@ -68,7 +65,7 @@ def split_sentences(text, max_words):
             final.append(" ".join(w[k:k + max_words]))
     return final
 
-# يقسم القسم إلى أجزاء بحيث لا يتجاوز كل جزء الحد الأقصى للكلمات المحدد. إذا كان هناك جزء لا يمكن تقسيمه على أساس الفقرات، فإنه يقوم بتقسيمه على أساس الجمل.
+
 def pieces_of(section, max_words):
     """Yield pieces: dict(paras=[...], lead=optional lead-in text). Each piece ≤ max_words when possible."""
     pieces = []
@@ -97,7 +94,7 @@ def pieces_of(section, max_words):
                     pieces.append({"paras": [{**p, "text": s}], "lead": None})
     return pieces, intro
 
-# يوزع الحجم بالتساوي، يعني بدال قطعة كبيرة وقطعة صغيرة مرة يطلع قطعتين متقاربات
+#التجميع
 def pack(pieces, max_words, intro):
     # balance chunk sizes: aim for equal parts instead of one full chunk + a small remainder
     total = sum(words(p["text"]) for pc in pieces for p in pc["paras"])
@@ -122,63 +119,7 @@ def pack(pieces, max_words, intro):
             cur["leads"].add(pc["lead"])
     return chunks
 
-""" 
-الملحق 1 والملحق 11 في لائحة صناديق الاستثمار عبارة عن قائمة متطلبات
- (وش لازم يكون مذكور في الشروط والأحكام) كل بند مرقم فيها 1) 2) 3) يصير قطعة لحاله،
- عشان مثلاً بند "الرسوم" في الشروط يلقى بالضبط البند (11) "الرسوم" في الملحق.
-"""
-CHECKLIST_ANNEXES = {("investment_funds_regulations", "1"), ("investment_funds_regulations", "11")}
-ITEM = re.compile(r"^(\d+)\)\s*(.*)")
-
-
-def checklist_items(paras):
-    """Indices of the main numbered items: the longest chain 1), 2), 3) … at level 2 (nested lists that
-    restart at 1) inside an item are skipped because they never continue the chain)."""
-    best = []
-    for start, p in enumerate(paras):
-        m = ITEM.match(p["text"])
-        if not (m and m.group(1) == "1" and p["level"] == 2):
-            continue
-        chain, want = [start], 2
-        for i in range(start + 1, len(paras)):
-            m = ITEM.match(paras[i]["text"])
-            if m and paras[i]["level"] == 2 and int(m.group(1)) == want:
-                chain.append(i); want += 1
-        # ties go to the later chain: in annex 1 the cover's own 1)…9) list can splice onto the main
-        # items 10)… and tie with the real chain 1)…33), which always comes after the cover
-        if len(chain) >= len(best):
-            best = chain
-    return best
-
-
-def item_title(text):
-    t = ITEM.match(text).group(2)
-    t = re.split(r"[:.،]", t, maxsplit=1)[0].strip()
-    return " ".join(t.split()[:10])
-
-
-def sub_sections(doc, s, max_words):
-    """[(label, item_number, packed_chunks)] — one entry (label None) for an ordinary section; for a
-    checklist annex, the cover block before item 1 followed by one entry per numbered item."""
-    paras = s["paragraphs"]
-    starts = checklist_items(paras) if (doc["doc_id"], s.get("number")) in CHECKLIST_ANNEXES else []
-    if len(starts) < 5:
-        pieces, intro = pieces_of(s, max_words)
-        return [(None, None, pack(pieces, max_words, intro))]
-    out = []
-    bounds = [0] + starts + [len(paras)]
-    for a, b in zip(bounds, bounds[1:]):
-        if a == b:
-            continue
-        pieces, intro = pieces_of({"paragraphs": paras[a:b]}, max_words)
-        if a in starts:
-            n = ITEM.match(paras[a]["text"]).group(1)
-            out.append((f"البند ({n}): {item_title(paras[a]['text'])}", n, pack(pieces, max_words, intro)))
-        else:
-            out.append(("صفحة الغلاف والمقدمة", None, pack(pieces, max_words, intro)))
-    return out
-
-
+#مسار المادة كامل
 def breadcrumb(doc, s):
     parts = [doc["title"]]
     if s["part"]:
@@ -193,16 +134,16 @@ def breadcrumb(doc, s):
 def para_text(p):
     return FOOT.sub(lambda m: f" [{m.group(1)}]", p["text"]).strip()
 
-
+#بناء القطعة
 def chunk_doc(doc, max_words):
     out = []
     code = SHORT[doc["doc_id"]]
+    printed = printed_page_numbers(doc["doc_id"])
     for s in doc["sections"]:
         if not s["paragraphs"]:
             continue
-        subs = sub_sections(doc, s, max_words)
-        # flatten: (sub-label, item number, chunk, part j of m within that sub-section)
-        packed = [(lab, n, ch, j, len(chs)) for lab, n, chs in subs for j, ch in enumerate(chs, 1)]
+        pieces, intro = pieces_of(s, max_words)
+        packed = pack(pieces, max_words, intro)
         if s["type"] == "article":
             sid = f"art{s['number']:03d}"
         elif s["type"] == "annex":
@@ -210,7 +151,7 @@ def chunk_doc(doc, max_words):
         else:
             sid = "pre" + str(s["pages"][0])
         crumb = breadcrumb(doc, s)
-        for k, (sub, item_no, ch, j, n_parts) in enumerate(packed, 1):
+        for k, ch in enumerate(packed, 1):
             paths = [p["path"] for p in ch["paras"] if p.get("path")]
             top = []
             for pth in paths:
@@ -220,10 +161,7 @@ def chunk_doc(doc, max_words):
             body = "\n".join(para_text(p) for p in ch["paras"])
             fns = {int(n) for p in ch["paras"] for n in FOOT.findall(p["text"])}
             fn_items = [f for f in s["footnotes"] if f["scope"] == "section" or f["n"] in fns]
-            if sub:
-                header = f"{crumb} › {sub}" + (f" (الجزء {j} من {n_parts})" if n_parts > 1 else "")
-            else:
-                header = crumb + (f" (الجزء {k} من {len(packed)})" if len(packed) > 1 else "")
+            header = crumb + (f" (الجزء {k} من {len(packed)})" if len(packed) > 1 else "")
             text = f"[{header}]\n"
             if ch["context"]:
                 text += f"(سياق: {FOOT.sub('', ch['context']).strip()})\n"
@@ -232,12 +170,10 @@ def chunk_doc(doc, max_words):
                 text += "\nالحواشي:\n" + "\n".join(f"[{f['n']}] {f['text']}" for f in fn_items)
             guidance_paras = [p["path"] for p in ch["paras"] if p.get("binding_status") == "guidance"]
             citation = f"{doc['title']}، {s['label'] or ''}".strip("، ")
-            if item_no:
-                citation += f"، البند ({item_no})"
-                top = [item_no]
-            elif len(packed) > 1 and top:
+            if len(packed) > 1 and top:
                 citation += "، " + ("الفقرة" if len(top) == 1 else "الفقرات") + " " + "، ".join(f"({t})" for t in top)
             pages = sorted({pg for p in ch["paras"] for pg in p["pages"]}) or s["pages"]
+            cma_pages = [printed[pg] for pg in pages if pg in printed]
             out.append({
                 "chunk_id": f"{code}-{sid}-c{k:02d}",
                 "doc_id": doc["doc_id"],
@@ -261,6 +197,10 @@ def chunk_doc(doc, max_words):
                 "chunk_count": len(packed),
                 "paragraphs": top,
                 "pdf_pages": pages,
+                #أول وآخر صفحة للقطعة بأرقام صفحات مستند الهيئة نفسه (مو ترقيم الـ PDF)
+                "page_start": min(cma_pages) if cma_pages else None,
+                "page_end": max(cma_pages) if cma_pages else None,
+                "pages": sorted(cma_pages),
                 "binding_status": s["binding_status"],
                 "guidance_paragraphs": guidance_paras,
                 "footnotes": fn_items,
