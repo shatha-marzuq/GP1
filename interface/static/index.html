@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ميثاق — مراجعة الشروط والأحكام</title>
+<link rel="icon" href="/static/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-900:#0B3B2C; --green-800:#0E4A37; --green-700:#106047; --green-600:#14785A; --green-500:#1B946F;
+  --mint-100:#DDF2E8; --mint-50:#EFF8F3;
+  --gold-600:#A87A2F; --gold-500:#CF9F55; --gold-300:#E8CC98; --gold-100:#FBF0DA; --gold-50:#FDF8EE;
+  --cream:#FAF6EE; --card:#FFFFFF; --line:#EDE5D4; --line-2:#F3EEE3;
+  --ink:#1D2A23; --muted:#66706A; --faint:#98A09A;
+  --red:#C2543F; --red-50:#FCEDEA;
+  --shadow:0 1px 2px rgba(16,60,44,.05),0 6px 22px rgba(16,60,44,.06);
+  --r:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;background:var(--cream);color:var(--ink);font-size:14.5px;line-height:1.7}
+button{font:inherit;cursor:pointer}
+a{color:inherit}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+
+/* sidebar */
+.side{background:linear-gradient(180deg,#fff 0%,var(--gold-50) 100%);border-inline-start:1px solid var(--line);padding:26px 18px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+.brand{text-align:center;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.brand img{width:118px;display:block;margin:0 auto 6px}
+.brand small{color:var(--muted);font-size:12px}
+.nav{display:flex;flex-direction:column;gap:6px}
+.nav button{display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:11px 14px;border-radius:12px;color:var(--ink);font-weight:500;text-align:right}
+.nav button:hover{background:var(--mint-50)}
+.nav button.on{background:var(--green-700);color:#fff;box-shadow:0 6px 16px rgba(16,96,71,.25)}
+.nav button.on svg{color:var(--gold-300)}
+.nav button[disabled]{opacity:.55;cursor:default}
+.nav svg{width:18px;height:18px;flex:none}
+.soon{margin-inline-start:auto;font-size:11px;background:var(--gold-100);color:var(--gold-600);padding:1px 8px;border-radius:99px;font-weight:600}
+.scope{margin-top:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:12.5px;color:var(--muted)}
+.scope b{display:block;color:var(--green-700);font-size:12px;margin-bottom:4px}
+.scope strong{color:var(--ink);font-weight:600}
+
+/* main */
+.main{min-width:0}
+.top{display:flex;align-items:center;justify-content:space-between;padding:16px 34px;background:rgba(255,255,255,.75);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.crumb{color:var(--muted);font-size:13px}
+.crumb b{color:var(--ink);font-weight:600}
+.engine{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:5px 12px;border-radius:99px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.dot.ok{background:var(--green-500);box-shadow:0 0 0 3px var(--mint-100)}
+.dot.wait{background:var(--gold-500);animation:pulse 1.2s infinite}
+.dot.bad{background:var(--red)}
+@keyframes pulse{50%{opacity:.35}}
+.page{padding:30px 34px 60px;max-width:1280px}
+.eyebrow{color:var(--gold-600);font-size:12.5px;font-weight:600}
+h1{font-size:28px;margin:2px 0 4px;color:var(--green-900)}
+.sub{color:var(--muted);margin:0}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:10px 18px;font-weight:600}
+.btn.primary{background:var(--green-700);color:#fff;box-shadow:0 6px 16px rgba(16,96,71,.22)}
+.btn.primary:hover{background:var(--green-600)}
+.btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--gold-300)}
+.btn svg{width:16px;height:16px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+.stat{padding:18px 20px;position:relative;overflow:hidden}
+.stat .lbl{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px}
+.stat .lbl i{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--mint-50);color:var(--green-600);font-style:normal}
+.stat .num{font-size:34px;font-weight:700;color:var(--green-900);margin-top:6px;line-height:1.2}
+.stat .hint{color:var(--faint);font-size:12px}
+.stat.hero{background:linear-gradient(135deg,var(--green-700),var(--green-500));color:#fff;border:0}
+.stat.hero .lbl,.stat.hero .hint{color:rgba(255,255,255,.85)}
+.stat.hero .num{color:#fff}
+.stat.hero .lbl i{background:rgba(255,255,255,.18);color:var(--gold-300)}
+.stat.hero::after{content:"";position:absolute;inset-inline-end:-40px;bottom:-60px;width:160px;height:160px;border-radius:50%;border:22px solid rgba(232,204,152,.22)}
+
+.banner{display:flex;gap:12px;align-items:flex-start;background:var(--gold-50);border:1px solid var(--gold-300);border-radius:14px;padding:13px 16px;margin-bottom:22px;font-size:13px;color:#6b5428}
+.banner b{color:var(--gold-600)}
+.banner.info{background:var(--mint-50);border-color:var(--mint-100);color:var(--green-800)}
+
+.section-h{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line-2)}
+.section-h h2{margin:0;font-size:17px;color:var(--green-900)}
+.section-h p{margin:0;color:var(--muted);font-size:12.5px}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;color:var(--muted);font-weight:500;text-align:right;padding:10px 22px;background:#FCFAF5;border-bottom:1px solid var(--line-2)}
+td{padding:14px 22px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.docname{display:flex;gap:12px;align-items:center}
+.docicon{width:36px;height:36px;border-radius:10px;background:var(--gold-50);border:1px solid var(--gold-100);display:grid;place-items:center;color:var(--gold-600);flex:none}
+.docname b{display:block;font-weight:600}
+.docname small{color:var(--faint);font-size:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 11px;border-radius:99px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.done{background:var(--mint-50);color:var(--green-600)}
+.pill.run{background:var(--gold-100);color:var(--gold-600)}
+.pill.fail{background:var(--red-50);color:var(--red)}
+.link{border:0;background:none;color:var(--green-600);font-weight:600;padding:0}
+.link:hover{text-decoration:underline}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+
+.split{display:grid;grid-template-columns:1.45fr 1fr;gap:18px;margin-top:22px}
+.bars{padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+.bar{display:grid;grid-template-columns:170px 1fr 34px;gap:10px;align-items:center;font-size:13px}
+.bar .track{height:10px;background:var(--line-2);border-radius:99px;overflow:hidden}
+.bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-500),var(--green-500))}
+.next{background:linear-gradient(150deg,var(--green-800),var(--green-600));color:#fff;border:0;padding:22px}
+.next .eyebrow{color:var(--gold-300)}
+.next h3{margin:4px 0 8px;font-size:18px}
+.next p{color:rgba(255,255,255,.82);font-size:13px;margin:0 0 14px}
+.next ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.next li{display:flex;gap:8px;align-items:center}
+.next li span{font-size:11px;background:rgba(232,204,152,.2);color:var(--gold-300);padding:1px 8px;border-radius:99px;margin-inline-start:auto}
+
+/* upload */
+.upgrid{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
+.drop{display:block;cursor:pointer;margin:20px 22px 22px;border:2px dashed var(--gold-300);border-radius:16px;background:var(--gold-50);padding:44px 20px;text-align:center;transition:.15s}
+.drop.over{border-color:var(--green-500);background:var(--mint-50)}
+.drop .ic{width:58px;height:58px;border-radius:18px;background:#fff;display:grid;place-items:center;margin:0 auto 12px;color:var(--green-600);box-shadow:var(--shadow)}
+.drop h3{margin:0 0 4px;font-size:17px}
+.drop p{margin:0 0 14px;color:var(--muted);font-size:13px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:20px 22px 0}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.field div{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#FCFAF5;font-size:13px}
+.steps{padding:12px 22px 22px;display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:34px 1fr;gap:12px;position:relative;padding:12px 0}
+.step:not(:last-child)::after{content:"";position:absolute;right:16px;top:44px;bottom:-10px;width:2px;background:var(--line)}
+.step.ok:not(:last-child)::after{background:var(--green-500)}
+.step .b{position:relative;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);background:#fff;color:var(--faint);font-size:13px;font-weight:700;z-index:1}
+.step.ok .b{background:var(--green-600);border-color:var(--green-600);color:#fff}
+.step.now .b{border-color:var(--gold-500);color:var(--gold-600);background:var(--gold-50)}
+.step.now .b::after{content:"";position:absolute;inset:-2px;width:34px;height:34px;border-radius:50%;border:2px solid var(--gold-500);border-top-color:transparent;animation:spin 0.9s linear infinite}
+.step.later{opacity:.6}
+.step.later .b{border-style:dashed}
+.step.err .b{background:var(--red);border-color:var(--red);color:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+.step h4{margin:4px 0 0;font-size:14.5px}
+.step p{margin:0;color:var(--muted);font-size:12.5px}
+.step .meta{font-size:12px;color:var(--gold-600);font-weight:600}
+.step.ok .meta{color:var(--green-600)}
+.progress{height:8px;border-radius:99px;background:var(--line-2);overflow:hidden;margin:6px 0 2px;max-width:260px}
+.progress div{height:100%;background:linear-gradient(90deg,var(--gold-500),var(--green-500));transition:width .3s}
+.pct{font-size:30px;font-weight:700;color:var(--green-700)}
+
+/* results */
+.rhead{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:16px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 13px;font-size:12.5px;color:var(--muted)}
+.chip b{color:var(--green-800)}
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-width:280px}
+.search input{border:0;outline:0;font:inherit;width:100%;background:transparent}
+.clauses{display:flex;flex-direction:column;gap:14px}
+.clause{overflow:hidden}
+.ch{display:flex;gap:14px;align-items:flex-start;padding:18px 22px;cursor:pointer}
+.cnum{flex:none;min-width:44px;height:44px;border-radius:12px;background:var(--mint-50);color:var(--green-700);display:grid;place-items:center;font-weight:700;font-size:13px}
+.ch .t{flex:1;min-width:0}
+.ch h3{margin:0;font-size:15.5px;color:var(--green-900)}
+.ch .crumbs{font-size:12px;color:var(--faint)}
+.ch .excerpt{color:var(--muted);font-size:13px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ch .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:11.5px;padding:2px 9px;border-radius:7px;background:var(--line-2);color:var(--muted)}
+.tag.page{background:var(--gold-50);color:var(--gold-600);border:1px solid var(--gold-100)}
+.tag.ocr{background:#EEF1FB;color:#4659A8}
+.tag.soon{border:1px dashed var(--gold-300);background:transparent;color:var(--gold-600)}
+.chev{flex:none;color:var(--faint);transition:.2s;margin-top:10px}
+.clause.open .chev{transform:rotate(180deg)}
+.cbody{display:none;border-top:1px solid var(--line-2);background:#FDFBF7}
+.clause.open .cbody{display:grid;grid-template-columns:1fr 1.15fr}
+.ctext{padding:18px 22px;border-inline-end:1px solid var(--line-2);white-space:pre-wrap;font-size:13.5px;max-height:460px;overflow:auto}
+.ctext h5,.regs h5{margin:0 0 10px;font-size:12.5px;color:var(--gold-600);font-weight:600}
+.regs{padding:18px 22px;display:flex;flex-direction:column;gap:10px;max-height:460px;overflow:auto}
+.reg{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.reg.first{border-color:var(--green-500);box-shadow:0 0 0 3px var(--mint-50)}
+.reg .rt{display:flex;gap:10px;align-items:flex-start}
+.rank{flex:none;width:24px;height:24px;border-radius:7px;background:var(--line-2);color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700}
+.reg.first .rank{background:var(--green-600);color:#fff}
+.reg .cit{font-weight:600;font-size:13.5px}
+.reg .doc{font-size:12px;color:var(--faint)}
+.reg .pg{margin-inline-start:auto;flex:none;font-size:11.5px;color:var(--gold-600);background:var(--gold-50);border-radius:7px;padding:2px 8px;white-space:nowrap}
+.reg details{margin-top:6px}
+.reg summary{font-size:12px;color:var(--green-600);cursor:pointer;font-weight:600}
+.reg .rtx{font-size:12.5px;color:var(--muted);white-space:pre-wrap;margin-top:6px;max-height:220px;overflow:auto}
+.verdict{border:1px dashed var(--gold-300);border-radius:12px;padding:10px 14px;font-size:12.5px;color:var(--gold-600);background:var(--gold-50)}
+.err{background:var(--red-50);border:1px solid #F1C9C0;color:#8A3524;border-radius:12px;padding:12px 16px;margin:0 22px 20px;font-size:13px}
+.hidden{display:none!important}
+
+@media (max-width:1050px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:14px 16px}
+  .brand{border:0;padding:0}.brand img{width:70px}.brand small{display:none}
+  .nav{flex-direction:row;flex-wrap:wrap}.scope{display:none}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .split,.upgrid,.clause.open .cbody{grid-template-columns:1fr}
+  .page,.top{padding-inline:16px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <img src="/static/logo.png" alt="ميثاق">
+      <small>منصة المراجعة التنظيمية الذكية</small>
+    </div>
+    <nav class="nav">
+      <button data-view="dash" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>لوحة المتابعة</button>
+      <button data-view="upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3-3 3 3"/></svg>رفع ومراجعة مستند</button>
+      <button disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>تقارير الامتثال<span class="soon">قريبًا</span></button>
+    </nav>
+    <div class="scope">
+      <b>نطاق المراجعة</b>
+      <strong>شروط وأحكام صناديق الاستثمار الخاصة</strong><br>
+      مقابل لوائح هيئة السوق المالية: صناديق الاستثمار، مؤسسات السوق المالية، حوكمة الشركات، والصناديق المبسطة.
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div class="crumb" id="crumb">ميثاق ‹ <b>لوحة المتابعة</b></div>
+      <div class="engine"><span class="dot wait" id="edot"></span><span id="etext">جاري تجهيز محرك البحث…</span></div>
+    </header>
+
+    <!-- ───────────── dashboard ───────────── -->
+    <section class="page" id="v-dash">
+      <div class="head">
+        <div>
+          <div class="eyebrow">مساحة العمل</div>
+          <h1>لوحة المتابعة</h1>
+          <p class="sub">نظرة سريعة على المستندات التي رُفعت ونتائج تحليلها.</p>
+        </div>
+        <button class="btn primary" data-go="upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>رفع مستند جديد</button>
+      </div>
+      <div class="stats">
+        <div class="card stat hero"><div class="lbl"><i>▤</i>المستندات المرفوعة</div><div class="num" id="s-docs">0</div><div class="hint">شروط وأحكام صناديق خاصة</div></div>
+        <div class="card stat"><div class="lbl"><i>≡</i>البنود المستخرجة</div><div class="num" id="s-clauses">0</div><div class="hint">بعد استخراج النص وتقسيمه</div></div>
+        <div class="card stat"><div class="lbl"><i>§</i>مواد نظامية مرتبطة</div><div class="num" id="s-regs">0</div><div class="hint">مادة أو بند مختلف من لوائح الهيئة</div></div>
+        <div class="card stat"><div class="lbl"><i>↻</i>قيد المعالجة</div><div class="num" id="s-run">0</div><div class="hint">مستندات يجري تحليلها الآن</div></div>
+      </div>
+      <div class="card">
+        <div class="section-h"><div><h2>المستندات الأخيرة</h2><p>حالة كل مستند ونتائج تحليله</p></div></div>
+        <table>
+          <thead><tr><th>المستند</th><th>تاريخ الرفع</th><th>الحالة</th><th>البنود</th><th>المواد المرتبطة</th><th></th></tr></thead>
+          <tbody id="docs"></tbody>
+        </table>
+        <div class="empty hidden" id="docs-empty">لا توجد مستندات بعد. ابدأ برفع ملف شروط وأحكام.</div>
+      </div>
+      <div class="split">
+        <div class="card">
+          <div class="section-h"><div><h2>اللوائح الأكثر ارتباطًا</h2><p>أقرب مادة لكل بند، مجمّعة حسب اللائحة</p></div></div>
+          <div class="bars" id="bars"><div class="empty">ستظهر هنا بعد أول مراجعة.</div></div>
+        </div>
+        <div class="card next">
+          <div class="eyebrow">المراحل القادمة</div>
+          <h3>من الربط إلى حكم الامتثال</h3>
+          <p>المراحل الجاهزة الآن تستخرج البنود وتربط كل بند بأقرب المواد النظامية. الخطوة التالية أن يحكم وكيل التحقق على كل بند.</p>
+          <ul>
+            <li>✓ استخراج النص (OCR) وتقسيم البنود<span style="background:rgba(255,255,255,.15);color:#fff">جاهز</span></li>
+            <li>✓ قاعدة المعرفة التنظيمية والبحث الدلالي<span style="background:rgba(255,255,255,.15);color:#fff">جاهز</span></li>
+            <li>○ التحقق من الامتثال بالنموذج اللغوي<span>قريبًا</span></li>
+            <li>○ تقرير الامتثال وكشف البنود الناقصة (الملحق 11)<span>قريبًا</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── upload & review ───────────── -->
+    <section class="page hidden" id="v-upload">
+      <div class="head">
+        <div>
+          <div class="eyebrow">مراجعة جديدة</div>
+          <h1>رفع ومراجعة مستند</h1>
+          <p class="sub">ارفع ملف الشروط والأحكام وتابع مراحل تحليله خطوة بخطوة.</p>
+        </div>
+        <button class="btn ghost" data-go="dash">→ العودة للوحة المتابعة</button>
+      </div>
+      <div class="banner"><span>ⓘ</span><div><b>نطاق واضح:</b> مراجعة شروط وأحكام صناديق الاستثمار الخاصة فقط، مقابل لوائح هيئة السوق المالية. النتائج الحالية تعرض المواد النظامية المرتبطة بكل بند، ولا تصدر حكم امتثال بعد.</div></div>
+      <div class="upgrid">
+        <div class="card">
+          <div class="section-h"><div><h2>المستند محل المراجعة</h2><p>PDF أو Word (docx)</p></div></div>
+          <div class="fields">
+            <div class="field"><label>نوع المستند</label><div>شروط وأحكام صندوق خاص</div></div>
+            <div class="field"><label>المرجع التنظيمي</label><div>لوائح هيئة السوق المالية</div></div>
+          </div>
+          <label class="drop" id="drop">
+            <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 18a4.5 4.5 0 0 1-.9-8.9A6 6 0 0 1 17.7 8 4.5 4.5 0 0 1 17 18"/><path d="M12 12v9M9 15l3-3 3 3"/></svg></div>
+            <h3>اسحب المستند هنا أو اختر ملفًا</h3>
+            <p>ملف PDF (نصي أو ممسوح ضوئيًا) أو Word</p>
+            <span class="btn primary">اختيار ملف</span>
+            <input type="file" id="file" accept=".pdf,.docx" hidden>
+          </label>
+          <div class="err hidden" id="up-err"></div>
+        </div>
+        <div class="card">
+          <div class="section-h"><div><h2>مسار المراجعة</h2><p id="cur-file">لم يُرفع مستند بعد</p></div><div class="pct" id="pct">0%</div></div>
+          <div class="steps" id="steps"></div>
+          <div class="err hidden" id="run-err"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── results ───────────── -->
+    <section class="page hidden" id="v-results">
+      <div class="head">
+        <div>
+          <div class="eyebrow">نتائج التحليل</div>
+          <h1 id="r-title">—</h1>
+          <p class="sub">كل بند مستخرج من المستند مع أقرب المواد في لوائح هيئة السوق المالية وأرقام صفحاتها.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <a class="btn ghost" id="r-json" href="#" download>تنزيل النتائج (JSON)</a>
+          <button class="btn primary" data-go="upload">مراجعة مستند آخر</button>
+        </div>
+      </div>
+      <div class="banner hidden" id="r-stub"><span>⚠</span><div><b>وضع تجريبي:</b> البحث في الأنظمة يعمل ببديل ثابت، فالمواد المعروضة ليست نتيجة بحث حقيقي.</div></div>
+      <div class="banner hidden" id="r-warn"><span>ⓘ</span><div id="r-warn-t"></div></div>
+      <div class="rhead">
+        <div class="chips" id="r-chips"></div>
+        <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98A09A" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="ابحث في البنود أو المواد…"></div>
+      </div>
+      <div class="clauses" id="clauses"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtDate = t => new Date(t*1000).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn",{day:"numeric",month:"long",year:"numeric"});
+const pages = (a,b) => a==null ? "" : (a===b||b==null ? `ص ${a}` : `ص ${a}–${b}`);
+const ORDER = ["received","extracting","segmenting","retrieving","done"];
+const STATUS = {received:"تم الاستلام",extracting:"استخراج النص",segmenting:"تقسيم البنود",retrieving:"ربط بالأنظمة",done:"اكتمل التحليل",failed:"تعذّر التحليل"};
+let MODE = "full", current = null, poll = null, result = null;
+
+// ───────── navigation
+function show(view){
+  for (const v of ["dash","upload","results"]) $("#v-"+v).classList.toggle("hidden", v!==view);
+  document.querySelectorAll(".nav button[data-view]").forEach(b => b.classList.toggle("on", b.dataset.view===(view==="results"?"upload":view)));
+  $("#crumb").innerHTML = "ميثاق ‹ <b>" + ({dash:"لوحة المتابعة",upload:"رفع ومراجعة مستند",results:"نتائج التحليل"})[view] + "</b>";
+  if (view==="dash") loadDash();
+  scrollTo(0,0);
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-view],[data-go]"); if (b) show(b.dataset.view || b.dataset.go);
+  const o = e.target.closest("[data-open]"); if (o) openReview(o.dataset.open);
+});
+
+// ───────── engine status
+async function engine(){
+  const i = await (await fetch("/api/info")).json(); MODE = i.mode;
+  const label = {full:"البحث الدلالي (BGE-M3 + إعادة ترتيب)",bm25:"البحث النصي (BM25)",stub:"وضع تجريبي (بديل)"}[i.mode];
+  $("#edot").className = "dot " + (i.error ? "bad" : i.ready ? "ok" : "wait");
+  $("#etext").textContent = i.error ? "تعذّر تشغيل محرك البحث" : i.ready ? label + " — جاهز" : "جاري تحميل نماذج البحث…";
+  if (!i.ready && !i.error) setTimeout(engine, 1500);
+}
+
+// ───────── dashboard
+async function loadDash(){
+  const list = await (await fetch("/api/reviews")).json();
+  $("#s-docs").textContent = list.length;
+  $("#s-clauses").textContent = list.reduce((a,r)=>a+r.clauses,0);
+  $("#s-run").textContent = list.filter(r=>!["done","failed"].includes(r.status)).length;
+  $("#docs-empty").classList.toggle("hidden", list.length>0);
+  $("#docs").innerHTML = list.map(r => {
+    const cls = r.status==="done"?"done":r.status==="failed"?"fail":"run";
+    const act = r.status==="done" ? `<button class="link" data-open="${r.id}">← عرض النتائج</button>`
+              : r.status==="failed" ? `<span style="color:var(--faint);font-size:12px">${esc(r.error||"")}</span>`
+              : `<button class="link" data-open="${r.id}">← متابعة المراجعة</button>`;
+    return `<tr><td><div class="docname"><div class="docicon">▤</div><div><b>${esc(r.filename)}</b><small>شروط وأحكام · ${(r.size/1024/1024).toFixed(1)} ميجابايت</small></div></div></td>
+      <td>${fmtDate(r.created)}</td><td><span class="pill ${cls}">${STATUS[r.status]}</span></td>
+      <td>${r.clauses||"—"}</td><td>${r.regulations||"—"}</td><td>${act}</td></tr>`;
+  }).join("");
+  // regulations across finished reviews
+  const done = list.filter(r=>r.status==="done");
+  const docs = {}; let regs = new Set();
+  for (const r of done){
+    const full = await (await fetch("/api/reviews/"+r.id)).json();
+    for (const c of full.output.clauses){
+      c.regulations.forEach(g=>regs.add(g.id));
+      const top = c.regulations[0]; if (top) docs[top.document] = (docs[top.document]||0)+1;
+    }
+  }
+  $("#s-regs").textContent = regs.size;
+  const rows = Object.entries(docs).sort((a,b)=>b[1]-a[1]); const max = Math.max(1,...rows.map(r=>r[1]));
+  if (rows.length) $("#bars").innerHTML = rows.map(([d,n]) =>
+    `<div class="bar"><span>${esc(d)}</span><div class="track"><div class="fill" style="width:${n/max*100}%"></div></div><b>${n}</b></div>`).join("");
+}
+
+// ───────── upload & progress
+const drop = $("#drop");
+["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over")}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over")}));
+drop.addEventListener("drop", e => e.dataTransfer.files[0] && upload(e.dataTransfer.files[0]));
+$("#file").addEventListener("change", e => e.target.files[0] && upload(e.target.files[0]));
+
+async function upload(f){
+  $("#up-err").classList.add("hidden");
+  const fd = new FormData(); fd.append("file", f);
+  const res = await fetch("/api/reviews",{method:"POST",body:fd});
+  const j = await res.json();
+  if (!res.ok){ $("#up-err").textContent = j.detail || "تعذّر رفع الملف"; $("#up-err").classList.remove("hidden"); return; }
+  $("#file").value = "";
+  track(j.id);
+}
+
+function renderSteps(r){
+  const i = r.status==="failed" ? ORDER.indexOf(r.failedAt||"extracting") : ORDER.indexOf(r.status);
+  const st = k => r.status==="failed" && k===i ? "err" : (i>k || r.status==="done") ? "ok" : i===k ? "now" : "";
+  const ret = r.total ? `${r.done} من ${r.total} بند` : "";
+  const S = [
+    ["استلام المستند","رفع ملف الشروط والأحكام", esc(r.filename)],
+    ["استخراج النص (OCR)","قراءة الصفحات النصية والممسوحة مع الاحتفاظ برقم كل صفحة", ""],
+    ["تقسيم النص إلى بنود","تنظيم الفقرات في بنود حسب ترقيم المستند وعناوينه", r.clauses? r.clauses+" بندًا":(r.total? r.total+" بندًا":"")],
+    ["ربط البنود بالأنظمة","البحث عن أقرب المواد في لوائح هيئة السوق المالية لكل بند", ret],
+  ];
+  let h = S.map((s,k)=>`<div class="step ${st(k)}"><div class="b">${st(k)==="ok"?"✓":st(k)==="err"?"!":k+1}</div><div>
+      <h4>${s[0]}</h4><p>${s[1]}</p>${k===3&&r.status==="retrieving"&&r.total?`<div class="progress"><div style="width:${r.done/r.total*100}%"></div></div>`:""}
+      ${s[2]?`<div class="meta">${s[2]}</div>`:""}</div></div>`).join("");
+  h += [["التحقق من الامتثال","مقارنة كل بند بالمادة النظامية والحكم عليه بنموذج لغوي"],["إعداد تقرير الامتثال","تجميع الملاحظات وكشف البنود الناقصة"]]
+    .map((s,k)=>`<div class="step later"><div class="b">${k+5}</div><div><h4>${s[0]} <span class="soon">قريبًا</span></h4><p>${s[1]}</p></div></div>`).join("");
+  $("#steps").innerHTML = h;
+  const base = {received:5,extracting:15,segmenting:35,retrieving:40,done:100}[r.status] ?? 0;
+  const pct = r.status==="retrieving" && r.total ? Math.round(40 + 60*r.done/r.total) : base;
+  $("#pct").textContent = (r.status==="failed"?"—":pct+"%");
+  $("#cur-file").textContent = r.filename;
+  $("#run-err").classList.toggle("hidden", r.status!=="failed");
+  if (r.status==="failed") $("#run-err").textContent = r.error || "تعذّر تحليل المستند";
+}
+
+let lastStatus = null;
+function track(id){
+  current = id; show("upload"); clearTimeout(poll);
+  const tick = async () => {
+    const r = await (await fetch("/api/reviews/"+id)).json();
+    if (r.status!=="failed") lastStatus = r.status; else r.failedAt = lastStatus;
+    renderSteps(r);
+    if (r.status==="done"){ setTimeout(()=>renderResults(r), 900); return; }
+    if (r.status!=="failed" && current===id) poll = setTimeout(tick, 700);
+  };
+  tick();
+}
+
+async function openReview(id){
+  const r = await (await fetch("/api/reviews/"+id)).json();
+  r.status==="done" ? renderResults(r) : track(id);
+}
+
+// ───────── results
+function renderResults(r){
+  result = r; show("results");
+  const o = r.output, cl = o.clauses;
+  $("#r-title").textContent = r.filename;
+  $("#r-json").href = `/api/reviews/${r.id}/json`;
+  $("#r-stub").classList.toggle("hidden", r.mode!=="stub");
+  const warn = (o.document_warnings||[]).map(w => typeof w==="string" ? w : (w.message_ar||w.code));
+  if (o.document_needs_review) warn.unshift("بعض صفحات المستند تحتاج مراجعة بشرية بعد الـ OCR.");
+  $("#r-warn").classList.toggle("hidden", !warn.length); $("#r-warn-t").innerHTML = warn.map(esc).join("<br>");
+  const pg = cl.map(c=>c.page_end).filter(x=>x!=null);
+  $("#r-chips").innerHTML = [
+    ["البنود", cl.length], ["الصفحات", pg.length? Math.max(...pg):"—"],
+    ["بنود من صفحات ممسوحة (OCR)", cl.filter(c=>c.from_ocr).length],
+    ["مواد نظامية مختلفة", new Set(cl.flatMap(c=>c.regulations.map(g=>g.id))).size],
+  ].map(([k,v])=>`<span class="chip">${k}: <b>${v}</b></span>`).join("");
+  $("#q").value = ""; drawClauses("");
+}
+
+function drawClauses(q){
+  const n = s => (s||"").replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآ]/g,"ا");
+  const qq = n(q.trim());
+  const list = result.output.clauses.filter(c => !qq || n(c.title+" "+c.body+" "+c.regulations.map(g=>g.citation+g.body).join(" ")).includes(qq));
+  $("#clauses").innerHTML = list.length ? list.map((c,i) => `
+    <div class="card clause${i===0&&!qq?" open":""}">
+      <div class="ch" data-toggle>
+        <div class="cnum">${esc(c.clause_id.replace(/^C0*/,""))}</div>
+        <div class="t">
+          ${c.breadcrumb?`<div class="crumbs">${esc(c.breadcrumb)}</div>`:""}
+          <h3>${esc(c.title||"بند بدون عنوان")}</h3>
+          <div class="excerpt">${esc(c.body)}</div>
+          <div class="tags">
+            ${c.page_start!=null?`<span class="tag page">${pages(c.page_start,c.page_end)} من المستند</span>`:""}
+            ${c.from_ocr?`<span class="tag ocr">مستخرج بالـ OCR</span>`:""}
+            ${c.regulations[0]?`<span class="tag">الأقرب: ${esc(c.regulations[0].citation)}</span>`:""}
+            <span class="tag soon">حكم الامتثال: قريبًا</span>
+          </div>
+        </div>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="cbody">
+        <div class="ctext"><h5>نص البند</h5>${esc(c.body)}</div>
+        <div class="regs"><h5>أقرب المواد في لوائح هيئة السوق المالية</h5>
+          ${c.regulations.map(g=>`<div class="reg${g.rank===1?" first":""}">
+            <div class="rt"><span class="rank">${g.rank}</span><div><div class="cit">${esc(g.citation)}</div><div class="doc">${esc(g.document)}${g.pinned?" · الملحق 11 (قائمة إفصاحات الصناديق الخاصة)":""}</div></div>
+            ${g.page_start!=null?`<span class="pg">${pages(g.page_start,g.page_end)}</span>`:""}</div>
+            <details><summary>نص المادة</summary><div class="rtx">${esc(g.body)}</div></details>
+          </div>`).join("")}
+          <div class="verdict">⏳ التحقق من امتثال البند لهذه المواد سيضاف في المرحلة القادمة (وكيل التحقق).</div>
+        </div>
+      </div>
+    </div>`).join("") : `<div class="card empty">لا توجد نتائج مطابقة.</div>`;
+}
+$("#q").addEventListener("input", e => drawClauses(e.target.value));
+$("#clauses").addEventListener("click", e => { const h = e.target.closest("[data-toggle]"); if (h) h.parentElement.classList.toggle("open"); });
+
+engine(); show("dash"); renderSteps({status:"",filename:"لم يُرفع مستند بعد",done:0,total:0});
+</script>
+</body>
+</html>
