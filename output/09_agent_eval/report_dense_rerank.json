@@ -1,0 +1,3604 @@
+{
+ "config": {
+  "mode": "dense",
+  "rerank": true
+ },
+ "sets": {
+  "blom": {
+   "n": 33,
+   "baseline": {
+    "hit1": 0.727,
+    "hit3": 0.909,
+    "hit5": 0.97,
+    "mrr": 0.833
+   },
+   "agent": {
+    "hit1": 0.727,
+    "hit3": 0.909,
+    "hit5": 0.97,
+    "mrr": 0.833
+   },
+   "decisions": {
+    "confirmed": {
+     "count": 27,
+     "hit1": 0.889
+    },
+    "confirmed_after_retry": {
+     "count": 2,
+     "hit1": 0.0
+    },
+    "uncertain": {
+     "count": 4,
+     "hit1": 0.0
+    }
+   },
+   "changed": [],
+   "rows": [
+    {
+     "id": "B01",
+     "expected": [
+      "IFR-anx9",
+      "IFR-art089",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-anx9",
+      "IFR-anx11",
+      "IFR-art090"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الغلاف",
+       "words": 28,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx9",
+        "IFR-anx11",
+        "IFR-art090"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx9",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B02",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art080",
+      "IFR-art084"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "decision": "confirmed_after_retry",
+     "agent_top3": [
+      "IFR-anx7",
+      "IFR-anx11",
+      "IFR-art084"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "اسم الصندوق ونوعه",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art001",
+        "IFR-anx11",
+        "IFR-art084"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art001",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-anx11",
+        "IFR-anx11",
+        "IFR-anx6"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-anx7",
+       "support": [
+        "title"
+       ]
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "confirmed_after_retry",
+       "reason": "بعد إعادة البحث صارت أعلى نتيجة مؤيدة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B03",
+     "expected": [
+      "IFR-art014",
+      "IFR-art088",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art014",
+      "IFR-anx11",
+      "IFR-anx11"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "سياسات تركز الاستثمار",
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art014",
+        "IFR-anx11",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art014",
+       "support": [
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B04",
+     "expected": [
+      "IFR-art088",
+      "IFR-art014"
+     ],
+     "baseline_rank": 4,
+     "agent_rank": 4,
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art009",
+      "IFR-anx11",
+      "IFR-art092"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "حد الطرف النظير",
+       "words": 27,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art009",
+        "IFR-anx11",
+        "IFR-art092"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art009",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-art019",
+        "IFR-anx11",
+        "IFR-art092"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": null
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B05",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art088"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-art088",
+      "IFR-art026"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "صلاحيات الاقتراض",
+       "words": 24,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art088",
+        "IFR-art026"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B06",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art088"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art027",
+      "IFR-anx11",
+      "CMIR-art077"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "استثمار النقد",
+       "words": 20,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art027",
+        "IFR-anx11",
+        "CMIR-art077"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art027",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B07",
+     "expected": [
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-art014",
+      "IFR-art009"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "المخاطر",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art014",
+        "IFR-art009"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B08",
+     "expected": [
+      "IFR-art083"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art083",
+      "IFR-anx11",
+      "IFR-art083"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الحد الأدنى وتمديد الطرح",
+       "words": 30,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art083",
+        "IFR-anx11",
+        "IFR-art083"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art083",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B09",
+     "expected": [
+      "IFR-art082"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art082",
+      "IFR-anx11",
+      "IFR-art098"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "أهلية المستثمرين",
+       "words": 15,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art082",
+        "IFR-anx11",
+        "IFR-art098"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art082",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B10",
+     "expected": [
+      "IFR-art009"
+     ],
+     "baseline_rank": null,
+     "agent_rank": null,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-anx11",
+      "IFR-art003"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الاستثمار متاح لفئات محددة بحسب الجنسية",
+       "words": 18,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-anx11",
+        "IFR-art003"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B11",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art085",
+      "IFR-art092"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art096",
+      "IFR-anx11",
+      "IFR-art083"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "أيام التداول",
+       "words": 23,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art096",
+        "IFR-anx11",
+        "IFR-art083"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art096",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-art085",
+        "IFR-anx11",
+        "IFR-art096"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-art096",
+       "support": null
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B12",
+     "expected": [
+      "IFR-art098",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "decision": "confirmed_after_retry",
+     "agent_top3": [
+      "IFR-art093",
+      "IFR-anx11",
+      "IFR-art094"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "نقل الوحدات",
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art094",
+        "IFR-anx11",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art094",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-anx11",
+        "IFR-art094",
+        "IFR-art098"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-art093",
+       "support": [
+        "title"
+       ]
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "confirmed_after_retry",
+       "reason": "بعد إعادة البحث صارت أعلى نتيجة مؤيدة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B13",
+     "expected": [
+      "IFR-art012"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art012",
+      "IFR-anx11",
+      "IFR-art010"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "سجل مالكي الوحدات",
+       "words": 17,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art012",
+        "IFR-anx11",
+        "IFR-art010"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art012",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B14",
+     "expected": [
+      "IFR-art023"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-art023",
+      "IFR-anx11"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "حالات الإنهاء",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art023",
+        "IFR-art023",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art023",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B15",
+     "expected": [
+      "IFR-art023"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-art023",
+      "IFR-art023"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "مهلة التصفية",
+       "words": 27,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art023",
+        "IFR-art023",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art023",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B16",
+     "expected": [
+      "IFR-art023"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-anx11",
+      "IFR-art023"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "إشعار الإنهاء",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art023",
+        "IFR-anx11",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art023",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B17",
+     "expected": [
+      "IFR-anx11"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art026",
+      "IFR-anx11",
+      "IFR-art023"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الاسترداد العيني",
+       "words": 17,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art026",
+        "IFR-anx11",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art026",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-art026",
+        "IFR-anx11",
+        "IFR-art015"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-art026",
+       "support": null
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B18",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art088",
+      "IFR-art019"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-art015",
+      "IFR-art009"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الرسوم",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art015",
+        "IFR-art009"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B19",
+     "expected": [
+      "IFR-art088",
+      "IFR-anx11",
+      "IFR-art019"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-art026",
+      "IFR-anx11"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "المصروفات الأخرى",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art026",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B20",
+     "expected": [
+      "IFR-art092",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art092",
+      "IFR-anx11",
+      "IFR-art005"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "التقييم",
+       "words": 25,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art092",
+        "IFR-anx11",
+        "IFR-art005"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art092",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B21",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art075",
+      "IFR-art095"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art092",
+      "IFR-anx11",
+      "IFR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "خطأ التقييم",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art092",
+        "IFR-anx11",
+        "IFR-art093"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art092",
+       "support": [
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B22",
+     "expected": [
+      "IFR-art020"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art020",
+      "IFR-anx11",
+      "IFR-art023"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "عزل مدير الصندوق",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art020",
+        "IFR-anx11",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art020",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B23",
+     "expected": [
+      "IFR-art015",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art015",
+      "IFR-anx11",
+      "IFR-art085"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "استثمار مدير الصندوق",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art015",
+        "IFR-anx11",
+        "IFR-art085"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art015",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B24",
+     "expected": [
+      "IFR-art031"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art031",
+      "IFR-anx11",
+      "IFR-art020"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "عزل أمين الحفظ",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art031",
+        "IFR-anx11",
+        "IFR-art020"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art031",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B25",
+     "expected": [
+      "IFR-art095",
+      "IFR-art011",
+      "IFR-art091"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art095",
+      "IFR-anx11",
+      "IFR-art096"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "القوائم المالية",
+       "words": 20,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art095",
+        "IFR-anx11",
+        "IFR-art096"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art095",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B26",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art013"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-anx11",
+      "CMIR-art041",
+      "IFR-art013"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "تعارض المصالح",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "CMIR-art041",
+        "IFR-art013"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B27",
+     "expected": [
+      "IFR-art093"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art093",
+      "IFR-art093",
+      "IFR-anx11"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الدعوة والنصاب",
+       "words": 33,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art093",
+        "IFR-art093",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art093",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B28",
+     "expected": [
+      "IFR-art093",
+      "IFR-art085"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art093",
+      "IFR-anx11",
+      "IFR-art085"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "سقوط حق الاعتراض",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art093",
+        "IFR-anx11",
+        "IFR-art085"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art093",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B29",
+     "expected": [
+      "IFR-art009"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art009",
+      "IFR-anx11",
+      "IFR-art029"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "مسؤولية مدير الصندوق",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art009",
+        "IFR-anx11",
+        "IFR-art029"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art009",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B30",
+     "expected": [
+      "CMIR"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art063",
+      "CMIR-art008",
+      "CMIR-art080"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الشكاوى",
+       "words": 23,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art063",
+        "CMIR-art008",
+        "CMIR-art080"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art063",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B31",
+     "expected": [
+      "IFR-art009",
+      "CMIR"
+     ],
+     "baseline_rank": 4,
+     "agent_rank": 4,
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-art020",
+      "IFR-art020"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "صحة المعلومات وإعفاء المدير",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art020",
+        "IFR-art020"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-art020",
+        "IFR-art020",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": null
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B32",
+     "expected": [
+      "IFR-art094",
+      "IFR-art089"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art094",
+      "IFR-anx11",
+      "IFR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "تعديل الشروط والأحكام",
+       "words": 29,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art094",
+        "IFR-anx11",
+        "IFR-art093"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art094",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B33",
+     "expected": [
+      "IFR-art094"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art094",
+      "IFR-anx11",
+      "IFR-art083"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "حق الاسترداد قبل التغيير",
+       "words": 15,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art094",
+        "IFR-anx11",
+        "IFR-art083"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art094",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    }
+   ]
+  },
+  "kb": {
+   "n": 36,
+   "baseline": {
+    "hit1": 0.889,
+    "hit3": 0.972,
+    "hit5": 1.0,
+    "mrr": 0.933
+   },
+   "agent": {
+    "hit1": 0.889,
+    "hit3": 0.972,
+    "hit5": 1.0,
+    "mrr": 0.933
+   },
+   "decisions": {
+    "confirmed": {
+     "count": 31,
+     "hit1": 0.935
+    },
+    "uncertain": {
+     "count": 5,
+     "hit1": 0.6
+    }
+   },
+   "changed": [],
+   "rows": [
+    {
+     "id": "q01",
+     "expected": [
+      "IFR-art068"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art068",
+      "IFR-art071",
+      "IFR-art069"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 23,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art068",
+        "IFR-art071",
+        "IFR-art069"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art068",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q02",
+     "expected": [
+      "IFR-art069"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art069",
+      "IFR-art015",
+      "IFR-art067"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art069",
+        "IFR-art015",
+        "IFR-art067"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art069",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q03",
+     "expected": [
+      "IFR-art075"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art075",
+      "SIFI-art008",
+      "IFR-art009"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art075",
+        "SIFI-art008",
+        "IFR-art009"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art075",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q04",
+     "expected": [
+      "IFR-art075"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art075",
+      "IFR-art092",
+      "SIFI-art025"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art075",
+        "IFR-art092",
+        "SIFI-art025"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art075",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q05",
+     "expected": [
+      "IFR-art064",
+      "IFR-art065",
+      "IFR-art094",
+      "SIFI-art029"
+     ],
+     "baseline_rank": 3,
+     "agent_rank": 3,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art077",
+      "IFR-art093",
+      "IFR-art094"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 18,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art077",
+        "IFR-art093",
+        "IFR-art094"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art077",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q06",
+     "expected": [
+      "IFR-art065"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art065",
+      "IFR-art064",
+      "IFR-art094"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art065",
+        "IFR-art064",
+        "IFR-art094"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art065",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q07",
+     "expected": [
+      "IFR-art066"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art066",
+      "IFR-art050",
+      "IFR-art049"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art066",
+        "IFR-art050",
+        "IFR-art049"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art066",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q08",
+     "expected": [
+      "IFR-art074"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art074",
+      "IFR-anx5",
+      "IFR-anx4"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 18,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art074",
+        "IFR-anx5",
+        "IFR-anx4"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art074",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q09",
+     "expected": [
+      "IFR-art071"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art071",
+      "IFR-art068",
+      "IFR-art060"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 11,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art071",
+        "IFR-art068",
+        "IFR-art060"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art071",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q10",
+     "expected": [
+      "IFR-art067"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art067",
+      "IFR-art074",
+      "IFR-art092"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 17,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art067",
+        "IFR-art074",
+        "IFR-art092"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art067",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q11",
+     "expected": [
+      "IFR-art019",
+      "IFR-art036",
+      "SIFI-art016"
+     ],
+     "baseline_rank": 4,
+     "agent_rank": 4,
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-art005",
+      "SIFI-art008"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 17,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art005",
+        "SIFI-art008"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q12",
+     "expected": [
+      "IFR-art023",
+      "SIFI-art018"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-art023",
+      "IFR-art023"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 12,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art023",
+        "IFR-art023",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art023",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q13",
+     "expected": [
+      "CMIR-art029"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art029",
+      "CMIR-anx45",
+      "CMIR-art039"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 18,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art029",
+        "CMIR-anx45",
+        "CMIR-art039"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art029",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q14",
+     "expected": [
+      "CMIR-art063"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "decision": "uncertain",
+     "agent_top3": [
+      "CGR-art081",
+      "CMIR-art063",
+      "IFR-anx1"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 12,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art081",
+        "CMIR-art063",
+        "IFR-anx1"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art081",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q15",
+     "expected": [
+      "CMIR-art046"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art046",
+      "CMIR-art088",
+      "IFR-anx11"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art046",
+        "CMIR-art088",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art046",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q16",
+     "expected": [
+      "CMIR-art043",
+      "CMIR-art039"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art043",
+      "CMIR-art039",
+      "CMIR-anx35ب"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 16,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art043",
+        "CMIR-art039",
+        "CMIR-anx35ب"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art043",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q17",
+     "expected": [
+      "CMIR-art039"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "uncertain",
+     "agent_top3": [
+      "CMIR-art039",
+      "CMIR-anx35أ",
+      "CMIR-anx35أ"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art039",
+        "CMIR-anx35أ",
+        "CMIR-anx35أ"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art039",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q18",
+     "expected": [
+      "CMIR-art036"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art036",
+      "CMIR-art043",
+      "CMIR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 11,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art036",
+        "CMIR-art043",
+        "CMIR-art093"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art036",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q19",
+     "expected": [
+      "CMIR-art073",
+      "CMIR-art075",
+      "CMIR-art070",
+      "CMIR-art071"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art073",
+      "CMIR-art077",
+      "IFR-art027"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art073",
+        "CMIR-art077",
+        "IFR-art027"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art073",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q20",
+     "expected": [
+      "CMIR-art045"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art045",
+      "CMIR-art045",
+      "CMIR-anx25"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 16,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art045",
+        "CMIR-art045",
+        "CMIR-anx25"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art045",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q21",
+     "expected": [
+      "CMIR-art047",
+      "CMIR-art048",
+      "CMIR-art091"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art047",
+      "CMIR-anx55",
+      "CMIR-anx55"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art047",
+        "CMIR-anx55",
+        "CMIR-anx55"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art047",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q22",
+     "expected": [
+      "CMIR-art051"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art051",
+      "CMIR-art016",
+      "CMIR-art085"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 8,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art051",
+        "CMIR-art016",
+        "CMIR-art085"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art051",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q23",
+     "expected": [
+      "CMIR-art027",
+      "CMIR-art028"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art027",
+      "CMIR-art077",
+      "CMIR-art028"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art027",
+        "CMIR-art077",
+        "CMIR-art028"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art027",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q24",
+     "expected": [
+      "CMIR-art041",
+      "IFR-art013",
+      "SIFI-art012"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CGR-art041",
+      "CMIR-art041",
+      "CMIR-anx45"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art041",
+        "CMIR-art041",
+        "CMIR-anx45"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art041",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q25",
+     "expected": [
+      "CMIR-art096",
+      "CMIR-art098",
+      "CMIR-art095"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art096",
+      "CMIR-art098",
+      "CMIR-art097"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art096",
+        "CMIR-art098",
+        "CMIR-art097"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art096",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q26",
+     "expected": [
+      "CMIR-art086"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art086",
+      "CMIR-art044",
+      "CMIR-art071"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 9,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art086",
+        "CMIR-art044",
+        "CMIR-art071"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art086",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q27",
+     "expected": [
+      "IFR-art026",
+      "IFR-art027",
+      "IFR-art025",
+      "SIFI-art020"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "uncertain",
+     "agent_top3": [
+      "SIFI-art020",
+      "IFR-anx1",
+      "IFR-art027"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "SIFI-art020",
+        "IFR-anx1",
+        "IFR-art027"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "SIFI-art020",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q28",
+     "expected": [
+      "CGR-art052"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CGR-art052",
+      "CGR-art052",
+      "CGR-art056"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 6,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art052",
+        "CGR-art052",
+        "CGR-art056"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art052",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q29",
+     "expected": [
+      "CGR-art019"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CGR-art019",
+      "CGR-art019",
+      "CGR-art019"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 12,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art019",
+        "CGR-art019",
+        "CGR-art019"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art019",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q30",
+     "expected": [
+      "CGR-art090",
+      "CGR-art059",
+      "CGR-art087"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CGR-art090",
+      "CGR-art087",
+      "CGR-art059"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art090",
+        "CGR-art087",
+        "CGR-art059"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art090",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q31",
+     "expected": [
+      "IFR-art077",
+      "IFR-art093",
+      "SIFI-art028"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art077",
+      "IFR-art093",
+      "IFR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 16,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art077",
+        "IFR-art093",
+        "IFR-art093"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art077",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q32",
+     "expected": [
+      "IFR-art078",
+      "IFR-art095",
+      "SIFI-art030",
+      "IFR-art011",
+      "SIFI-art010"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art078",
+      "IFR-art095",
+      "IFR-art096"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art078",
+        "IFR-art095",
+        "IFR-art096"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art078",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q33",
+     "expected": [
+      "IFR-art082",
+      "IFR-art083",
+      "SIFI-art021"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art082",
+      "IFR-art100",
+      "SIFI-art021"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 12,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art082",
+        "IFR-art100",
+        "SIFI-art021"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art082",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q34",
+     "expected": [
+      "IFR-art043"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art043",
+      "IFR-art043",
+      "IFR-art043"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art043",
+        "IFR-art043",
+        "IFR-art043"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art043",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q35",
+     "expected": [
+      "CMIR-art037",
+      "CMIR-art064"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "CMIR-art064",
+      "CMIR-art037",
+      "CMIR-art055"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art064",
+        "CMIR-art037",
+        "CMIR-art055"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art064",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q36",
+     "expected": [
+      "IFR-art072",
+      "IFR-art090",
+      "IFR-art103",
+      "SIFI-art023",
+      "CMIR-art033"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "decision": "confirmed",
+     "agent_top3": [
+      "IFR-art072",
+      "IFR-art072",
+      "IFR-art103"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art072",
+        "IFR-art072",
+        "IFR-art103"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art072",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "decide",
+       "decision": "confirmed",
+       "reason": "أعلى نتيجة تؤيدها إشارة ثانية مستقلة",
+       "references_first": null
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -4,7 +4,7 @@ Connects the document processing (OCR) agent and the regulatory retrieval agent 
 Every clause is searched in its own parallel branch.
 
 ```
-extract (docproc) ─► segment (segmentation.py) ─► retrieve × N (pipeline/retriever.py) ─► collect
+extract (docproc) ─► segment (segmentation.py) ─► retrieve × N (retriever.py or retrieval_agent.py) ─► collect
         └────────────────┴──► failed
 ```
 
@@ -26,6 +26,8 @@ pip install -r orchestrator/requirements.txt
 python -m pytest orchestrator/tests -q                              # graph behaviour with a stand-in retriever
 python -m orchestrator.run ../docproc/testset/test7.docx --stub     # real OCR + segmentation, stand-in retrieval
 python -m orchestrator.run terms.pdf --mode hybrid -k 5             # real retrieval (BGE-M3 + Chroma store)
+python -m orchestrator.run terms.pdf --agent                        # retrieval through the agent (adds retrieval_decision/steps per clause)
+python -m orchestrator.run terms.pdf --agent --llm                  # … with the LLM step (OPENAI_API_KEY in .env)
 ```
 
-Writes `retrieval.json`.
+Writes `retrieval.json` (git-ignored: it holds the clauses of the T&C you ran).

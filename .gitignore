@@ -14,3 +14,8 @@ docproc/out/
 docproc/testset/
 docproc/test_items.json
 backend/segmentation_output/
+
+# run outputs and uploads (may contain test T&Cs)
+backend/retrieval.json
+interface/uploads/
+interface/data/

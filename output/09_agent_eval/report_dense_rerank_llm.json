@@ -1,0 +1,5278 @@
+{
+ "config": {
+  "mode": "dense",
+  "rerank": true,
+  "llm": "gpt-4o"
+ },
+ "sets": {
+  "blom": {
+   "n": 33,
+   "baseline": {
+    "hit1": 0.727,
+    "hit3": 0.909,
+    "hit5": 0.97,
+    "mrr": 0.833
+   },
+   "agent": {
+    "hit1": 0.909,
+    "hit3": 0.97,
+    "hit5": 0.97,
+    "mrr": 0.939
+   },
+   "decisions": {
+    "confirmed_by_llm": {
+     "count": 21,
+     "hit1": 1.0
+    },
+    "uncertain": {
+     "count": 12,
+     "hit1": 0.75
+    }
+   },
+   "changed": [
+    {
+     "id": "B02",
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    },
+    {
+     "id": "B04",
+     "baseline_rank": 4,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    },
+    {
+     "id": "B11",
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    },
+    {
+     "id": "B12",
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    },
+    {
+     "id": "B21",
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    },
+    {
+     "id": "B31",
+     "baseline_rank": 4,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    }
+   ],
+   "rows": [
+    {
+     "id": "B01",
+     "expected": [
+      "IFR-anx9",
+      "IFR-art089",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-anx9",
+      "IFR-anx11",
+      "IFR-art090"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-anx9",
+      "IFR-anx11",
+      "IFR-art089"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الغلاف",
+       "words": 28,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx9",
+        "IFR-anx11",
+        "IFR-art090"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx9",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-anx9",
+        "IFR-art089",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة المختارة في الملحق التاسع تتطلب بيان إخلاء المسؤولية المتعلق بتوزيع المستندات الخاصة في المملكة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B02",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art080",
+      "IFR-art084"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art001",
+      "IFR-anx11",
+      "IFR-art084"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-anx7",
+      "IFR-art084"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "اسم الصندوق ونوعه",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art001",
+        "IFR-anx11",
+        "IFR-art084"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art001",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-anx11",
+        "IFR-anx11",
+        "IFR-anx6"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-anx7",
+       "support": [
+        "title"
+       ]
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "الملحق ١١ يتضمن متطلبات اسم ونوع الصندوق في شروط وأحكام الصندوق الخاص."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B03",
+     "expected": [
+      "IFR-art014",
+      "IFR-art088",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art014",
+      "IFR-anx11",
+      "IFR-anx11"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art014",
+      "IFR-anx11",
+      "IFR-art088"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "سياسات تركز الاستثمار",
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art014",
+        "IFR-anx11",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art014",
+       "support": [
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art014"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art088"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art014",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "العنصر يحدد سياسات تركيز الاستثمار، وتنظيم ذلك مشمول في المادة الرابعة عشرة التي تغطي سياسات الاستثمار وممارساته."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B04",
+     "expected": [
+      "IFR-art088",
+      "IFR-art014"
+     ],
+     "baseline_rank": 4,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art009",
+      "IFR-anx11",
+      "IFR-art092"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art014",
+      "IFR-anx11",
+      "CMIR-art043"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "حد الطرف النظير",
+       "words": 27,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art009",
+        "IFR-anx11",
+        "IFR-art092"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art009",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-art019",
+        "IFR-anx11",
+        "IFR-art092"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": null
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "search_regulations",
+       "query": "الحد الأعلى للتعامل مع الطرف النظير"
+      },
+      {
+       "step": 7,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art014"
+      },
+      {
+       "step": 8,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art043"
+      },
+      {
+       "step": 9,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art050"
+      },
+      {
+       "step": 10,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art014",
+        "CMIR-art043",
+        "IFR-anx11"
+       ],
+       "status": "unsure",
+       "reason": "اللوائح لا تنظم بشكل واضح استخدام التصنيف الداخلي للطرف النظير أو الحد الأعلى للتعامل معه."
+      },
+      {
+       "step": 11,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B05",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art088"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-anx11",
+      "IFR-art088",
+      "IFR-art026"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art088",
+      "IFR-anx11",
+      "IFR-art014"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "صلاحيات الاقتراض",
+       "words": 24,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art088",
+        "IFR-art026"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art088"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art014"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "search_regulations",
+       "query": "تمويل الصناديق الاستثمارية"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art088",
+        "IFR-anx11",
+        "IFR-art014"
+       ],
+       "status": "found",
+       "reason": "تنظيم تمويل الصندوق الواقع ضمن قيود الاستثمار."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B06",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art088"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "baseline_top3": [
+      "IFR-art027",
+      "IFR-anx11",
+      "CMIR-art077"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art014",
+      "IFR-anx11",
+      "IFR-art027"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "استثمار النقد",
+       "words": 20,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art027",
+        "IFR-anx11",
+        "CMIR-art077"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art027",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art014"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art017"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "search_regulations",
+       "query": "استثمار النقد في ودائع مرابحة"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art014",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "تنظم المادة سياسة الاستثمار للصندوق، والملحق 11 يتطلب تضمين ذلك في الشروط والأحكام."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B07",
+     "expected": [
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-anx11",
+      "IFR-art014",
+      "IFR-art009"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-anx11",
+      "CMIR-art042",
+      "IFR-art014"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "المخاطر",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art014",
+        "IFR-art009"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-anx11",
+        "CMIR-art042"
+       ],
+       "status": "found",
+       "reason": "البند يتناول مخاطر الاستثمار، والملحق 11 والبند 7 يختص مباشرة بالمخاطر في شروط وأحكام الصندوق، مع إشعار عدم ضمان الربح أو الخسارة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B08",
+     "expected": [
+      "IFR-art083"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art083",
+      "IFR-anx11",
+      "IFR-art083"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art083",
+      "IFR-anx11",
+      "IFR-art015"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الحد الأدنى وتمديد الطرح",
+       "words": 30,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art083",
+        "IFR-anx11",
+        "IFR-art083"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art083",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art083"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "search_regulations",
+       "query": "الحد الأدنى وتمديد الطرح"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art083",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "تنظم المادة الثالثة والثمانون متطلبات الطرح الخاص، بما في ذلك إعادة مبالغ الاشتراك عند عدم جمع الحد الأدنى. كما تذكر الملحق 11 متطلبات شروط وأحكام الصندوق المتعلقة بالحد الأدنى للطرح."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B09",
+     "expected": [
+      "IFR-art082"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art082",
+      "IFR-anx11",
+      "IFR-art098"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art082",
+      "IFR-anx11",
+      "IFR-art098"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "أهلية المستثمرين",
+       "words": 15,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art082",
+        "IFR-anx11",
+        "IFR-art098"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art082",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art082",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الثانية والثمانون تنظّم الطرح الخاص للمستثمرين المؤهلين والمؤسسيين وتحدد الحد الأعلى لمستثمري التجزئة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B10",
+     "expected": [
+      "IFR-art009"
+     ],
+     "baseline_rank": null,
+     "agent_rank": null,
+     "baseline_top3": [
+      "IFR-anx11",
+      "IFR-anx11",
+      "IFR-art003"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art082",
+      "IFR-anx11",
+      "IFR-art003"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الاستثمار متاح لفئات محددة بحسب الجنسية",
+       "words": 18,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-anx11",
+        "IFR-art003"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art082"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art088"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art082",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 82 تتعلق بالطرح الخاص وأهلية المستثمرين، والملحق 11 يتضمن متطلبات شروط وأحكام الصندوق."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B11",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art085",
+      "IFR-art092"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art096",
+      "IFR-anx11",
+      "IFR-art083"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art085",
+      "IFR-anx11",
+      "IFR-art096"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "أيام التداول",
+       "words": 23,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art096",
+        "IFR-anx11",
+        "IFR-art083"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art096",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-art085",
+        "IFR-anx11",
+        "IFR-art096"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-art096",
+       "support": null
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 7,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art085"
+      },
+      {
+       "step": 8,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art085",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 85 تنظم المواعيد النهائية لتقديم طلبات الاشتراك والاسترداد ويوم التعامل."
+      },
+      {
+       "step": 9,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B12",
+     "expected": [
+      "IFR-art098",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art094",
+      "IFR-anx11",
+      "IFR-art023"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art098",
+      "IFR-anx11",
+      "IFR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "نقل الوحدات",
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art094",
+        "IFR-anx11",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art094",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-anx11",
+        "IFR-art094",
+        "IFR-art098"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-art093",
+       "support": [
+        "title"
+       ]
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art098"
+      },
+      {
+       "step": 7,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 8,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art098",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 98 تحدد القيود على نقل وحدات الصندوق الخاص، وهي تنطبق على البند المتعلق بنقل الوحدات بموافقة مدير الصندوق."
+      },
+      {
+       "step": 9,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B13",
+     "expected": [
+      "IFR-art012"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art012",
+      "IFR-anx11",
+      "IFR-art010"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art012",
+      "IFR-anx11",
+      "IFR-art010"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "سجل مالكي الوحدات",
+       "words": 17,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art012",
+        "IFR-anx11",
+        "IFR-art010"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art012",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art012",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 12 تحدد اشتراطات سجل مالكي الوحدات بالتفصيل، بينما الملحق 11 يذكر السجل كجزء من متطلبات الشروط والأحكام."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B14",
+     "expected": [
+      "IFR-art023"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art023",
+      "IFR-art023",
+      "IFR-anx11"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-anx11",
+      "IFR-anx14"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "حالات الإنهاء",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art023",
+        "IFR-art023",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art023",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art023"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art023",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الثالثة والعشرون تتعلق بإنهاء الصندوق وتصفيته، وهي الأكثر صلة ببند حالات الإنهاء."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B15",
+     "expected": [
+      "IFR-art023"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art023",
+      "IFR-art023",
+      "IFR-art023"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-anx11",
+      "IFR-art095"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "مهلة التصفية",
+       "words": 27,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art023",
+        "IFR-art023",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art023",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art023"
+      },
+      {
+       "step": 5,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art023",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الثالثة والعشرون تحتوي على القواعد لتصفية الصندوق وتوزيع المستحقات، وهي تطابق موضوع البند بشكل مباشر."
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B16",
+     "expected": [
+      "IFR-art023"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art023",
+      "IFR-anx11",
+      "IFR-art023"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-anx11",
+      "IFR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "إشعار الإنهاء",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art023",
+        "IFR-anx11",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art023",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art023"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art023",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 23 تحدد بوضوح شروط وإجراءات إشعار إنهاء الصندوق."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B17",
+     "expected": [
+      "IFR-anx11"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 2,
+     "baseline_top3": [
+      "IFR-art026",
+      "IFR-anx11",
+      "IFR-art023"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-anx11",
+      "IFR-art026"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الاسترداد العيني",
+       "words": 17,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art026",
+        "IFR-anx11",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art026",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-art026",
+        "IFR-anx11",
+        "IFR-art015"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-art026",
+       "support": null
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art023"
+      },
+      {
+       "step": 7,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 8,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art023",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الثالثة والعشرون تعالج إنهاء الصندوق وتصفيته، وتشمل إجراءات وتفاصيل التصفية وحقوق مالكي الوحدات."
+      },
+      {
+       "step": 9,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B18",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art088",
+      "IFR-art019"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-anx11",
+      "IFR-art015",
+      "IFR-art009"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art019",
+      "IFR-anx11",
+      "IFR-art015"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الرسوم",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art015",
+        "IFR-art009"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art019"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art019",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة التاسعة عشرة تحدد ضوابط الرسوم والعمولات للصندوق الخاصة، وهي الأهم للتحقق من الامتثال."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B19",
+     "expected": [
+      "IFR-art088",
+      "IFR-anx11",
+      "IFR-art019"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-anx11",
+      "IFR-art026",
+      "IFR-anx11"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-anx3",
+      "IFR-art026"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "المصروفات الأخرى",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art026",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx3"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-anx11",
+        "IFR-anx3"
+       ],
+       "status": "found",
+       "reason": "ينظم هذا القسم الإفصاح عن الرسوم والمصاريف التي يتحملها الصندوق، بما في ذلك نسبة المصاريف من إجمالي الأصول."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B20",
+     "expected": [
+      "IFR-art092",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art092",
+      "IFR-anx11",
+      "IFR-art005"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art092",
+      "IFR-anx11",
+      "IFR-art005"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "التقييم",
+       "words": 25,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art092",
+        "IFR-anx11",
+        "IFR-art005"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art092",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art092"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art092",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الثانية والتسعون تغطي مسؤوليات التقييم والتسعير التي تتوافق مع البند المذكور."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B21",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art075",
+      "IFR-art095"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art092",
+      "IFR-anx11",
+      "IFR-art093"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-art092",
+      "IFR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "خطأ التقييم",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art092",
+        "IFR-anx11",
+        "IFR-art093"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art092",
+       "support": [
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art092"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "search_regulations",
+       "query": "تصحيح خطأ في التقييم أو السعر خلال 10 أيام"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-anx11",
+        "IFR-art092"
+       ],
+       "status": "found",
+       "reason": "البند 12 من الملحق 11 يغطي إجراءات تصحيح الأخطاء في التقييم أو التسعير."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B22",
+     "expected": [
+      "IFR-art020"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art020",
+      "IFR-anx11",
+      "IFR-art023"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art020",
+      "IFR-anx11",
+      "IFR-art023"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "عزل مدير الصندوق",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art020",
+        "IFR-anx11",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art020",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art020"
+      },
+      {
+       "step": 5,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art020",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة العشرون تحدد صلاحية الهيئة في عزل مدير الصندوق والشروط المتعلقة بذلك، مما يتوافق مع موضوع البند."
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B23",
+     "expected": [
+      "IFR-art015",
+      "IFR-anx11"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art015",
+      "IFR-anx11",
+      "IFR-art085"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art015",
+      "IFR-anx11",
+      "IFR-art085"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "استثمار مدير الصندوق",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art015",
+        "IFR-anx11",
+        "IFR-art085"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art015",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art015"
+      },
+      {
+       "step": 5,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art015",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الخامسة عشرة تحدد بوضوح شروط استثمار مدير الصندوق بحقوق مماثلة لمالكي الوحدات الآخرين، باستثناء حق التصويت كما ورد في البند."
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B24",
+     "expected": [
+      "IFR-art031"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art031",
+      "IFR-anx11",
+      "IFR-art020"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art031",
+      "IFR-anx11",
+      "IFR-art020"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "عزل أمين الحفظ",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art031",
+        "IFR-anx11",
+        "IFR-art020"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art031",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art031",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الحادية والثلاثون تحدد المتطلبات والإجراءات اللازمة لعزل أمين الحفظ وتعيين بديل."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B25",
+     "expected": [
+      "IFR-art095",
+      "IFR-art011",
+      "IFR-art091"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art095",
+      "IFR-anx11",
+      "IFR-art096"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art095",
+      "IFR-anx11",
+      "IFR-art091"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "القوائم المالية",
+       "words": 20,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art095",
+        "IFR-anx11",
+        "IFR-art096"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art095",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art091"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art011"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art095",
+        "IFR-art091",
+        "IFR-art011",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "تحدد المادة الخامسة والتسعون متطلبات إعداد القوائم المالية وتقديمها لمالكي الوحدات."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B26",
+     "expected": [
+      "IFR-anx11",
+      "IFR-art013"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-anx11",
+      "CMIR-art041",
+      "IFR-art013"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art013",
+      "IFR-anx11",
+      "CMIR-art041"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "تعارض المصالح",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "CMIR-art041",
+        "IFR-art013"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art041"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art013"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art013",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة تتعلق مباشرة بإجراءات معالجة تعارض المصالح في إدارة الصناديق."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B27",
+     "expected": [
+      "IFR-art093"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art093",
+      "IFR-art093",
+      "IFR-anx11"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art093",
+      "IFR-anx11",
+      "IFR-art012"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الدعوة والنصاب",
+       "words": 33,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art093",
+        "IFR-art093",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art093",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art093"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art093",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الثالثة والتسعون تتناول بالتفصيل سياسات واجتماعات مالكي الوحدات، بما في ذلك الدعوة والنصاب."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B28",
+     "expected": [
+      "IFR-art093",
+      "IFR-art085"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art093",
+      "IFR-anx11",
+      "IFR-art085"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art093",
+      "IFR-anx11",
+      "IFR-art085"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "سقوط حق الاعتراض",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art093",
+        "IFR-anx11",
+        "IFR-art085"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art093",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art093"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art093",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الثالثة والتسعون تتناول اجتماعات مالكي الوحدات والسياسات المرتبطة بها والتي تشمل الحق في الاعتراض. الملحق 11 يتضمن متطلبات تتعلق بالاجتماعات."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B29",
+     "expected": [
+      "IFR-art009"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art009",
+      "IFR-anx11",
+      "IFR-art029"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art009",
+      "IFR-anx11",
+      "IFR-art029"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "مسؤولية مدير الصندوق",
+       "words": 19,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art009",
+        "IFR-anx11",
+        "IFR-art029"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art009",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art009"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art009",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة التاسعة تحدد مسؤوليات مدير الصندوق بما فيها الخسائر الناجمة عن إهماله، وهو المضمون الذي يغطيه هذا البند في الشروط والأحكام."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B30",
+     "expected": [
+      "CMIR"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art063",
+      "CMIR-art008",
+      "CMIR-art080"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art063",
+      "CMIR-art008",
+      "CMIR-art080"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "الشكاوى",
+       "words": 23,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art063",
+        "CMIR-art008",
+        "CMIR-art080"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art063",
+       "support": [
+        "lexical",
+        "title"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art063"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art083"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "search_regulations",
+       "query": "الشكاوى"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art063"
+       ],
+       "status": "found",
+       "reason": "المادة 63 تغطي تسوية الشكاوى بشكل مباشر."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B31",
+     "expected": [
+      "IFR-art009",
+      "CMIR"
+     ],
+     "baseline_rank": 4,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-anx11",
+      "IFR-art020",
+      "IFR-art020"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art009",
+      "IFR-anx11",
+      "IFR-art020"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "صحة المعلومات وإعفاء المدير",
+       "words": 22,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art020",
+        "IFR-art020"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "retry",
+       "strategy": "title+text",
+       "mode": "hybrid",
+       "top": [
+        "IFR-art020",
+        "IFR-art020",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 5,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": null
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art009"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art009",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 9 توضح مسؤوليات مدير الصندوق وشروط الإفصاح، وهو مناسب لبند يعفيه من المسؤولية."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B32",
+     "expected": [
+      "IFR-art094",
+      "IFR-art089"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art094",
+      "IFR-anx11",
+      "IFR-art093"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art094",
+      "IFR-anx11",
+      "IFR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "تعديل الشروط والأحكام",
+       "words": 29,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art094",
+        "IFR-anx11",
+        "IFR-art093"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art094",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art094"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx11"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art094",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 94 تحدد متطلبات موافقة مالكي الوحدات والإشعارات للتغييرات الأساسية وغير الأساسية في الشروط والأحكام."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "B33",
+     "expected": [
+      "IFR-art094"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art094",
+      "IFR-anx11",
+      "IFR-art083"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art094",
+      "IFR-anx11",
+      "IFR-art083"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": "حق الاسترداد قبل التغيير",
+       "words": 15,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art094",
+        "IFR-anx11",
+        "IFR-art083"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art094",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art094"
+      },
+      {
+       "step": 5,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art094",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "تنظم المادة 94 حق الاسترداد قبل التغييرات وتفاصيل موافقة المالكين."
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    }
+   ]
+  },
+  "kb": {
+   "n": 36,
+   "baseline": {
+    "hit1": 0.889,
+    "hit3": 0.972,
+    "hit5": 1.0,
+    "mrr": 0.933
+   },
+   "agent": {
+    "hit1": 0.944,
+    "hit3": 1.0,
+    "hit5": 1.0,
+    "mrr": 0.972
+   },
+   "decisions": {
+    "confirmed_by_llm": {
+     "count": 28,
+     "hit1": 1.0
+    },
+    "uncertain": {
+     "count": 8,
+     "hit1": 0.75
+    }
+   },
+   "changed": [
+    {
+     "id": "q05",
+     "baseline_rank": 3,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    },
+    {
+     "id": "q11",
+     "baseline_rank": 4,
+     "agent_rank": 2,
+     "decision": "uncertain"
+    },
+    {
+     "id": "q14",
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    },
+    {
+     "id": "q23",
+     "baseline_rank": 1,
+     "agent_rank": 2,
+     "decision": "uncertain"
+    },
+    {
+     "id": "q24",
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "decision": "uncertain"
+    }
+   ],
+   "rows": [
+    {
+     "id": "q01",
+     "expected": [
+      "IFR-art068"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art068",
+      "IFR-art071",
+      "IFR-art069"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art068",
+      "IFR-art067",
+      "IFR-art071"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 23,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art068",
+        "IFR-art071",
+        "IFR-art069"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art068",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art068",
+        "IFR-art067"
+       ],
+       "status": "found",
+       "reason": "المادة 68 تحدد شروط تأجيل طلبات الاسترداد كما هو مذكور في البند."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q02",
+     "expected": [
+      "IFR-art069"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art069",
+      "IFR-art015",
+      "IFR-art067"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art069",
+      "IFR-art067",
+      "IFR-art015"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art069",
+        "IFR-art015",
+        "IFR-art067"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art069",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art069",
+        "IFR-art067"
+       ],
+       "status": "found",
+       "reason": "المادة 69 تحدد متى يمكن تعليق الاشتراك والاسترداد."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q03",
+     "expected": [
+      "IFR-art075"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art075",
+      "SIFI-art008",
+      "IFR-art009"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art075",
+      "IFR-art009",
+      "SIFI-art008"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art075",
+        "SIFI-art008",
+        "IFR-art009"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art075",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art075",
+        "IFR-art009",
+        "SIFI-art008",
+        "IFR-art092",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة الخامسة والسبعون تنظم تعويض مالكي الوحدات عند الخطأ في التسعير بشكل مباشر."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q04",
+     "expected": [
+      "IFR-art075"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art075",
+      "IFR-art092",
+      "SIFI-art025"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art075",
+      "IFR-art092",
+      "IFR-anx11"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art075",
+        "IFR-art092",
+        "SIFI-art025"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art075",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art075",
+        "IFR-art092",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 75 تتناول إبلاغ الهيئة بالأخطاء في التقييم مباشرة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q05",
+     "expected": [
+      "IFR-art064",
+      "IFR-art065",
+      "IFR-art094",
+      "SIFI-art029"
+     ],
+     "baseline_rank": 3,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art077",
+      "IFR-art093",
+      "IFR-art094"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art064",
+      "IFR-art094",
+      "IFR-art065"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 18,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art077",
+        "IFR-art093",
+        "IFR-art094"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art077",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art094"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art064"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art064",
+        "IFR-art094",
+        "IFR-art065",
+        "IFR-art063"
+       ],
+       "status": "found",
+       "reason": "البند يتعلق بتغيير الشروط والأحكام وضرورة الحصول على موافقة مالكي الوحدات."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q06",
+     "expected": [
+      "IFR-art065"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art065",
+      "IFR-art064",
+      "IFR-art094"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art065",
+      "IFR-art064",
+      "IFR-art094"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art065",
+        "IFR-art064",
+        "IFR-art094"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art065",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art065"
+       ],
+       "status": "found",
+       "reason": "المادة 65 تغطي الإشعار بالتغييرات غير الأساسية بشكل مباشر."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q07",
+     "expected": [
+      "IFR-art066"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art066",
+      "IFR-art050",
+      "IFR-art049"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art066",
+      "IFR-anx1",
+      "IFR-art050"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art066",
+        "IFR-art050",
+        "IFR-art049"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art066",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art066"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx1"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art066",
+        "IFR-anx1"
+       ],
+       "status": "found",
+       "reason": "المادة 66 تحدد مدة وسعر الطرح الأولي بالتفصيل."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q08",
+     "expected": [
+      "IFR-art074"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art074",
+      "IFR-anx5",
+      "IFR-anx4"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art074",
+      "IFR-anx11",
+      "IFR-anx1"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 18,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art074",
+        "IFR-anx5",
+        "IFR-anx4"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art074",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art074",
+        "IFR-anx11",
+        "IFR-anx1",
+        "IFR-art051",
+        "IFR-art075"
+       ],
+       "status": "found",
+       "reason": "المادة الرابعة والسبعون تغطي تسعير الوحدات بتفصيل، وهي الأكثر تطابقاً مع نص البند."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q09",
+     "expected": [
+      "IFR-art071"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art071",
+      "IFR-art068",
+      "IFR-art060"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art071",
+      "IFR-anx11",
+      "IFR-art068"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 11,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art071",
+        "IFR-art068",
+        "IFR-art060"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art071",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art071",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة 71 تنظم الاقتراض لتنفيذ طلبات الاسترداد مباشرة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q10",
+     "expected": [
+      "IFR-art067"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art067",
+      "IFR-art074",
+      "IFR-art092"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art067",
+      "IFR-anx1",
+      "IFR-art074"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 17,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art067",
+        "IFR-art074",
+        "IFR-art092"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art067",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art067"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art073"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx1"
+      },
+      {
+       "step": 7,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art068"
+      },
+      {
+       "step": 8,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art067",
+        "IFR-anx1"
+       ],
+       "status": "found",
+       "reason": "البند يتطلب دفع عوائد الاسترداد خلال فترة زمنية محددة، والمادة 67 تعالج هذه النقطة بوضوح."
+      },
+      {
+       "step": 9,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q11",
+     "expected": [
+      "IFR-art019",
+      "IFR-art036",
+      "SIFI-art016"
+     ],
+     "baseline_rank": 4,
+     "agent_rank": 2,
+     "baseline_top3": [
+      "IFR-anx11",
+      "IFR-art005",
+      "SIFI-art008"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-anx11",
+      "IFR-art036",
+      "IFR-art005"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 17,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-anx11",
+        "IFR-art005",
+        "SIFI-art008"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-anx11",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art036"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx1"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-anx11",
+        "IFR-art036"
+       ],
+       "status": "found",
+       "reason": "تتعلق المادة السادسة والثلاثون بتحديد الرسوم والعمولات المسموح بها، بينما يتطلب الملحق 11 الإفصاح عن جميع الرسوم والتفاصيل."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q12",
+     "expected": [
+      "IFR-art023",
+      "SIFI-art018"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art023",
+      "IFR-art023",
+      "IFR-art023"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art023",
+      "IFR-anx11",
+      "SIFI-art018"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 12,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art023",
+        "IFR-art023",
+        "IFR-art023"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art023",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art023",
+        "IFR-anx11",
+        "SIFI-art018"
+       ],
+       "status": "found",
+       "reason": "المادة 23 تتناول إنهاء الصندوق وتصفيته بشكل تفصيلي، والملحق 11 يحدد متطلبات الشروط والأحكام، وتعليمات SIFI-art018 تشير لتطبيق أحكام اللائحة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q13",
+     "expected": [
+      "CMIR-art029"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art029",
+      "CMIR-anx45",
+      "CMIR-art039"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art029",
+      "CGR-art080",
+      "CMIR-anx45"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 18,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art029",
+        "CMIR-anx45",
+        "CMIR-art039"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art029",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art029"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CGR-art080"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art029",
+        "CGR-art080"
+       ],
+       "status": "found",
+       "reason": "المادة التاسعة والعشرون في لائحة مؤسسات السوق المالية تحدد بوضوح متطلبات الحفاظ على سرية معلومات العميل."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q14",
+     "expected": [
+      "CMIR-art063"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CGR-art081",
+      "CMIR-art063",
+      "IFR-anx1"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "CMIR-art063",
+      "IFR-anx1",
+      "CGR-art081"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 12,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art081",
+        "CMIR-art063",
+        "IFR-anx1"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art081",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-anx1"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art063"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "search_regulations",
+       "query": "إجراءات تسوية الشكاوى لصناديق الاستثمار"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art063",
+        "IFR-anx1"
+       ],
+       "status": "found",
+       "reason": "تنظيم إجراءات معالجة الشكاوى يدخل ضمن متطلبات لوائح صناديق الاستثمار واللوائح التنظيمية للمؤسسات."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q15",
+     "expected": [
+      "CMIR-art046"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art046",
+      "CMIR-art088",
+      "IFR-anx11"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art046",
+      "IFR-anx11",
+      "CMIR-art088"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art046",
+        "CMIR-art088",
+        "IFR-anx11"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art046",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art046",
+        "IFR-anx11"
+       ],
+       "status": "found",
+       "reason": "المادة السادسة والأربعون من لائحة مؤسسات السوق المالية تغطي بشكل مباشر الإفصاح عن الأتعاب والعمولات قبل تقديم الخدمة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q16",
+     "expected": [
+      "CMIR-art043",
+      "CMIR-art039"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art043",
+      "CMIR-art039",
+      "CMIR-anx35ب"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art043",
+      "CMIR-art039",
+      "CMIR-anx35ب"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 16,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art043",
+        "CMIR-art039",
+        "CMIR-anx35ب"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art043",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art043"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art039"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art043",
+        "CMIR-art039"
+       ],
+       "status": "found",
+       "reason": "البند يتعلق بتقييم ملاءمة المنتج الاستثماري للعميل، وتحديد المتطلبات والشروط لذلك."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q17",
+     "expected": [
+      "CMIR-art039"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art039",
+      "CMIR-anx35أ",
+      "CMIR-anx35أ"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "CMIR-art039",
+      "CMIR-anx35أ",
+      "CMIR-art043"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art039",
+        "CMIR-anx35أ",
+        "CMIR-anx35أ"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art039",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art039"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-anx35أ"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art039",
+        "CMIR-anx35أ"
+       ],
+       "status": "found",
+       "reason": "المادة تتعلق بتحديث بيانات العميل ومتطلبات اعرف عميلك."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q18",
+     "expected": [
+      "CMIR-art036"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art036",
+      "CMIR-art043",
+      "CMIR-art093"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art036",
+      "CMIR-art043",
+      "CMIR-art093"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 11,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art036",
+        "CMIR-art043",
+        "CMIR-art093"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art036",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art036"
+       ],
+       "status": "found",
+       "reason": "المادة تحدد تصنيف العملاء المطلوب للشركات."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q19",
+     "expected": [
+      "CMIR-art073",
+      "CMIR-art075",
+      "CMIR-art070",
+      "CMIR-art071"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art073",
+      "CMIR-art077",
+      "IFR-art027"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art073",
+      "CMIR-art071",
+      "CMIR-art069"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art073",
+        "CMIR-art077",
+        "IFR-art027"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art073",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art073",
+        "CMIR-art071",
+        "CMIR-art069",
+        "IFR-art027",
+        "CMIR-art070"
+       ],
+       "status": "found",
+       "reason": "المادة 73 تلزم بفصل أموال العميل في حساب لدى بنك محلي."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q20",
+     "expected": [
+      "CMIR-art045"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art045",
+      "CMIR-art045",
+      "CMIR-anx25"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art045",
+      "CMIR-art093",
+      "CMIR-art094"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 16,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art045",
+        "CMIR-art045",
+        "CMIR-anx25"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art045",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art045"
+      },
+      {
+       "step": 5,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art045",
+        "CMIR-art093",
+        "CMIR-art094",
+        "CMIR-art044"
+       ],
+       "status": "found",
+       "reason": "المادة 45 من لائحة مؤسسات السوق المالية تحكم متطلبات الصفقة بهامش تغطية وإجراءات التصفية المرتبطة بها."
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q21",
+     "expected": [
+      "CMIR-art047",
+      "CMIR-art048",
+      "CMIR-art091"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art047",
+      "CMIR-anx55",
+      "CMIR-anx55"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art047",
+      "CMIR-art091",
+      "CMIR-art048"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art047",
+        "CMIR-anx55",
+        "CMIR-anx55"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art047",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art091"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art047"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art048"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art047",
+        "CMIR-art091",
+        "CMIR-art048"
+       ],
+       "status": "found",
+       "reason": "المادة السابعة والأربعون تحدد بشكل واضح شرط الإشعار والتنفيذ للصفقات."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q22",
+     "expected": [
+      "CMIR-art051"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art051",
+      "CMIR-art016",
+      "CMIR-art085"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art051",
+      "CMIR-art016",
+      "CMIR-art085"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 8,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art051",
+        "CMIR-art016",
+        "CMIR-art085"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art051",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art051",
+        "CMIR-art016"
+       ],
+       "status": "found",
+       "reason": "المادة 51 تختص بتسجيل المكالمات الهاتفية، وتشترط تسجيل مكالمات العملاء."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q23",
+     "expected": [
+      "CMIR-art027",
+      "CMIR-art028"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 2,
+     "baseline_top3": [
+      "CMIR-art027",
+      "CMIR-art077",
+      "CMIR-art028"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "CMIR-art046",
+      "CMIR-art027",
+      "CMIR-art077"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art027",
+        "CMIR-art077",
+        "CMIR-art028"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art027",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art027"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art046"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art046",
+        "CMIR-art027"
+       ],
+       "status": "found",
+       "reason": "المادة 46 تطلب الإفصاح الكامل عن العمولات للعملاء وهو ما يتطلب الالتزام به في الحالة المذكورة."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q24",
+     "expected": [
+      "CMIR-art041",
+      "IFR-art013",
+      "SIFI-art012"
+     ],
+     "baseline_rank": 2,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CGR-art041",
+      "CMIR-art041",
+      "CMIR-anx45"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "CMIR-art041",
+      "IFR-art013",
+      "CGR-art041"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art041",
+        "CMIR-art041",
+        "CMIR-anx45"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art041",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art041"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art013"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art041",
+        "IFR-art013"
+       ],
+       "status": "found",
+       "reason": "تتعلق المادة بالإفصاح عن تعارض المصالح بين الشركة والعميل."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q25",
+     "expected": [
+      "CMIR-art096",
+      "CMIR-art098",
+      "CMIR-art095"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art096",
+      "CMIR-art098",
+      "CMIR-art097"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art096",
+      "CMIR-art088",
+      "CMIR-art070"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art096",
+        "CMIR-art098",
+        "CMIR-art097"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art096",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art096",
+        "CMIR-art088",
+        "CMIR-art070"
+       ],
+       "status": "found",
+       "reason": "المادة 96 تحدد حقوق العملاء في حالة إفلاس مؤسسة السوق المالية مباشرة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q26",
+     "expected": [
+      "CMIR-art086"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art086",
+      "CMIR-art044",
+      "CMIR-art071"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art086",
+      "CMIR-anx25",
+      "CMIR-art044"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 9,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art086",
+        "CMIR-art044",
+        "CMIR-art071"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art086",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art086",
+        "CMIR-anx25"
+       ],
+       "status": "found",
+       "reason": "المادة السادسة والثمانون تنظم إقراض أوراق مالية عائدة لعميل."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q27",
+     "expected": [
+      "IFR-art026",
+      "IFR-art027",
+      "IFR-art025",
+      "SIFI-art020"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "SIFI-art020",
+      "IFR-anx1",
+      "IFR-art027"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art027",
+      "SIFI-art020",
+      "IFR-anx1"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "SIFI-art020",
+        "IFR-anx1",
+        "IFR-art027"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "SIFI-art020",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art027",
+        "SIFI-art020",
+        "IFR-anx1"
+       ],
+       "status": "found",
+       "reason": "المادة 27 من لائحة صناديق الاستثمار تتناول فصل الأصول بشكل مفصل."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q28",
+     "expected": [
+      "CGR-art052"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CGR-art052",
+      "CGR-art052",
+      "CGR-art056"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CGR-art052",
+      "CGR-art056",
+      "CGR-art055"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 6,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art052",
+        "CGR-art052",
+        "CGR-art056"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art052",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CGR-art052"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CGR-art056"
+      },
+      {
+       "step": 6,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CGR-art055"
+      },
+      {
+       "step": 7,
+       "action": "llm_finish",
+       "ranked": [
+        "CGR-art052",
+        "CGR-art056",
+        "CGR-art055"
+       ],
+       "status": "found",
+       "reason": "توضح المادة الثانية والخمسون اختصاصات ومسؤوليات لجنة المراجعة بشكل مباشر."
+      },
+      {
+       "step": 8,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q29",
+     "expected": [
+      "CGR-art019"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CGR-art019",
+      "CGR-art019",
+      "CGR-art019"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CGR-art019",
+      "CGR-art018",
+      "CGR-art029"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 12,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art019",
+        "CGR-art019",
+        "CGR-art019"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art019",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "CGR-art019",
+        "CGR-art018",
+        "CGR-art029"
+       ],
+       "status": "found",
+       "reason": "المادة التاسعة عشرة تحدد عوارض الاستقلال المرتبطة بأعضاء مجلس الإدارة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q30",
+     "expected": [
+      "CGR-art090",
+      "CGR-art059",
+      "CGR-art087"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CGR-art090",
+      "CGR-art087",
+      "CGR-art059"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CGR-art090",
+      "CGR-art058",
+      "CGR-art059"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CGR-art090",
+        "CGR-art087",
+        "CGR-art059"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CGR-art090",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "CGR-art090",
+        "CGR-art058",
+        "CGR-art059"
+       ],
+       "status": "found",
+       "reason": "المادة التسعون تغطي نص البند المطلوب بوضوح تام."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q31",
+     "expected": [
+      "IFR-art077",
+      "IFR-art093",
+      "SIFI-art028"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art077",
+      "IFR-art093",
+      "IFR-art093"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art077",
+      "IFR-art093",
+      "SIFI-art028"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 16,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art077",
+        "IFR-art093",
+        "IFR-art093"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art077",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art077",
+        "IFR-art093"
+       ],
+       "status": "found",
+       "reason": "المادة 77 تنظّم متطلبات دعوة مدير الصندوق لاجتماع مالكي الوحدات بعد طلب من أمين الحفظ."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q32",
+     "expected": [
+      "IFR-art078",
+      "IFR-art095",
+      "SIFI-art030",
+      "IFR-art011",
+      "SIFI-art010"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art078",
+      "IFR-art095",
+      "IFR-art096"
+     ],
+     "decision": "uncertain",
+     "agent_top3": [
+      "IFR-art095",
+      "IFR-anx11",
+      "IFR-anx1"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art078",
+        "IFR-art095",
+        "IFR-art096"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art078",
+       "support": null
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art095",
+        "IFR-anx11",
+        "IFR-anx1",
+        "IFR-art078"
+       ],
+       "status": "found",
+       "reason": "البند يتعلق بتقديم التقارير السنوية والتقارير المالية لمالكي الوحدات، والمادة (95) تحدد ذلك بوضوح للصناديق الخاصة."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "uncertain",
+       "reason": "ما فيه إشارة تؤيد أعلى نتيجة حتى بعد إعادة البحث، تحتاج مراجعة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q33",
+     "expected": [
+      "IFR-art082",
+      "IFR-art083",
+      "SIFI-art021"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art082",
+      "IFR-art100",
+      "SIFI-art021"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art082",
+      "IFR-art100",
+      "SIFI-art021"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 12,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art082",
+        "IFR-art100",
+        "SIFI-art021"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art082",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art082"
+       ],
+       "status": "found",
+       "reason": "يتعلق البند بتحديد المستثمرين المؤهلين للاشتراك في الصندوق الخاص، والمادة 82 توضح ذلك بشكل مباشر."
+      },
+      {
+       "step": 5,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q34",
+     "expected": [
+      "IFR-art043"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art043",
+      "IFR-art043",
+      "IFR-art043"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art043",
+      "IFR-art038",
+      "IFR-art059"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 13,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art043",
+        "IFR-art043",
+        "IFR-art043"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art043",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art043"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art038"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art043"
+       ],
+       "status": "found",
+       "reason": "المادة الثالثة والأربعون هي التي تحدد القيود الاستثمارية بما في ذلك الحد الأقصى للاستثمار في مصدر واحد."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q35",
+     "expected": [
+      "CMIR-art037",
+      "CMIR-art064"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "CMIR-art064",
+      "CMIR-art037",
+      "CMIR-art055"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "CMIR-art064",
+      "CMIR-art037",
+      "CMIR-art055"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 14,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "CMIR-art064",
+        "CMIR-art037",
+        "CMIR-art055"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "CMIR-art064",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art064"
+      },
+      {
+       "step": 5,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "CMIR-art037"
+      },
+      {
+       "step": 6,
+       "action": "llm_finish",
+       "ranked": [
+        "CMIR-art064",
+        "CMIR-art037"
+       ],
+       "status": "found",
+       "reason": "البند يتحدث عن مكافحة غسل الأموال وتمويل الإرهاب، وهاتان المادتان تغطيان المتطلبات ذات الصلة."
+      },
+      {
+       "step": 7,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    },
+    {
+     "id": "q36",
+     "expected": [
+      "IFR-art072",
+      "IFR-art090",
+      "IFR-art103",
+      "SIFI-art023",
+      "CMIR-art033"
+     ],
+     "baseline_rank": 1,
+     "agent_rank": 1,
+     "baseline_top3": [
+      "IFR-art072",
+      "IFR-art072",
+      "IFR-art103"
+     ],
+     "decision": "confirmed_by_llm",
+     "agent_top3": [
+      "IFR-art072",
+      "CMIR-anx15",
+      "IFR-art103"
+     ],
+     "steps": [
+      {
+       "step": 1,
+       "action": "analyse",
+       "title": null,
+       "words": 10,
+       "references": []
+      },
+      {
+       "step": 2,
+       "action": "search",
+       "mode": "dense",
+       "rerank": true,
+       "top": [
+        "IFR-art072",
+        "IFR-art072",
+        "IFR-art103"
+       ]
+      },
+      {
+       "step": 3,
+       "action": "check",
+       "top": "IFR-art072",
+       "support": [
+        "lexical"
+       ]
+      },
+      {
+       "step": 4,
+       "action": "llm_tool",
+       "tool": "read_section",
+       "section_key": "IFR-art072"
+      },
+      {
+       "step": 5,
+       "action": "llm_finish",
+       "ranked": [
+        "IFR-art072",
+        "CMIR-anx15"
+       ],
+       "status": "found",
+       "reason": "المادة الثانية والسبعون تتناول بشكل مباشر متطلبات إعلانات الأوراق المالية والمواد الترويجية."
+      },
+      {
+       "step": 6,
+       "action": "decide",
+       "decision": "confirmed_by_llm",
+       "reason": "القواعد والنموذج اتفقوا على نفس المادة",
+       "references_first": null
+      }
+     ]
+    }
+   ]
+  }
+ }
+}
