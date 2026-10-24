@@ -4,3 +4,6 @@ torch>=2.4
 sentence-transformers>=3.0
 chromadb>=1.0
 numpy
+# optional LLM step of retrieval_agent.py
+openai>=1.0
+python-dotenv

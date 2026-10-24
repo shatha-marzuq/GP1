@@ -5,7 +5,8 @@
 
 extract  = Document Processing Agent (docproc OCR, items with page numbers)
 segment  = segmentation.segment_clauses (paragraphs -> clauses)
-retrieve = Regulatory Retrieval Agent (pipeline/retriever.py over the Chroma vector DB)
+retrieve = plain search (pipeline/retriever.py over the Chroma vector DB) or the Regulatory Retrieval Agent
+           (pipeline/retrieval_agent.py: checks the top result, retries, flags uncertain clauses)
 
 Every agent is passed in, so tests and demos can swap in stand-ins.
 The compliance verdict (LLM) is not part of this graph yet; it will consume the `results` this graph returns.
@@ -78,12 +79,17 @@ def build_graph(retriever, *,
 #تاخذ البند، وتبحث بنصه في قاعدة الأنظمة  كود الرتريف
     def retrieve_node(task: ClauseTask):
         clause = task["clause"]
-        hits = retriever.search(clause["text"], k=k, **search_kwargs)
+        agent = None
+        if hasattr(retriever, "run"):  # وكيل الاسترجاع: يرجع النتائج + قراره وخطواته
+            out = retriever.run(clause["text"], title=clause.get("title"), k=k, **search_kwargs)
+            hits, agent = out["hits"], {"decision": out["decision"], "steps": out["steps"]}
+        else:
+            hits = retriever.search(clause["text"], k=k, **search_kwargs)
         with lock:
             done[task["review_id"]] += 1
             n = done[task["review_id"]]
         on_status(task["review_id"], "retrieving", done=n)
-        return {"results": [_result(clause, hits)]}
+        return {"results": [_result(clause, hits, agent)]}
 
     def collect_node(state: ReviewState):
         rid = state["review_id"]
@@ -115,8 +121,8 @@ def build_graph(retriever, *,
     return g.compile(checkpointer=checkpointer)
 
 # نرتب النواتج 
-def _result(clause: dict, hits: list[dict]) -> dict:
-    return {
+def _result(clause: dict, hits: list[dict], agent: dict | None = None) -> dict:
+    out = {
         "clause_id": clause["clause_id"],
         "title": clause.get("title"),
         "page_start": clause.get("page_start"),
@@ -126,3 +132,9 @@ def _result(clause: dict, hits: list[dict]) -> dict:
         "regulations": [{"id": h["id"], "score": h["score"], "citation": h["citation"],
                          "pdf_pages": h.get("pdf_pages"), "text": h["text"]} for h in hits],
     }
+    if agent:  # نحفظ قرار الوكيل وخطواته عشان نعرف ليش اختار هالمواد
+        out["retrieval_decision"] = agent["decision"]
+        out["retrieval_steps"] = agent["steps"]
+        for reg, h in zip(out["regulations"], hits):
+            reg["found_by"] = h.get("found_by")
+    return out

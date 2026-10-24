@@ -3,7 +3,9 @@ with their closest CMA regulations.  Only what is built today runs (OCR → segm
 compliance verification and the report are shown as "coming soon".
 
     cd interface
-    python app.py                    # real retrieval: BGE-M3 + reranker over the Chroma store
+    python app.py                    # Regulatory Retrieval Agent (+ its LLM step when OPENAI_API_KEY is in .env)
+    python app.py --no-llm           # the agent with its rule-based steps only
+    python app.py --retriever full   # plain search: BGE-M3 + reranker over the Chroma store, no agent
     python app.py --retriever bm25   # real regulations, lexical search only (no models to download)
     python app.py --retriever stub   # stand-in regulation (OCR + segmentation only)
 
@@ -13,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import threading
 import time
@@ -37,8 +40,9 @@ ALLOWED = {".pdf", ".docx"}
 K = 5
 
 # ─────────────────────────── retriever (built once, warmed in the background) ───────────────────────────
-MODE = "full"
-ENGINE = {"ready": False, "error": None, "retriever": None}
+MODE = "agent"
+USE_LLM = True
+ENGINE = {"ready": False, "error": None, "retriever": None, "llm": None}
 
 
 def search_kwargs():
@@ -52,8 +56,13 @@ def load_engine():
         else:
             from retriever import RegulationRetriever
             r = RegulationRetriever()
-            if MODE == "full":       # download/load BGE-M3 + reranker now, not during the first upload
+            if MODE in ("agent", "full"):   # download/load BGE-M3 + reranker now, not during the first upload
                 r.search("رسوم الاشتراك في الصندوق", k=1)
+            if MODE == "agent":
+                from retrieval_agent import LLM, RetrievalAgent   # importing it loads the project .env
+                llm = LLM() if USE_LLM and os.getenv("OPENAI_API_KEY") else None
+                ENGINE["llm"] = llm.model if llm else None
+                r = RetrievalAgent(r, llm=llm)
             ENGINE["retriever"] = r
         ENGINE["ready"] = True
     except Exception as e:
@@ -121,8 +130,31 @@ def cma_pages(pdf_pages):
     return (min(printed), max(printed)) if printed else (None, None)
 
 
+DOC_NAMES = {"IFR": "لائحة صناديق الاستثمار", "CMIR": "لائحة مؤسسات السوق المالية",
+             "CGR": "لائحة حوكمة الشركات", "SIFI": "تعليمات صناديق الاستثمار المبسطة"}
+
+
+def section_label(key):
+    """IFR-art092 → لائحة صناديق الاستثمار، المادة 92 (for the reference-mismatch note)."""
+    doc, _, sec = key.partition("-")
+    kind, num = ("المادة", sec[3:].lstrip("0")) if sec.startswith("art") else ("الملحق", sec[3:])
+    return f"{DOC_NAMES.get(doc, doc)}، {kind} {num}"
+
+
+def agent_view(c):
+    """Pull what the interface shows out of the retrieval agent's steps (absent with plain search)."""
+    steps = c.get("retrieval_steps") or []
+    last = lambda action: next((s for s in reversed(steps) if s["action"] == action), {})
+    c["decision"] = c.get("retrieval_decision")
+    c["decision_reason"] = last("decide").get("reason")
+    c["llm_reason"] = last("llm_finish").get("reason")
+    c["llm_error"] = last("llm_error").get("error")
+    c["reference_mismatch"] = [section_label(k) for k in last("reference_mismatch").get("references", [])]
+
+
 def enrich(output):
     for c in output["clauses"]:
+        agent_view(c)
         text = c["text"]
         if text.startswith("[") and "]" in text:      # segmentation prefixes a breadcrumb: [الشروط والأحكام › …]
             c["breadcrumb"], text = text[1:text.index("]")], text[text.index("]") + 1:].strip()
@@ -140,10 +172,14 @@ def summary(r):
     out = r.get("output") or {}
     clauses = out.get("clauses", [])
     return {k: r.get(k) for k in ("id", "filename", "size", "created", "finished", "status", "done", "total",
-                                  "error", "mode")} | {
+                                  "error", "mode", "llm")} | {
         "clauses": len(clauses),
         "regulations": len({g["id"] for c in clauses for g in c["regulations"]}),
         "needs_review": out.get("document_needs_review", False),
+        # retrieval agent: clauses to check by hand, references to an old numbering, LLM calls that failed
+        "to_review": sum(c.get("decision") in ("uncertain", "no_match") for c in clauses),
+        "mismatches": sum(bool(c.get("reference_mismatch")) for c in clauses),
+        "llm_errors": sum(bool(c.get("llm_error")) for c in clauses),
     }
 
 
@@ -159,7 +195,7 @@ def index():
 
 @app.get("/api/info")
 def info():
-    return {"mode": MODE, "ready": ENGINE["ready"], "error": ENGINE["error"], "k": K}
+    return {"mode": MODE, "ready": ENGINE["ready"], "error": ENGINE["error"], "k": K, "llm": ENGINE["llm"]}
 
 
 @app.get("/api/reviews")
@@ -206,23 +242,24 @@ async def upload(file: UploadFile = File(...)):
     dest.write_bytes(data)
     with LOCK:
         REVIEWS[review_id] = {"id": review_id, "filename": name, "size": len(data), "created": time.time(),
-                              "status": "received", "done": 0, "total": 0, "mode": MODE}
+                              "status": "received", "done": 0, "total": 0, "mode": MODE, "llm": ENGINE["llm"]}
     threading.Thread(target=run_review, args=(review_id, dest), daemon=True).start()
     return {"id": review_id}
 
 
 def main():
-    global MODE
+    global MODE, USE_LLM
     ap = argparse.ArgumentParser()
-    ap.add_argument("--retriever", default="full", choices=["full", "bm25", "stub"])
+    ap.add_argument("--retriever", default="agent", choices=["agent", "full", "bm25", "stub"])
+    ap.add_argument("--no-llm", action="store_true", help="agent without its LLM step")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8000)
     a = ap.parse_args()
-    MODE = a.retriever
+    MODE, USE_LLM = a.retriever, not a.no_llm
     load_saved()
     threading.Thread(target=load_engine, daemon=True).start()
     import uvicorn
-    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE})\n")
+    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'})\n")
     uvicorn.run(app, host=a.host, port=a.port, log_level="warning")
 
 

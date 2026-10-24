@@ -1,225 +1,128 @@
-# معالجة لوائح هيئة السوق المالية — المهام 3 إلى 12
+# MITHAQ
 
-المصادر (4 وثائق، 374 صفحة):
+MITHAQ reviews the **Terms and Conditions (T&C) of Saudi private investment funds** against the regulations of the
+Capital Market Authority (CMA). A compliance officer uploads a T&C file; the system extracts the text, splits it into
+clauses, and finds the CMA articles that govern each clause, with a confidence decision and the reasoning behind it.
 
-| الوثيقة | الصفحات | المواد | الملاحق | الـ chunks |
-|---|---|---|---|---|
-| لائحة صناديق الاستثمار (معدلة 2025/11/24) | 181 | 113 | 14 | 238 |
-| لائحة مؤسسات السوق المالية (معدلة 2026/01/07) | 111 | 99 | 11 | 142 |
-| لائحة حوكمة الشركات (معدلة 2023/01/18) | 65 | 95 | 1 | 109 |
-| تعليمات صناديق الاستثمار المبسطة (2026/03/02) | 17 | 31 | 3 | 35 |
-| **المجموع** | **374** | **338** | **29** | **524** |
+**Scope:** private (and simplified) funds only. Applicable sources are the Investment Funds Regulations (IFR) general
+parts, Part 5 (private funds, arts 80–98) and Annex 11, the Capital Market Institutions Regulations (CMIR), and the
+Simplified Investment Funds Instructions (SIFI) for simplified funds.
 
----
+```
+upload ─► Document Processing (OCR) ─► Segmentation ─► Regulatory Retrieval Agent ─► Compliance Verification ─► Report
+           docproc/                     backend/        pipeline/retrieval_agent.py   (next phase)              (next phase)
+                          └──────── orchestrated by LangGraph: backend/orchestrator/ ────────┘
+```
 
-## 3) استخراج المحتوى — `pipeline/extract.py`
+## Repository layout
 
-**مشكلة جوهرية في ملفات PDF:** الخطوط العربية فيها تخزّن الحروف المركّبة (لم، لا، في، يج، مج…) بترتيب منطقي داخل صفحة مرسومة بترتيب بصري. أدوات الاستخراج المعتادة (pdftotext / PyMuPDF) تعكس السطر كاملاً فتعكس معه هذه المركّبات، فتنتج كلمات مشوّهة مثل:
-`املالية` بدل `المالية`، `جملس` بدل `مجلس`، `اهليئة` بدل `الهيئة`، `يف` بدل `في`.
-
-**الحل:** استخراج على مستوى الحرف (glyph) باستخدام pdfminer:
-- تجميع الحروف في أسطر حسب الإحداثي الرأسي، ثم عكس *تسلسل الحروف* لا محتوى المركّب نفسه.
-- إعادة الأرقام والنصوص اللاتينية والتواريخ والروابط لاتجاهها الصحيح (تقريب لخوارزمية bidi).
-- التقاط أرقام الحواشي المرتفعة (superscript) وربطها بسطرها كـ `[^n]`.
-- حذف حروف رؤوس الجداول العمودية (حروف صغيرة مكدّسة).
-
-المخرج: `output/01_extracted/*.json` — كل سطر مع رقم الصفحة وحجم الخط والموضع.
-
-## 4) التنظيف والتوحيد — `pipeline/clean.py`
-- توحيد Unicode (NFC) وحذف محارف الاتجاه والمحارف الخفية.
-- حذف التشكيل: يظهر في الـ PDF كحروف منفصلة في مواضع خاطئة (مثل `دائما ً`).
-- حذف التطويل الزخرفي مع الإبقاء على `هـ` (الهجري) ورموز الفقرات مثل `جـ)`.
-- ضبط المسافات حول الترقيم والأقواس والتواريخ (`28/ 8/ 1439` ← `28/8/1439`).
-- إصلاح أقواس المصطلحات الإنجليزية (`التتبع)Tracking Error(` ← `التتبع (Tracking Error)`).
-- إصلاح 15 تشوهاً سببه الكشيدة في السطور المضبوطة الطرفين (`م سسسسستحقة` ← `مستحقة`)، بالاعتماد على مفردات المستندات نفسها.
-- تصحيح ترتيب نطاقات الأرقام في خلايا الجداول (`300,000–100,001` ← `100,001–300,000`).
-
-## 5) إزالة المحتوى غير المهم والضوضاء — `pipeline/clean.py`
-تفاصيل كل ما حُذف موجودة في `output/02_clean/noise_report.json`:
-- صفحات الغلاف و«ملحوظة مهمة» (46 سطراً).
-- جداول المحتويات (443 سطراً)، مع حفظها لاستخدامها في التحقق في الخطوة 6.
-- أرقام الصفحات (370) وتصنيف «Internal - داخلي» (181).
-- صفوف القوالب الفارغة في جداول الملاحق (39).
-- **الحواشي لم تُحذف**، بل فُصلت عن المتن (29 حاشية) ورُبطت بموضعها. في لائحة الحوكمة تحدد الحواشي إن كانت المادة أو الفقرة **استرشادية أو إلزامية**، فهي معلومة تنظيمية مهمة.
-
-## 6) هيكلة المعلومات — `pipeline/structure.py`
-الهيكل: وثيقة ← باب ← فصل ← مادة / ملحق ← فقرات (أ، ب…) ← فقرات فرعية (1، 2…).
-- تحويل الأعداد الترتيبية العربية إلى أرقام (`الحادية عشرة بعد المئة` = 111).
-- الملاحق التي تقع بعد آخر مادة تُعامل على مستوى الوثيقة، أما ملاحق لائحة المؤسسات فتبقى داخل أبوابها.
-- `binding_status` لكل مادة وفقرة في لائحة الحوكمة: 13 مادة استرشادية و6 فقرات استرشادية.
-- **التحقق:** قارنّا النتيجة بجدول محتويات كل وثيقة. النتيجة 338/338 مادة و29/29 ملحقاً، ترقيم متسلسل، وعناوين مطابقة دون أي اختلاف (`validation.json`).
-- عنوان المادة 88 في لائحة الحوكمة ناقص كلمة «المادة» في الـ PDF الأصلي، وتم استرجاعه تلقائياً.
-
-المخرجات: `output/03_structured/*.json`، ونسخة `*.md` مقروءة للمراجعة.
-
-## 7) التقسيم إلى chunks — `pipeline/chunk.py`
-- لا يتجاوز أي chunk حدود المادة.
-- المادة أو الملحق chunk واحد إذا كان طوله 300 كلمة فأقل (الحد قابل للتغيير بـ `--max-words`).
-- المواد الأطول تُقسم عند حدود الفقرات (أ، ب…) مع إبقاء كل فقرة مع فقراتها الفرعية، وتوزَّع الأجزاء بأحجام متقاربة.
-- إذا قُسمت قائمة، تُكرر جملتها التمهيدية في الجزء التالي كسياق (`(سياق: … ما يلي:)`).
-- يبدأ كل chunk بمسار يجعله مفهوماً وحده:
-  `[لائحة مؤسسات السوق المالية › الباب الخامس: ممارسة الأعمال › الفصل الرابع: العلاقة مع العملاء › المادة الثالثة والأربعون: الملاءمة (الجزء 2 من 3)]`
-- تُلحق بكل chunk الحواشي التي تخصه.
-- **ملاحق قوائم المتطلبات** (الملحق 1: شروط وأحكام الصندوق العام، والملحق 11: شروط وأحكام الصندوق الخاص) يُقسم كل منها
-  إلى chunk لكل بند مرقّم، مع chunk مستقل لصفحة الغلاف، والمسار يتضمن البند:
-  `[لائحة صناديق الاستثمار › الملحق 11: متطلبات شروط وأحكام الصندوق الخاص › البند (11): الرسوم ومقابل الخدمات والعمولات وأتعاب الإدارة]`.
-  مستويات الفقرات في هذين الملحقين مقلوبة: البنود المرقّمة في مستوى أعمق من فقراتها (أ، ب…). لذلك كان التقسيم العام
-  يُلصق كل بند في آخر فقرة من البند الذي قبله، فلا يُسترجع الملحق تقريباً. البنود الرئيسية تُحدَّد بأطول سلسلة
-  متتالية 1)، 2)، 3)…، وبذلك تُتخطى القوائم المتداخلة.
-
-**الإحصاءات:** 524 chunk، وسيط الطول 142 كلمة، الحد الأقصى 419 كلمة (بسبب حاشية تعديل طويلة).
-
-### حقول كل chunk (`output/04_chunks/chunks.jsonl`)
-| الحقل | الوصف |
+| Path | What it is |
 |---|---|
-| `chunk_id` | مثل `CMIR-art043-c02` |
-| `doc_id`, `doc_title`, `doc_title_en`, `doc_type`, `source_file` | الوثيقة |
-| `version_decision`, `version_date_gregorian` | آخر قرار تعديل (لإدارة الإصدارات) |
-| `section_type` | `article` / `annex` / `preamble` |
-| `part_number/title`, `chapter_number/title` | الباب والفصل |
-| `article_number`, `article_label`, `annex_number`, `section_title` | المادة أو الملحق |
-| `chunk_index`, `chunk_count`, `paragraphs` | موضع الجزء والفقرات التي يغطيها |
-| `pdf_pages` | أرقام صفحات ملف PDF (وليست أرقام الصفحات المطبوعة) |
-| `binding_status`, `guidance_paragraphs` | إلزامية أم استرشادية (لائحة الحوكمة) |
-| `footnotes` | الحواشي المرتبطة |
-| `citation` | مرجع جاهز، مثل: «لائحة مؤسسات السوق المالية، المادة الثالثة والأربعون، الفقرات (د)، (هـ)…» |
-| `text` | **النص المستخدم للـ embedding** (المسار + المحتوى + الحواشي) |
-| `content` | نص المادة فقط |
-| `text_search` | نص موحّد للبحث المعجمي BM25 (أ/إ/آ←ا، ى←ي، ة←ه) |
-| `word_count`, `char_count` | الطول |
+| `docproc/mithaq_docproc/` | Document Processing Agent: PDF/Word → clean items with page numbers (PyMuPDF, Tesseract, Surya OCR). Own README. |
+| `backend/segmentation.py` | Rule-based splitting of the items into clauses (each clause keeps a breadcrumb and its pages). |
+| `backend/segmentation_agent.py`, `segmentation_tools.py` | LLM tool-using version of segmentation (checks and fixes the rule split). Not wired into the graph yet. |
+| `backend/orchestrator/` | LangGraph pipeline: extract → segment → retrieve × N clauses (parallel) → collect. Own README. |
+| `pipeline/` | Regulatory knowledge base (steps 3–12 below), `retriever.py` (search) and `retrieval_agent.py` (the agent). |
+| `interface/` | FastAPI + single-page web app (Arabic, RTL): upload, live progress, clauses with their regulations. |
+| `output/` | Knowledge-base artefacts (`01`–`06`), Chroma vector store (`chroma_db/`), evaluation reports (`07`–`09`). |
 
-## 9) تجهيز البيانات للـ embedding — `pipeline/embed_and_store.py`
-- التحقق من كل chunk: عدم تكرار المعرّفات، وجود الحقول الأساسية، وبدء النص بالمسار (breadcrumb).
-- تحويل البيانات الوصفية إلى صيغة تقبلها Chroma (نص/رقم/منطقي فقط): حذف القيم الفارغة، وتحويل القوائم إلى نص
-  (`pdf_pages` = `"74,75"`، `footnotes` و`guidance_paragraphs` بصيغة JSON)، وإضافة حقول مساعدة للفلترة:
-  `section_key` (مثل `CMIR-art043` لجمع أجزاء المادة الواحدة)، `pdf_page_start`، `has_footnotes`، `has_guidance_paragraphs`.
-- `fund_scope`: نوع الصناديق التي ينظمها الـ chunk، ويستخدمه فلتر `fund_type` في الاسترجاع:
+## Quick start
 
-  | القيمة | ما يشمله |
-  |---|---|
-  | `general` | لائحة مؤسسات السوق المالية |
-  | `funds_all` | الأحكام المشتركة في لائحة صناديق الاستثمار (الأبواب 1–3 و7–9، والملاحق 3 و10 و14) |
-  | `public` | الباب الرابع، والملاحق 1 و2 و4 و5 و12 و13 |
-  | `private` | الباب الخامس، والملحقان 7 و11 |
-  | `foreign` | الباب السادس، والملحق 8 |
-  | `private_foreign` | الملحقان 6 و9 |
-  | `simplified` | تعليمات الصناديق المبسطة |
-  | `companies` | لائحة حوكمة الشركات |
-- المخرج: `output/05_embedding_input/records.jsonl` و`prep_report.json`.
-
-## 10) توليد الـ embeddings بنموذج BGE-M3
-- النموذج `BAAI/bge-m3` (متجهات كثيفة 1024 بُعداً، مُطبّعة) عبر sentence-transformers، على GPU (Apple MPS / CUDA) أو CPU.
-- النص المستخدم هو حقل `text` (المسار + المحتوى + الحواشي). أطول chunk = 740 token، فلم يُقتطع أي chunk (الحد 1024).
-- 524 chunk في ≈ 30 ثانية على Apple M5. تُحفظ النتائج في `output/06_embeddings/` مع بصمة SHA-256 للمحتوى،
-  فلا يُعاد الحساب إلا إذا تغيّرت الـ chunks (أو باستخدام `--force-embed`).
-
-## 11) التخزين في Chroma
-- قاعدة دائمة في `output/chroma_db/`، المجموعة `cma_regulations`، مسافة cosine.
-- تُبنى المجموعة من جديد في كل تشغيل حتى لا تبقى chunks قديمة.
-- تحقق تلقائي: العدد 524/524، تطابق النص المخزّن، وكل chunk يسترجع نفسه في المرتبة الأولى (524/524).
-
-## 12) اختبار جودة الاسترجاع — `pipeline/test_retrieval.py`
-مجموعة اختبار من 36 استعلاماً (`pipeline/eval/retrieval_queries.json`): 30 بنداً بصياغة الشروط والأحكام كما ستأتي من
-المستخدم في MITHAQ، و6 أسئلة، ولكل منها المواد الصحيحة المتوقعة (تم التحقق منها يدوياً من نصوص المواد).
-المطابقة على مستوى المادة (المادة المقسّمة تُحتسب إذا ظهر أي جزء منها).
-
-| الطريقة | Hit@1 | Hit@3 | Hit@5 | MRR@10 | Recall@10 |
-|---|---|---|---|---|---|
-| Dense (BGE-M3) | 0.861 | 0.944 | 1.000 | 0.917 | 0.958 |
-| BM25 (معجمي) | 0.833 | 0.944 | 0.944 | 0.884 | 0.854 |
-| Hybrid (RRF) | 0.889 | 0.972 | 0.972 | 0.929 | 0.920 |
-| **Dense + Reranker** | **0.889** | **0.972** | **1.000** | **0.933** | **0.963** |
-
-- **Reranker:** النموذج `BAAI/bge-reranker-v2-m3` (cross-encoder متعدد اللغات، من عائلة BGE-M3). يعيد ترتيب أفضل
-  20 نتيجة من البحث الدلالي، ويُفعَّل بـ `rerank=True`. أول تشغيل يحمّله (≈ 2.1GB). التكلفة ≈ 1.6 ثانية لكل استعلام على Apple M5.
-- **أثر تقسيم الملحقين 1 و11:** Hit@1 للبحث الدلالي نزل من 0.917 إلى 0.861، بسبب استعلامين (q11 الرسوم، وq32 التقارير)
-  صار بند الإفصاح المقابل في الملحق يظهر فيهما قبل المادة. البند ذو صلة، لكن الإجابات المتوقعة في المجموعة لا تتضمن الملاحق.
-  للحصول على المواد فقط استخدم `section_types=["article"]`.
-- التقرير الكامل لكل استعلام في `output/07_retrieval_eval/report.md`.
-
-### اختبار على شروط وأحكام حقيقية
-مجموعة الاختبار أعلاه كُتبت مع معرفة المواد المتوقعة مسبقاً، فنتائجها متفائلة. لذلك اختبرنا أيضاً 33 بنداً من شروط وأحكام
-صندوق خاص حقيقي (صندوق بلوم إنفست للطروحات الأولية)، ولكل بند المادة الصحيحة المحددة يدوياً:
-
-| الإعداد | Hit@1 | Hit@3 | Hit@5 | MRR |
-|---|---|---|---|---|
-| Dense بلا فلتر (قبل التحسينات) | 0.364 | 0.636 | 0.758 | 0.521 |
-| Dense + `fund_type="private"` | 0.636 | 0.788 | 0.848 | 0.735 |
-| + تقسيم الملحقين 1 و11 إلى بنود | 0.667 | 0.848 | 0.909 | 0.776 |
-| **+ Reranker** | **0.727** | **0.939** | **0.939** | **0.810** |
-
-- **سبب الأخطاء الرئيسي:** مواد الصناديق العامة (الباب الرابع) شبه مطابقة لمواد الصناديق الخاصة (الباب الخامس)، فتتقدم عليها.
-  أمثلة: المادة 77 تتقدم على 93 (الاجتماعات)، و65 على 94 (التغييرات)، و66 على 83 (الحد الأدنى للطرح).
-- **الحل:** فلتر `fund_type`.
-- **جُرّبت وأُزيلت: الفهرسة على مستوى الفقرة.** الفكرة متجه إضافي لكل فقرة رئيسية، وتأخذ المادة أعلى درجة بين متجهها ومتجهات فقراتها.
-  لم تحسّن النتائج: في مجموعة بلوم الفرق ±1 بند، وفي المجموعة الأصلية نزل Hit@1 للبحث الدلالي من 0.861 إلى 0.833.
-
-#### توسيع الاختبار: أربعة صناديق خاصة و201 بند
-أضفنا ثلاثة صناديق خاصة حقيقية إلى بلوم، وصنّفنا المادة الصحيحة لكل بند يدوياً:
-- صندوق دخل ثابت خاص مغلق.
-- صندوق عقاري تطويري خاص مغلق.
-- صندوق أسهم ملكية خاصة مغلق.
-
-ملفات الشروط والأحكام ومجموعات البنود محفوظة خارج المستودع. الإعداد هو الافتراضي: `fund_type="private"` و`rerank=True`.
-
-- **سبب الأخطاء الرئيسي بعد الفلتر:** بنود الإفصاح في الملحق 11 تتأخر خلف مواد عامة، مثل المادة 14 والمادة 17.
-  - 38 من 47 بنداً لم تأتِ إجابتها الصحيحة أولاً كان الملحق 11 من إجاباتها.
-  - في كثير منها كان الملحق 11 في المرتبة الثانية.
-- **الحل:** تثبيت الملحق 11 في المرتبة الثانية (`pin_annex11`):
-  - يعمل تلقائياً مع `fund_type="private"`.
-  - لا يغيّر النتيجة الأولى.
-  - إذا لم يكن الملحق 11 ضمن أول قسمين، يرفع أفضل جزء منه إلى المرتبة الثانية ويعلّمه بـ `pinned: True`.
-
-| الإعداد (201 بند) | Hit@1 | Hit@3 | Hit@5 | MRR |
-|---|---|---|---|---|
-| بدون تثبيت | 0.716 | 0.886 | 0.935 | 0.812 |
-| **مع التثبيت (الافتراضي)** | **0.716** | **0.965** | **0.985** | **0.846** |
-
-- **لم يتراجع أي ملف في أي مقياس.** المجموعة الأصلية (36 استعلاماً) لا تتأثر، لأنها تعمل بدون فلتر.
-- **جُرّب ورُفض: رفع درجة الملحق 11 بمقدار ثابت بعد إعادة الترتيب.** مع +0.5 تحسّن Hit@3، لكن Hit@1 نزل:
-  - في بلوم من 0.697 إلى 0.606.
-  - في المجموعة الأصلية من 0.889 إلى 0.806.
-- **ملاحظة على التصنيف:**
-  - التصنيف من شخص واحد.
-  - الملحق 11 متوقع في أغلب البنود، لأن كل قسم في شروط وأحكام الصندوق الخاص يقابله بند إفصاح فيه. فجزء من التحسن ناتج عن أن التصنيف نفسه يكافئ ظهوره.
-- **فرق في رقم بلوم:** Hit@1 لبلوم في هذا التشغيل 0.697، بينما الجدول أعلاه يسجل 0.727. الفرق بند واحد، ولم نتحقق من سببه.
-
-### الاستخدام من الكود (مرحلة تحليل الشروط والأحكام)
-```python
-from retriever import RegulationRetriever
-r = RegulationRetriever()
-hits = r.search("يحق لمدير الصندوق تعليق الاسترداد في أي وقت", k=5)
-# الافتراضي: fund_type="private" و rerank=True و pin_annex11 (نطاق MITHAQ)
-# fund_type=None لإلغاء الفلتر، rerank=False لتخطي إعادة الترتيب، section_types=["article"] لاستبعاد الملاحق
-for h in hits:
-    print(h["citation"], h["score"], h["binding_status"], h["pdf_pages"])
-```
-- الفلاتر المتاحة:
-  - `doc_ids`
-  - `section_types`
-  - `binding_status`
-  - `fund_type` = `public` | `private` | `foreign` | `simplified` | `None` (الافتراضي `private`)
-  - `mode` = `dense` | `hybrid` | `bm25`
-- من سطر الأوامر: `python3 retriever.py "<بند>"` يستخدم نفس الافتراضي؛ `--fund-type all` يلغي الفلتر، و`--no-rerank` يتخطى إعادة الترتيب، و`--no-pin-annex11` يلغي تثبيت الملحق 11.
-- مع `rerank=True` (الافتراضي) تصبح `score` درجة الـ reranker، وتُحفظ الدرجة الأولى في `first_stage_score`.
-
-## التشغيل
 ```bash
-pip install -r pipeline/requirements.txt
-# ضع ملفات PDF في raw/ بأسماء doc_id (مثل raw/investment_funds_regulations.pdf)
-cd pipeline && python3 run_all.py --max-words 300
-# أو من المخرجات المستخرجة مسبقاً دون ملفات PDF:
-cd pipeline && python3 run_all.py --skip-extract
+python -m venv .venv && source .venv/bin/activate
+pip install -r docproc/mithaq_docproc/requirements.txt -r pipeline/requirements.txt \
+            -r backend/orchestrator/requirements.txt -r interface/requirements.txt
 
-# الخطوات 9–12 فقط:
-python3 embed_and_store.py          # تجهيز + BGE-M3 + Chroma
-python3 test_retrieval.py           # تقييم الاسترجاع
-python3 retriever.py "نص البند" --k 5 --fund-type private --rerank   # بحث تجريبي
+# optional: the LLM step of the retrieval agent (the file is git-ignored)
+echo "OPENAI_API_KEY=sk-..."   >> .env
+echo "RETRIEVAL_MODEL=gpt-4o"  >> .env
+
+# web interface → http://127.0.0.1:8000
+cd interface && python app.py                 # retrieval agent (+ LLM step if a key is set)
+python app.py --no-llm                        # agent, rule-based steps only
+python app.py --retriever full|bm25|stub      # plain search | lexical only | stand-in (no models)
+
+# command line: one document → backend/retrieval.json
+cd backend && python -m orchestrator.run path/to/terms.pdf --agent --llm
 ```
-- أول تشغيل يحمّل نموذج BGE-M3 (≈ 2.2GB)، ونموذج الـ reranker عند أول استخدام لـ `--rerank` (≈ 2.1GB). بعد ذلك يمكن العمل دون اتصال: `HF_HUB_OFFLINE=1 python3 ...`.
-- تم التشغيل في بيئة `.venv` (Python 3.14، torch 2.14، sentence-transformers 6.1، chromadb 1.5.9).
 
-## ملاحظات وحدود
-- **جداول الملاحق** (جدول المكافآت في لائحة الحوكمة، ونماذج «اعرف عميلك» وطلبات الطرح) استُخرجت كنص متتابع، لذا فقدت بنية الأعمدة. هي قوالب فارغة قليلة الأهمية للأسئلة، ويمكن استبعادها بالفلتر `section_type == "annex"` إذا لزم.
-- بعض التواريخ في الحواشي تظهر بترتيب يوم/شهر/سنة وأخرى سنة/شهر/يوم، كما هي في الأصل.
-- `pdf_pages` هي أرقام صفحات ملف PDF. في لائحة المؤسسات مثلاً، صفحة PDF رقم 47 مطبوع عليها «٤٦».
+The first run downloads BGE-M3 and the reranker (~4.5 GB); afterwards `HF_HUB_OFFLINE=1` works. The Chroma store is
+in the repo, so the knowledge base does not need rebuilding unless the regulations change
+(`cd pipeline && python run_all.py --skip-extract`).
+
+## Regulatory knowledge base (`pipeline/`, steps 3–12)
+
+| Source | Pages | Articles | Annexes | Chunks |
+|---|---|---|---|---|
+| Investment Funds Regulations (amended 2025-11-24) | 181 | 113 | 14 | 238 |
+| Capital Market Institutions Regulations (amended 2026-01-07) | 111 | 99 | 11 | 142 |
+| Corporate Governance Regulations (amended 2023-01-18) | 65 | 95 | 1 | 109 |
+| Simplified Investment Funds Instructions (2026-03-02) | 17 | 31 | 3 | 35 |
+
+1. **Extract** (`extract.py`): glyph-level pdfminer extraction that fixes the reversed Arabic ligatures common
+   in CMA PDFs (`املالية` → `المالية`), restores numbers/Latin direction and footnote markers.
+2. **Clean** (`clean.py`): Unicode normalisation, diacritics, kashida artefacts; removes covers, tables of contents,
+   page numbers (log in `output/02_clean/noise_report.json`). Footnotes are kept: in the governance regulations they
+   mark provisions as guidance or binding.
+3. **Structure** (`structure.py`): document → part → chapter → article/annex → paragraphs; validated against each
+   document's table of contents (338/338 articles, 29/29 annexes).
+4. **Chunk** (`chunk.py`): never crosses an article; ≤ 300 words, split at paragraph boundaries; every chunk starts
+   with its breadcrumb. Annexes 1 and 11 (T&C content checklists) are split per numbered item.
+5. **Embed and store** (`embed_and_store.py`): BGE-M3 dense vectors (1024-d) in Chroma (cosine), with metadata for
+   filtering — notably `fund_scope` (`private`, `public`, `funds_all`, `general`, …) used by `fund_type`.
+
+## Retrieval
+
+**`retriever.py`**: dense search (BGE-M3), optional BM25/hybrid, reranking with `bge-reranker-v2-m3`, and a
+`fund_type="private"` filter that drops look-alike public-fund articles. Defaults match MITHAQ's scope
+(`fund_type="private"`, `rerank=True`, Annex 11 pinned to rank 2).
+
+**`retrieval_agent.py`, the Regulatory Retrieval Agent.** For each clause:
+
+1. **analyse** the title and find explicit references ("وفقًا للمادة 76", "الملحق (11)");
+2. **search** as above, then **check** the top result against independent signals (BM25, article-title match);
+3. **retry** with other strategies (title + text, clause parts) if unsupported;
+4. **LLM step** (optional): the model reads the candidates, may read full articles (`read_section`) or search again
+   (`search_regulations`), and returns a ranking. A cited article stays first only if the LLM picks it; otherwise
+   a `reference_mismatch` is logged (T&Cs often cite an older numbering of the IFR);
+5. **decide**, with every step recorded in `retrieval_steps`:
+
+| Decision | Meaning | Interface |
+|---|---|---|
+| `confirmed_by_llm` | rules and LLM independently agree on the top article | مؤكدة |
+| `confirmed_by_reference` | the clause cites the article and the LLM confirms its subject | مؤكدة |
+| `uncertain` | rules and LLM disagree, or no supporting signal | تحتاج مراجعة |
+| `no_match` | the LLM finds no governing article | لا توجد مادة مطابقة |
+
+Without a key, or if the API fails (no credit, timeout of 60 s), the agent falls back to its rule-based ranking and
+logs `llm_error`; the interface shows a warning for those clauses.
+
+## Evaluation
+
+Section-level metrics: a clause is a hit if any expected article appears at that rank.
+
+| Set (clauses) | Plain search Hit@1 / MRR | Agent + GPT-4o Hit@1 / MRR | `confirmed_by_llm` accuracy |
+|---|---|---|---|
+| Knowledge-base queries (36) | 0.889 / 0.933 | **0.944 / 0.972** | 28/28 |
+| Real private-fund T&C, BlomInvest (33) | 0.727 / 0.833 | **0.909 / 0.939** | 21/21 |
+| Second private-fund T&C, Mulkia (37), held out | 0.514 / 0.608 | **0.784 / 0.867** ¹ | 9/9 |
+
+¹ Measured before the reference-mismatch fix (the four remaining reference errors are what it targets); re-run with
+`cd pipeline && python test_agent.py --llm --sets mulkia` once API credit is available.
+
+- The rule-based agent alone does not beat plain search; the gain comes from the LLM step. When rules and LLM agree,
+  the top article was right in every evaluated case, so `uncertain` is a useful "needs review" signal.
+- Labels were made by one person; the Mulkia labels are strict (the specific governing article; Annex 11 only when no
+  specific article exists). The BlomInvest set was also used to tune the agent's prompt; Mulkia was not.
+- Reports: `output/07_retrieval_eval` (search), `output/09_agent_eval` (agent). Test T&Cs, their labels and their
+  reports stay out of the repo (`docproc/testset/`, git-ignored).
+
+## Known limitations and next steps
+
+- **Compliance Verification Agent** (next phase): judge each clause as Compliant / Violation / Needs Review with
+  quotations. It also needs a checklist of mandatory requirements (Annex 11, arts 80–98) to detect *missing* clauses,
+  which clause-by-clause retrieval cannot find.
+- Text extraction maps `ق` to `ة` in some PDF fonts (`حةوق`); this weakens lexical matching.
+- Segmentation sometimes merges the front matter or trailing sections (Shariah controls, complaints) into one clause.
+- LLM results vary by a clause or two between runs; `segmentation_agent.py` still retries on HTTP 429 even when the
+  account has no credit.

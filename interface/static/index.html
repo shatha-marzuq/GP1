@@ -185,6 +185,22 @@ tr:last-child td{border-bottom:0}
 .reg .rtx{font-size:12.5px;color:var(--muted);white-space:pre-wrap;margin-top:6px;max-height:220px;overflow:auto}
 .verdict{border:1px dashed var(--gold-300);border-radius:12px;padding:10px 14px;font-size:12.5px;color:var(--gold-600);background:var(--gold-50)}
 .err{background:var(--red-50);border:1px solid #F1C9C0;color:#8A3524;border-radius:12px;padding:12px 16px;margin:0 22px 20px;font-size:13px}
+.tag.ok{background:var(--mint-50);color:var(--green-600);border:1px solid var(--mint-100)}
+.tag.rev{background:var(--gold-100);color:var(--gold-600);border:1px solid var(--gold-300)}
+.tag.no{background:var(--red-50);color:var(--red)}
+.by{font-size:11px;padding:1px 7px;border-radius:6px;background:var(--line-2);color:var(--muted);white-space:nowrap}
+.by.llm{background:var(--mint-50);color:var(--green-600)}
+.by.reference{background:var(--gold-50);color:var(--gold-600)}
+.why{border-radius:12px;padding:10px 14px;font-size:12.5px;background:var(--mint-50);color:var(--green-800)}
+.why.rev{background:var(--gold-50);color:#6b5428;border:1px solid var(--gold-100)}
+.why.no{background:var(--red-50);color:#8A3524}
+.why b{display:block;margin-bottom:2px}
+.mismatch{border:1px solid #F1C9C0;background:var(--red-50);color:#8A3524;border-radius:12px;padding:10px 14px;font-size:12.5px}
+.trace summary{font-size:12px;color:var(--muted);cursor:pointer}
+.trace ol{margin:6px 0 0;padding-inline-start:18px;font-size:12px;color:var(--muted)}
+.filter{display:flex;gap:6px}
+.filter button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 13px;font-size:12.5px;color:var(--muted)}
+.filter button.on{background:var(--green-700);border-color:var(--green-700);color:#fff}
 .hidden{display:none!important}
 
 @media (max-width:1050px){
@@ -259,6 +275,7 @@ tr:last-child td{border-bottom:0}
           <ul>
             <li>✓ استخراج النص (OCR) وتقسيم البنود<span style="background:rgba(255,255,255,.15);color:#fff">جاهز</span></li>
             <li>✓ قاعدة المعرفة التنظيمية والبحث الدلالي<span style="background:rgba(255,255,255,.15);color:#fff">جاهز</span></li>
+            <li>✓ وكيل الاسترجاع: تحقق وإعادة بحث وقراءة المواد بالنموذج اللغوي<span style="background:rgba(255,255,255,.15);color:#fff">جاهز</span></li>
             <li>○ التحقق من الامتثال بالنموذج اللغوي<span>قريبًا</span></li>
             <li>○ تقرير الامتثال وكشف البنود الناقصة (الملحق 11)<span>قريبًا</span></li>
           </ul>
@@ -316,8 +333,10 @@ tr:last-child td{border-bottom:0}
       </div>
       <div class="banner hidden" id="r-stub"><span>⚠</span><div><b>وضع تجريبي:</b> البحث في الأنظمة يعمل ببديل ثابت، فالمواد المعروضة ليست نتيجة بحث حقيقي.</div></div>
       <div class="banner hidden" id="r-warn"><span>ⓘ</span><div id="r-warn-t"></div></div>
+      <div class="banner hidden" id="r-llm"><span>⚠</span><div id="r-llm-t"></div></div>
       <div class="rhead">
         <div class="chips" id="r-chips"></div>
+        <div class="filter hidden" id="r-filter"><button data-f="all" class="on">كل البنود</button><button data-f="review">تحتاج مراجعة</button><button data-f="ok">مؤكدة</button></div>
         <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98A09A" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="ابحث في البنود أو المواد…"></div>
       </div>
       <div class="clauses" id="clauses"></div>
@@ -332,7 +351,12 @@ const fmtDate = t => new Date(t*1000).toLocaleDateString("ar-SA-u-ca-gregory-nu-
 const pages = (a,b) => a==null ? "" : (a===b||b==null ? `ص ${a}` : `ص ${a}–${b}`);
 const ORDER = ["received","extracting","segmenting","retrieving","done"];
 const STATUS = {received:"تم الاستلام",extracting:"استخراج النص",segmenting:"تقسيم البنود",retrieving:"ربط بالأنظمة",done:"اكتمل التحليل",failed:"تعذّر التحليل"};
-let MODE = "full", current = null, poll = null, result = null;
+let MODE = "agent", current = null, poll = null, result = null, FILTER = "all";
+const DECISION = {
+  confirmed_by_llm:["مؤكدة","ok"], confirmed_by_reference:["مؤكدة بإحالة البند","ok"],
+  confirmed:["مؤكدة بالقواعد","ok"], confirmed_after_retry:["مؤكدة بعد إعادة البحث","ok"],
+  uncertain:["تحتاج مراجعة","rev"], no_match:["لا توجد مادة مطابقة","no"]};
+const FOUND_BY = {llm:"اختيار النموذج", search:"البحث", reference:"إحالة في البند"};
 
 // ───────── navigation
 function show(view){
@@ -350,7 +374,8 @@ document.addEventListener("click", e => {
 // ───────── engine status
 async function engine(){
   const i = await (await fetch("/api/info")).json(); MODE = i.mode;
-  const label = {full:"البحث الدلالي (BGE-M3 + إعادة ترتيب)",bm25:"البحث النصي (BM25)",stub:"وضع تجريبي (بديل)"}[i.mode];
+  const label = {agent: i.llm ? `وكيل الاسترجاع + ${i.llm}` : "وكيل الاسترجاع (قواعد فقط)",
+                 full:"البحث الدلالي (BGE-M3 + إعادة ترتيب)",bm25:"البحث النصي (BM25)",stub:"وضع تجريبي (بديل)"}[i.mode];
   $("#edot").className = "dot " + (i.error ? "bad" : i.ready ? "ok" : "wait");
   $("#etext").textContent = i.error ? "تعذّر تشغيل محرك البحث" : i.ready ? label + " — جاهز" : "جاري تحميل نماذج البحث…";
   if (!i.ready && !i.error) setTimeout(engine, 1500);
@@ -413,7 +438,7 @@ function renderSteps(r){
     ["استلام المستند","رفع ملف الشروط والأحكام", esc(r.filename)],
     ["استخراج النص (OCR)","قراءة الصفحات النصية والممسوحة مع الاحتفاظ برقم كل صفحة", ""],
     ["تقسيم النص إلى بنود","تنظيم الفقرات في بنود حسب ترقيم المستند وعناوينه", r.clauses? r.clauses+" بندًا":(r.total? r.total+" بندًا":"")],
-    ["ربط البنود بالأنظمة","البحث عن أقرب المواد في لوائح هيئة السوق المالية لكل بند", ret],
+    ["ربط البنود بالأنظمة", MODE==="agent" ? "وكيل الاسترجاع يبحث ويتحقق ويقرأ المواد ليختار ما يحكم كل بند" : "البحث عن أقرب المواد في لوائح هيئة السوق المالية لكل بند", ret],
   ];
   let h = S.map((s,k)=>`<div class="step ${st(k)}"><div class="b">${st(k)==="ok"?"✓":st(k)==="err"?"!":k+1}</div><div>
       <h4>${s[0]}</h4><p>${s[1]}</p>${k===3&&r.status==="retrieving"&&r.total?`<div class="progress"><div style="width:${r.done/r.total*100}%"></div></div>`:""}
@@ -450,7 +475,7 @@ async function openReview(id){
 // ───────── results
 function renderResults(r){
   result = r; show("results");
-  const o = r.output, cl = o.clauses;
+  const o = r.output, cl = o.clauses, agent = cl.some(c=>c.decision);
   $("#r-title").textContent = r.filename;
   $("#r-json").href = `/api/reviews/${r.id}/json`;
   $("#r-stub").classList.toggle("hidden", r.mode!=="stub");
@@ -462,14 +487,25 @@ function renderResults(r){
     ["البنود", cl.length], ["الصفحات", pg.length? Math.max(...pg):"—"],
     ["بنود من صفحات ممسوحة (OCR)", cl.filter(c=>c.from_ocr).length],
     ["مواد نظامية مختلفة", new Set(cl.flatMap(c=>c.regulations.map(g=>g.id))).size],
+    ...(agent ? [["مؤكدة", cl.filter(c=>DECISION[c.decision]?.[1]==="ok").length],
+                 ["تحتاج مراجعة", cl.filter(c=>DECISION[c.decision] && DECISION[c.decision][1]!=="ok").length],
+                 ["إحالات لا تطابق موضوعها", cl.filter(c=>c.reference_mismatch?.length).length]] : []),
   ].map(([k,v])=>`<span class="chip">${k}: <b>${v}</b></span>`).join("");
+  const errs = cl.filter(c=>c.llm_error).length;
+  $("#r-llm").classList.toggle("hidden", !errs);
+  $("#r-llm-t").innerHTML = `<b>تعذّر الوصول للنموذج اللغوي في ${errs} بند</b> (مثلًا انتهاء رصيد الحساب أو انقطاع الاتصال)، فاعتمدت هذه البنود على ترتيب القواعد فقط.`;
+  $("#r-filter").classList.toggle("hidden", !agent);
+  FILTER = "all"; document.querySelectorAll("#r-filter button").forEach(b=>b.classList.toggle("on", b.dataset.f==="all"));
   $("#q").value = ""; drawClauses("");
 }
 
 function drawClauses(q){
   const n = s => (s||"").replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآ]/g,"ا");
   const qq = n(q.trim());
-  const list = result.output.clauses.filter(c => !qq || n(c.title+" "+c.body+" "+c.regulations.map(g=>g.citation+g.body).join(" ")).includes(qq));
+  const kind = c => DECISION[c.decision]?.[1];
+  const list = result.output.clauses
+    .filter(c => FILTER==="all" || (FILTER==="ok" ? kind(c)==="ok" : kind(c) && kind(c)!=="ok"))
+    .filter(c => !qq || n(c.title+" "+c.body+" "+c.regulations.map(g=>g.citation+g.body).join(" ")).includes(qq));
   $("#clauses").innerHTML = list.length ? list.map((c,i) => `
     <div class="card clause${i===0&&!qq?" open":""}">
       <div class="ch" data-toggle>
@@ -481,6 +517,8 @@ function drawClauses(q){
           <div class="tags">
             ${c.page_start!=null?`<span class="tag page">${pages(c.page_start,c.page_end)} من المستند</span>`:""}
             ${c.from_ocr?`<span class="tag ocr">مستخرج بالـ OCR</span>`:""}
+            ${DECISION[c.decision]?`<span class="tag ${DECISION[c.decision][1]}">${DECISION[c.decision][0]}</span>`:""}
+            ${c.reference_mismatch?.length?`<span class="tag no">إحالة لا تطابق موضوعها</span>`:""}
             ${c.regulations[0]?`<span class="tag">الأقرب: ${esc(c.regulations[0].citation)}</span>`:""}
             <span class="tag soon">حكم الامتثال: قريبًا</span>
           </div>
@@ -490,8 +528,10 @@ function drawClauses(q){
       <div class="cbody">
         <div class="ctext"><h5>نص البند</h5>${esc(c.body)}</div>
         <div class="regs"><h5>أقرب المواد في لوائح هيئة السوق المالية</h5>
+          ${agentPanel(c)}
           ${c.regulations.map(g=>`<div class="reg${g.rank===1?" first":""}">
-            <div class="rt"><span class="rank">${g.rank}</span><div><div class="cit">${esc(g.citation)}</div><div class="doc">${esc(g.document)}${g.pinned?" · الملحق 11 (قائمة إفصاحات الصناديق الخاصة)":""}</div></div>
+            <div class="rt"><span class="rank">${g.rank}</span><div><div class="cit">${esc(g.citation)}</div><div class="doc">${esc(g.document)}${g.pinned?" · الملحق 11 (قائمة إفصاحات الصناديق الخاصة)":""}
+              ${FOUND_BY[g.found_by]?` <span class="by ${esc(g.found_by)}">${FOUND_BY[g.found_by]}</span>`:""}</div></div>
             ${g.page_start!=null?`<span class="pg">${pages(g.page_start,g.page_end)}</span>`:""}</div>
             <details><summary>نص المادة</summary><div class="rtx">${esc(g.body)}</div></details>
           </div>`).join("")}
@@ -500,6 +540,26 @@ function drawClauses(q){
       </div>
     </div>`).join("") : `<div class="card empty">لا توجد نتائج مطابقة.</div>`;
 }
+const STEP = s => ({
+  analyse: `تحليل البند${s.references?.length ? " · إحالات: "+s.references.map(r=>r.section||r.ref).join("، ") : ""}`,
+  search: `بحث في الأنظمة · أعلى نتيجة ${s.top?.[0] ?? s.top ?? "—"}`,
+  check: `تحقق من أعلى نتيجة (${s.top ?? "—"}) · ${s.support ? "مؤيدة: "+s.support.join("، ") : "بلا إشارة تأييد"}`,
+  retry: `إعادة بحث (${s.strategy})`,
+  llm_tool: s.tool==="read_section" ? `النموذج قرأ ${s.section_key}` : `النموذج بحث: «${s.query}»`,
+  llm_finish: `النموذج اختار: ${(s.ranked||[]).join("، ") || "لا شيء"}`,
+  reference_mismatch: `إحالة لا تطابق موضوع البند: ${(s.references||[]).join("، ")}`,
+  llm_error: "تعذّر الوصول للنموذج اللغوي",
+  decide: `القرار: ${DECISION[s.decision]?.[0] ?? s.decision}`}[s.action] ?? s.action);
+
+function agentPanel(c){
+  if (!DECISION[c.decision]) return "";
+  const [label, k] = DECISION[c.decision];
+  return `<div class="why ${k}"><b>${label}</b>${esc(c.decision_reason||"")}${c.llm_reason?`<br>سبب النموذج: ${esc(c.llm_reason)}`:""}</div>
+    ${c.reference_mismatch?.length?`<div class="mismatch">⚠ البند يحيل إلى <b>${c.reference_mismatch.map(esc).join("، ")}</b>، لكن موضوعها لا يطابق موضوع البند. قد تكون الإحالة لترقيم قديم للائحة، وتستحق التحقق.</div>`:""}
+    <details class="trace"><summary>خطوات وكيل الاسترجاع (${(c.retrieval_steps||[]).length})</summary><ol>${(c.retrieval_steps||[]).map(s=>`<li>${esc(STEP(s))}</li>`).join("")}</ol></details>`;
+}
+$("#r-filter").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (!b) return;
+  FILTER = b.dataset.f; document.querySelectorAll("#r-filter button").forEach(x=>x.classList.toggle("on", x===b)); drawClauses($("#q").value); });
 $("#q").addEventListener("input", e => drawClauses(e.target.value));
 $("#clauses").addEventListener("click", e => { const h = e.target.closest("[data-toggle]"); if (h) h.parentElement.classList.toggle("open"); });
 
