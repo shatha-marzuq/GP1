@@ -15,6 +15,8 @@ decide-and-act loop per clause and records every decision with its reason:
                  and, for a long clause, each part of it on its own — then fuse all lists (RRF)
   6. llm       : (optional, llm=LLM()) an LLM reads the candidate sections, may read a full section or search
                  again (tools: read_section, search_regulations), and returns the ranking + found/unsure/none.
+                 The model is OpenAI (OPENAI_API_KEY, RETRIEVAL_MODEL); LLM_BACKEND=vllm runs a local model
+                 on vLLM instead, started by the agent itself (see LLM / start_vllm).
                  If it fails (no key, server down) the rule ranking of steps 3-5 stands. A referenced article
                  stays first only if the LLM picks it; otherwise it follows the LLM's picks and the step
                  "reference_mismatch" is logged (the T&C may cite an old numbering of the regulation).
@@ -32,13 +34,13 @@ retriever.search (+ "found_by"); agent.run(text, title=…) also returns the dec
 
 CLI:  python3 retrieval_agent.py "نص البند" [--title "عنوان البند"] [--k 5] [--mode dense|hybrid|bm25] [--no-rerank] [--llm]
 """
-import argparse, json, os, re, time
+import argparse, atexit, json, os, re, subprocess, sys, time
 from collections import Counter, defaultdict
 
 from chunk import search_normalize
 from retriever import BM25, PIN_SECTION, tokenize
 
-try:  # the API key and model come from the .env, like the segmentation agent
+try:  # settings (OPENAI_API_KEY, RETRIEVAL_MODEL, or LLM_BACKEND=vllm + VLLM_MODEL …) come from the .env
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
@@ -101,15 +103,79 @@ LLM_TOOLS = [
 ]
 
 
-class LLM:
-    """OpenAI-compatible chat model with tools (OPENAI_API_KEY / OPENAI_BASE_URL / RETRIEVAL_MODEL in .env)."""
+# Optional vLLM backend (LLM_BACKEND=vllm; all settings can be set in the .env). The default is a 4-bit 7B model: good Arabic, ~6 GB of GPU memory,
+# so it fits next to BGE-M3 + the reranker on the same card.
+VLLM_MODEL = os.getenv("VLLM_MODEL", "Qwen/Qwen2.5-7B-Instruct-AWQ")
+VLLM_PORT = int(os.getenv("VLLM_PORT", 8001))                  # 8000 is the interface
+VLLM_GPU_SHARE = os.getenv("VLLM_GPU_SHARE", "0.55")           # share of GPU memory vLLM may take
+VLLM_MAX_LEN = os.getenv("VLLM_MAX_LEN", "16384")              # context length (prompt + tool results)
+VLLM_START_TIMEOUT = int(os.getenv("VLLM_START_TIMEOUT", 1800))  # the first start downloads the model
+VLLM_LOG = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "output", "vllm.log"))
 
-    def __init__(self, model=None, tool_choice=None):
+
+def _served_models(url):
+    from openai import OpenAI
+    try:
+        return [m.id for m in OpenAI(base_url=url, api_key="EMPTY", timeout=3, max_retries=0).models.list().data]
+    except Exception:
+        return None
+
+
+def start_vllm(model=VLLM_MODEL, port=VLLM_PORT):
+    """Make sure a vLLM server with `model` answers on localhost:port and return its URL.
+    If one is already running (started by hand or by another process) it is reused; otherwise the agent
+    starts `vllm serve` itself in the background, waits until it is ready, and stops it when Python exits."""
+    url = f"http://localhost:{port}/v1"
+    served = _served_models(url)
+    if served is not None:
+        if model not in served:
+            raise RuntimeError(f"another vLLM server on port {port} serves {served}, not {model}")
+        return url
+    try:
+        import vllm  # noqa: F401
+    except ImportError:
+        raise RuntimeError("vLLM is not installed (pip install vllm). It runs on Linux / WSL2 with an NVIDIA GPU")
+    os.makedirs(os.path.dirname(VLLM_LOG), exist_ok=True)
+    log = open(VLLM_LOG, "w", encoding="utf-8")
+    cmd = [sys.executable, "-m", "vllm.entrypoints.openai.api_server", "--model", model, "--port", str(port),
+           "--enable-auto-tool-choice", "--tool-call-parser", "hermes",   # the agent calls tools; Qwen = hermes format
+           "--gpu-memory-utilization", VLLM_GPU_SHARE, "--max-model-len", VLLM_MAX_LEN]
+    print(f"starting vLLM ({model}) on port {port}; the first start downloads the model. Log: {VLLM_LOG}", flush=True)
+    proc = subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT)
+    atexit.register(proc.terminate)
+    deadline = time.time() + VLLM_START_TIMEOUT
+    while time.time() < deadline:
+        if proc.poll() is not None:
+            with open(VLLM_LOG, encoding="utf-8", errors="replace") as f:
+                tail = "".join(f.readlines()[-15:])
+            raise RuntimeError(f"vLLM stopped while starting (see {VLLM_LOG}):\n{tail}")
+        if _served_models(url) is not None:
+            print(f"vLLM ready: {model}", flush=True)
+            return url
+        time.sleep(3)
+    proc.terminate()
+    raise RuntimeError(f"vLLM did not start within {VLLM_START_TIMEOUT}s (see {VLLM_LOG})")
+
+
+class LLM:
+    """Chat model with tools for step 6. Default backend: the OpenAI API (OPENAI_API_KEY, RETRIEVAL_MODEL,
+    optional OPENAI_BASE_URL). LLM_BACKEND=vllm in the .env runs a local model on vLLM instead, started by
+    the agent itself (start_vllm)."""
+
+    def __init__(self, model=None, tool_choice=None, backend=None):
         from openai import OpenAI
+        self.backend = backend or os.getenv("LLM_BACKEND", "openai")
         # the default waits up to 10 min per call: one hung request stalled a whole evaluation run for 30+ min.
         # On timeout the agent falls back to the rule ranking (llm_error step).
-        self.client = OpenAI(timeout=float(os.getenv("RETRIEVAL_TIMEOUT", 60)), max_retries=2)
-        self.model = model or os.getenv("RETRIEVAL_MODEL", "gpt-4o")
+        timeout = float(os.getenv("RETRIEVAL_TIMEOUT", 60))
+        if self.backend == "vllm":
+            self.model = model or VLLM_MODEL
+            self.client = OpenAI(base_url=start_vllm(self.model), api_key="EMPTY", timeout=timeout, max_retries=2)
+        else:
+            if not os.getenv("OPENAI_API_KEY"):
+                raise RuntimeError("OPENAI_API_KEY is not set (put it in the .env at the repo root)")
+            self.model = model or os.getenv("RETRIEVAL_MODEL", "gpt-4o")
+            self.client = OpenAI(timeout=timeout, max_retries=2)
         self.tool_choice = tool_choice or os.getenv("RETRIEVAL_TOOL_CHOICE", "required")
 
     def __call__(self, messages, tools):
@@ -460,7 +526,7 @@ if __name__ == "__main__":
     ap.add_argument("--k", type=int, default=5)
     ap.add_argument("--mode", default="dense", choices=["hybrid", "dense", "bm25"])
     ap.add_argument("--no-rerank", action="store_true")
-    ap.add_argument("--llm", action="store_true", help="add the LLM step (needs OPENAI_API_KEY)")
+    ap.add_argument("--llm", action="store_true", help="add the LLM step (OpenAI; LLM_BACKEND=vllm for a local model)")
     a = ap.parse_args()
     out = RetrievalAgent(RegulationRetriever(), llm=LLM() if a.llm else None).run(a.query, a.title, a.k, a.mode,
                                                     rerank=not a.no_rerank and a.mode != "bm25")
