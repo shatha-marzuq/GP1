@@ -1,4 +1,0 @@
-# واجهة ميثاق: فوق متطلبات backend/orchestrator و docproc و pipeline
-fastapi
-uvicorn
-python-multipart
