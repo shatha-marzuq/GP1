@@ -26,7 +26,7 @@ pip install -r orchestrator/requirements.txt
 python -m pytest orchestrator/tests -q                              # graph behaviour with a stand-in retriever
 python -m orchestrator.run ../docproc/testset/test7.docx --stub     # real OCR + segmentation, stand-in retrieval
 python -m orchestrator.run terms.pdf --mode hybrid -k 5             # real retrieval (BGE-M3 + Chroma store)
-python -m orchestrator.run terms.pdf --agent                        # retrieval through the agent (adds retrieval_decision/steps per clause)
+python -m orchestrator.run terms.pdf --agent                        # retrieval through the agent (adds topics, selected provisions with role/reason, and its steps)
 python -m orchestrator.run terms.pdf --agent --llm                  # … with the LLM step (OPENAI_API_KEY in .env)
 ```
 

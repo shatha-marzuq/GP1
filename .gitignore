@@ -19,3 +19,7 @@ backend/segmentation_output/
 backend/retrieval.json
 interface/uploads/
 interface/data/
+
+# LLM answers cached by the retrieval agent, and the local vLLM log
+output/llm_cache/
+output/vllm.log

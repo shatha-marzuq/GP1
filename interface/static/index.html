@@ -151,55 +151,62 @@ tr:last-child td{border-bottom:0}
 .chip b{color:var(--green-800)}
 .search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-width:280px}
 .search input{border:0;outline:0;font:inherit;width:100%;background:transparent}
-.clauses{display:flex;flex-direction:column;gap:14px}
-.clause{overflow:hidden}
-.ch{display:flex;gap:14px;align-items:flex-start;padding:18px 22px;cursor:pointer}
-.cnum{flex:none;min-width:44px;height:44px;border-radius:12px;background:var(--mint-50);color:var(--green-700);display:grid;place-items:center;font-weight:700;font-size:13px}
-.ch .t{flex:1;min-width:0}
-.ch h3{margin:0;font-size:15.5px;color:var(--green-900)}
-.ch .crumbs{font-size:12px;color:var(--faint)}
-.ch .excerpt{color:var(--muted);font-size:13px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ch .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .tag{font-size:11.5px;padding:2px 9px;border-radius:7px;background:var(--line-2);color:var(--muted)}
 .tag.page{background:var(--gold-50);color:var(--gold-600);border:1px solid var(--gold-100)}
 .tag.ocr{background:#EEF1FB;color:#4659A8}
-.tag.soon{border:1px dashed var(--gold-300);background:transparent;color:var(--gold-600)}
-.chev{flex:none;color:var(--faint);transition:.2s;margin-top:10px}
-.clause.open .chev{transform:rotate(180deg)}
-.cbody{display:none;border-top:1px solid var(--line-2);background:#FDFBF7}
-.clause.open .cbody{display:grid;grid-template-columns:1fr 1.15fr}
-.ctext{padding:18px 22px;border-inline-end:1px solid var(--line-2);white-space:pre-wrap;font-size:13.5px;max-height:460px;overflow:auto}
-.ctext h5,.regs h5{margin:0 0 10px;font-size:12.5px;color:var(--gold-600);font-weight:600}
-.regs{padding:18px 22px;display:flex;flex-direction:column;gap:10px;max-height:460px;overflow:auto}
-.reg{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 14px}
-.reg.first{border-color:var(--green-500);box-shadow:0 0 0 3px var(--mint-50)}
-.reg .rt{display:flex;gap:10px;align-items:flex-start}
-.rank{flex:none;width:24px;height:24px;border-radius:7px;background:var(--line-2);color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700}
-.reg.first .rank{background:var(--green-600);color:#fff}
-.reg .cit{font-weight:600;font-size:13.5px}
-.reg .doc{font-size:12px;color:var(--faint)}
-.reg .pg{margin-inline-start:auto;flex:none;font-size:11.5px;color:var(--gold-600);background:var(--gold-50);border-radius:7px;padding:2px 8px;white-space:nowrap}
-.reg details{margin-top:6px}
-.reg summary{font-size:12px;color:var(--green-600);cursor:pointer;font-weight:600}
-.reg .rtx{font-size:12.5px;color:var(--muted);white-space:pre-wrap;margin-top:6px;max-height:220px;overflow:auto}
-.verdict{border:1px dashed var(--gold-300);border-radius:12px;padding:10px 14px;font-size:12.5px;color:var(--gold-600);background:var(--gold-50)}
-.err{background:var(--red-50);border:1px solid #F1C9C0;color:#8A3524;border-radius:12px;padding:12px 16px;margin:0 22px 20px;font-size:13px}
-.tag.ok{background:var(--mint-50);color:var(--green-600);border:1px solid var(--mint-100)}
-.tag.rev{background:var(--gold-100);color:var(--gold-600);border:1px solid var(--gold-300)}
-.tag.no{background:var(--red-50);color:var(--red)}
-.by{font-size:11px;padding:1px 7px;border-radius:6px;background:var(--line-2);color:var(--muted);white-space:nowrap}
-.by.llm{background:var(--mint-50);color:var(--green-600)}
-.by.reference{background:var(--gold-50);color:var(--gold-600)}
-.why{border-radius:12px;padding:10px 14px;font-size:12.5px;background:var(--mint-50);color:var(--green-800)}
-.why.rev{background:var(--gold-50);color:#6b5428;border:1px solid var(--gold-100)}
-.why.no{background:var(--red-50);color:#8A3524}
-.why b{display:block;margin-bottom:2px}
-.mismatch{border:1px solid #F1C9C0;background:var(--red-50);color:#8A3524;border-radius:12px;padding:10px 14px;font-size:12.5px}
-.trace summary{font-size:12px;color:var(--muted);cursor:pointer}
-.trace ol{margin:6px 0 0;padding-inline-start:18px;font-size:12px;color:var(--muted)}
-.filter{display:flex;gap:6px}
-.filter button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 13px;font-size:12.5px;color:var(--muted)}
-.filter button.on{background:var(--green-700);border-color:var(--green-700);color:#fff}
+/* results workspace: clause list | clause next to its provisions */
+.ws{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}
+.navl{position:sticky;top:78px;max-height:calc(100vh - 100px);display:flex;flex-direction:column;overflow:hidden}
+.navl .search{margin:12px;min-width:0}
+.navl .items{overflow:auto;padding:0 8px 10px}
+.grp{font-size:11.5px;color:var(--gold-600);font-weight:600;padding:12px 8px 4px}
+.ci{display:flex;gap:8px;align-items:flex-start;width:100%;border:0;background:transparent;text-align:right;padding:7px 8px;border-radius:10px;color:var(--ink)}
+.ci:hover{background:var(--mint-50)}
+.ci.on{background:var(--green-700);color:#fff}
+.ci .n{flex:none;min-width:24px;font-size:12px;font-weight:700;color:var(--green-700);padding-top:1px}
+.ci.on .n{color:var(--gold-300)}
+.ci .tt{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ci .c{margin-inline-start:auto;flex:none;font-size:11px;color:var(--faint);padding-top:2px}
+.ci.on .c{color:rgba(255,255,255,.75)}
+.pane{min-width:0}
+.pane-h{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line-2)}
+.pane-h .crumbs{font-size:12px;color:var(--faint)}
+.pane-h h2{margin:2px 0 8px;font-size:18px;color:var(--green-900);line-height:1.6}
+.meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.topic{font-size:12px;padding:2px 10px;border-radius:99px;background:var(--mint-50);color:var(--green-700)}
+.stepper{display:flex;gap:6px;flex:none}
+.stepper button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px;font-size:12.5px;color:var(--muted)}
+.stepper button:hover:not([disabled]){border-color:var(--gold-300);color:var(--ink)}
+.stepper button[disabled]{opacity:.4;cursor:default}
+.cmp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+.cmp>div{padding:18px 22px;min-width:0}
+.cmp .clausecol{border-inline-end:1px solid var(--line-2);background:#FDFBF7}
+.lbl{font-size:12px;color:var(--gold-600);font-weight:600;margin-bottom:10px}
+.ctext{white-space:pre-wrap;font-size:14px;line-height:1.95;max-height:68vh;overflow:auto}
+.arts{display:flex;flex-direction:column;gap:8px}
+.art{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;cursor:pointer;text-align:right;width:100%;font:inherit;color:inherit}
+.art:hover{border-color:var(--gold-300)}
+.art.on{border-color:var(--green-500);box-shadow:0 0 0 3px var(--mint-50)}
+.art .rk{flex:none;width:24px;height:24px;border-radius:7px;background:var(--line-2);color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700}
+.art.on .rk{background:var(--green-600);color:#fff}
+.art .bd{flex:1;min-width:0}
+.art .hd{font-weight:600;font-size:13.5px;line-height:1.6}
+.art .sub{font-size:12px;color:var(--faint)}
+.art .rs{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.role{font-size:11px;padding:1px 8px;border-radius:6px;white-space:nowrap;margin-inline-start:6px}
+.role.governing{background:var(--mint-50);color:var(--green-600)}
+.role.disclosure{background:var(--gold-50);color:var(--gold-600)}
+.role.related,.role.cited{background:var(--line-2);color:var(--muted)}
+.more{margin-top:10px}
+.more summary{font-size:12.5px;color:var(--muted);cursor:pointer}
+.more .arts{margin-top:8px}
+.none{font-size:13px;color:var(--muted);background:var(--line-2);border-radius:12px;padding:10px 14px;margin-bottom:8px}
+.reader{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+.reader .rh{padding:12px 16px;border-bottom:1px solid var(--line-2);background:#FCFAF5}
+.reader .rh b{display:block;font-size:14px;color:var(--green-900);line-height:1.6}
+.reader .rh small{color:var(--faint);font-size:12px}
+.reader .why{font-size:12.5px;color:var(--green-800);background:var(--mint-50);padding:8px 16px}
+.reader .rtx{white-space:pre-wrap;font-size:13.5px;line-height:1.95;padding:14px 16px;max-height:52vh;overflow:auto}
 .hidden{display:none!important}
 
 /* account */
@@ -253,7 +260,8 @@ tr:last-child td{border-bottom:0}
   .brand{border:0;padding:0}.brand img{width:70px}.brand small{display:none}
   .nav{flex-direction:row;flex-wrap:wrap}.scope{display:none}
   .stats{grid-template-columns:repeat(2,1fr)}
-  .split,.upgrid,.clause.open .cbody{grid-template-columns:1fr}
+  .split,.upgrid,.ws,.cmp{grid-template-columns:1fr}
+  .navl{position:static;max-height:320px}
   .page,.top{padding-inline:16px}
 }
 </style>
@@ -391,7 +399,7 @@ tr:last-child td{border-bottom:0}
         <div>
           <div class="eyebrow">نتائج التحليل</div>
           <h1 id="r-title">—</h1>
-          <p class="sub">كل بند مستخرج من المستند مع أقرب المواد في لوائح هيئة السوق المالية وأرقام صفحاتها.</p>
+          <p class="sub">كل بند من المستند بجانب المواد النظامية التي تنطبق عليه. الحكم على امتثال البند مرحلة لاحقة.</p>
         </div>
         <div style="display:flex;gap:8px">
           <a class="btn ghost" id="r-json" href="#" download>تنزيل النتائج (JSON)</a>
@@ -400,14 +408,16 @@ tr:last-child td{border-bottom:0}
       </div>
       <div class="banner hidden" id="r-stub"><span>⚠</span><div><b>وضع تجريبي:</b> البحث في الأنظمة يعمل ببديل ثابت، فالمواد المعروضة ليست نتيجة بحث حقيقي.</div></div>
       <div class="banner hidden" id="r-warn"><span>ⓘ</span><div id="r-warn-t"></div></div>
-      <div class="banner hidden" id="r-llm"><span>⚠</span><div id="r-llm-t"></div></div>
-      <div class="rhead">
-        <div class="chips" id="r-chips"></div>
-        <div class="filter hidden" id="r-filter"><button data-f="all" class="on">كل البنود</button><button data-f="review">تحتاج مراجعة</button><button data-f="ok">مؤكدة</button></div>
-        <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98A09A" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="ابحث في البنود أو المواد…"></div>
-      </div>
+      <div class="banner hidden" id="r-llm"><span>ⓘ</span><div id="r-llm-t"></div></div>
+      <div class="rhead"><div class="chips" id="r-chips"></div></div>
       <div class="vtabs" id="vtabs"><button data-v="clauses" class="on">البنود والمواد النظامية</button><button data-v="text">النص المستخرج من المستند</button></div>
-      <div class="clauses" id="clauses"></div>
+      <div class="ws" id="clauses">
+        <aside class="card navl">
+          <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98A09A" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="ابحث في البنود أو المواد…"></div>
+          <div class="items" id="navitems"></div>
+        </aside>
+        <section class="card pane" id="pane"></section>
+      </div>
       <div class="card doctext hidden" id="doctext"></div>
     </section>
   </main>
@@ -420,12 +430,8 @@ const fmtDate = t => new Date(t*1000).toLocaleDateString("ar-SA-u-ca-gregory-nu-
 const pages = (a,b) => a==null ? "" : (a===b||b==null ? `ص ${a}` : `ص ${a}–${b}`);
 const ORDER = ["received","extracting","segmenting","retrieving","done"];
 const STATUS = {received:"قيد المراجعة",extracting:"قيد المراجعة",segmenting:"قيد المراجعة",retrieving:"قيد المراجعة",done:"اكتملت المراجعة",failed:"تعذّرت المراجعة"};
-let current = null, poll = null, result = null, FILTER = "all", VIEW = "clauses";
-const DECISION = {
-  confirmed_by_llm:["مؤكدة","ok"], confirmed_by_reference:["مؤكدة بإحالة البند","ok"],
-  confirmed:["مؤكدة","ok"], confirmed_after_retry:["مؤكدة","ok"],
-  uncertain:["تحتاج مراجعة","rev"], no_match:["لا توجد مادة مطابقة","no"]};
-const FOUND_BY = {reference:"يحيل إليها البند"};
+let current = null, poll = null, result = null, VIEW = "clauses", CUR = 0, ART = 0;
+const ROLE = {governing:"حكم نظامي", disclosure:"متطلب إفصاح", related:"ذات صلة"};
 
 // ───────── account: sign up / log in / log out
 const _fetch = window.fetch;
@@ -563,36 +569,34 @@ async function openReview(id){
 }
 
 // ───────── results
+// provisions the agent selected for a clause, then the other candidates (plain search: everything is "selected")
+const chosen = c => c.regulations.filter(g => g.selected !== false);
+const others = c => c.regulations.filter(g => g.selected === false);
+
 function renderResults(r){
   result = r; show("results");
-  const o = r.output, cl = o.clauses, agent = cl.some(c=>c.decision);
+  const o = r.output, cl = o.clauses;
   $("#r-title").textContent = r.filename;
   $("#r-json").href = `/api/reviews/${r.id}/json`;
   $("#r-stub").classList.toggle("hidden", r.mode!=="stub");
   const warn = (o.document_warnings||[]).map(w => typeof w==="string" ? w : (w.message_ar||w.code));
   if (o.document_needs_review) warn.unshift("بعض صفحات المستند تحتاج مراجعة بشرية بعد الـ OCR.");
   $("#r-warn").classList.toggle("hidden", !warn.length); $("#r-warn-t").innerHTML = warn.map(esc).join("<br>");
+  const errs = cl.filter(c=>c.llm_error).length;
+  $("#r-llm").classList.toggle("hidden", !errs);
+  $("#r-llm-t").innerHTML = `لم يكن النموذج اللغوي متاحًا لـ <b>${errs}</b> بند (مثلًا انقطاع الاتصال أو انتهاء رصيد OpenAI)، فعُرضت لها نتائج البحث مباشرة.`;
   const pg = cl.map(c=>c.page_end).filter(x=>x!=null);
   $("#r-chips").innerHTML = [
     ["البنود", cl.length], ["الصفحات", pg.length? Math.max(...pg):"—"],
-    ["بنود من صفحات ممسوحة (OCR)", cl.filter(c=>c.from_ocr).length],
-    ["مواد نظامية مختلفة", new Set(cl.flatMap(c=>c.regulations.map(g=>g.id))).size],
-    ...(agent ? [["مؤكدة", cl.filter(c=>DECISION[c.decision]?.[1]==="ok").length],
-                 ["تحتاج مراجعة", cl.filter(c=>DECISION[c.decision] && DECISION[c.decision][1]!=="ok").length],
-                 ["إحالات لا تطابق موضوعها", cl.filter(c=>c.reference_mismatch?.length).length]] : []),
+    ["مواد نظامية مرتبطة", new Set(cl.flatMap(c=>chosen(c).map(g=>g.section_key||g.id))).size],
+    ...(cl.some(c=>c.from_ocr) ? [["بنود من صفحات ممسوحة (OCR)", cl.filter(c=>c.from_ocr).length]] : []),
   ].map(([k,v])=>`<span class="chip">${k}: <b>${v}</b></span>`).join("");
-  const errs = cl.filter(c=>c.llm_error).length;
-  $("#r-llm").classList.toggle("hidden", !errs);
-  $("#r-llm-t").innerHTML = `<b>تعذّر الوصول للنموذج اللغوي في ${errs} بند</b> (مثلًا خلص رصيد OpenAI أو انقطع الاتصال)، فاعتمدت هذه البنود على ترتيب القواعد فقط.`;
-  $("#r-filter").classList.toggle("hidden", !agent);
-  FILTER = "all"; document.querySelectorAll("#r-filter button").forEach(b=>b.classList.toggle("on", b.dataset.f==="all"));
-  $("#q").value = ""; drawClauses(""); drawText(); view("clauses");
+  $("#q").value = ""; drawNav(""); openClause(0); drawText(); view("clauses");
 }
 
 function view(v){
   VIEW = v; document.querySelectorAll("#vtabs button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
   $("#clauses").classList.toggle("hidden", v!=="clauses"); $("#doctext").classList.toggle("hidden", v!=="text");
-  document.querySelector("#v-results .rhead").classList.toggle("hidden", v!=="clauses");
 }
 $("#vtabs").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (b) view(b.dataset.v); });
 
@@ -606,55 +610,88 @@ function drawText(){
   $("#doctext").innerHTML = h || `<div class="empty">لا يوجد نص.</div>`;
 }
 
-function drawClauses(q){
+// clause list, grouped by the section of the T&C it belongs to
+function drawNav(q){
   const n = s => (s||"").replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآ]/g,"ا");
-  const qq = n(q.trim());
-  const kind = c => DECISION[c.decision]?.[1];
-  const list = result.output.clauses
-    .filter(c => FILTER==="all" || (FILTER==="ok" ? kind(c)==="ok" : kind(c) && kind(c)!=="ok"))
-    .filter(c => !qq || n(c.title+" "+c.body+" "+c.regulations.map(g=>g.citation+g.body).join(" ")).includes(qq));
-  $("#clauses").innerHTML = list.length ? list.map((c,i) => `
-    <div class="card clause${i===0&&!qq?" open":""}">
-      <div class="ch" data-toggle>
-        <div class="cnum">${esc(c.clause_id.replace(/^C0*/,""))}</div>
-        <div class="t">
-          ${c.breadcrumb?`<div class="crumbs">${esc(c.breadcrumb)}</div>`:""}
-          <h3>${esc(c.title||"بند بدون عنوان")}</h3>
-          <div class="excerpt">${esc(c.body)}</div>
-          <div class="tags">
-            ${c.page_start!=null?`<span class="tag page">${pages(c.page_start,c.page_end)} من المستند</span>`:""}
-            ${c.from_ocr?`<span class="tag ocr">مستخرج بالـ OCR</span>`:""}
-            ${DECISION[c.decision]?`<span class="tag ${DECISION[c.decision][1]}">${DECISION[c.decision][0]}</span>`:""}
-            ${c.reference_mismatch?.length?`<span class="tag no">إحالة لا تطابق موضوعها</span>`:""}
-            ${c.regulations[0]?`<span class="tag">الأقرب: ${esc(c.regulations[0].citation)}</span>`:""}
-          </div>
-        </div>
-        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-      </div>
-      <div class="cbody">
-        <div class="ctext"><h5>نص البند</h5>${esc(c.body)}</div>
-        <div class="regs"><h5>أقرب المواد في لوائح هيئة السوق المالية</h5>
-          ${agentPanel(c)}
-          ${c.regulations.map(g=>`<div class="reg${g.rank===1?" first":""}">
-            <div class="rt"><span class="rank">${g.rank}</span><div><div class="cit">${esc(g.citation)}</div><div class="doc">${esc(g.document)}${g.pinned?" · الملحق 11 (قائمة إفصاحات الصناديق الخاصة)":""}
-              ${FOUND_BY[g.found_by]?` <span class="by ${esc(g.found_by)}">${FOUND_BY[g.found_by]}</span>`:""}</div></div>
-            ${g.page_start!=null?`<span class="pg">${pages(g.page_start,g.page_end)}</span>`:""}</div>
-            <details><summary>نص المادة</summary><div class="rtx">${esc(g.body)}</div></details>
-          </div>`).join("")}
-        </div>
-      </div>
-    </div>`).join("") : `<div class="card empty">لا توجد نتائج مطابقة.</div>`;
+  const qq = n(q.trim()), cl = result.output.clauses;
+  let h = "", group = null;
+  cl.forEach((c,i) => {
+    if (qq && !n(c.title+" "+c.body+" "+c.regulations.map(g=>(g.heading||"")+" "+g.citation+" "+(g.full_text||g.excerpt||g.body||"")).join(" ")).includes(qq)) return;
+    if (c.section !== group){ group = c.section; h += `<div class="grp">${esc(group||"—")}</div>`; }
+    h += `<button class="ci${i===CUR?" on":""}" data-ci="${i}"><span class="n">${esc(c.clause_id.replace(/^C0*/,""))}</span>
+      <span class="tt">${esc(c.title||c.body.slice(0,80))}</span><span class="c">${chosen(c).length||""}</span></button>`;
+  });
+  $("#navitems").innerHTML = h || `<div class="empty">لا توجد نتائج مطابقة.</div>`;
 }
-function agentPanel(c){
-  if (!DECISION[c.decision]) return "";
-  const [label, k] = DECISION[c.decision];
-  return `<div class="why ${k}"><b>${label}</b>${esc(c.llm_reason || (k==="ok" ? "" : c.decision_reason) || "")}</div>
-    ${c.reference_mismatch?.length?`<div class="mismatch">⚠ البند يحيل إلى <b>${c.reference_mismatch.map(esc).join("، ")}</b>، لكن موضوعها لا يطابق موضوع البند. قد تكون الإحالة لترقيم قديم للائحة، وتستحق التحقق.</div>`:""}`;
+
+function openClause(i){
+  const cl = result.output.clauses; if (!cl.length){ $("#pane").innerHTML = `<div class="empty">لا توجد بنود.</div>`; return; }
+  CUR = Math.max(0, Math.min(i, cl.length-1)); ART = 0;
+  document.querySelectorAll("#navitems .ci").forEach(b => b.classList.toggle("on", +b.dataset.ci===CUR));
+  document.querySelector(`#navitems .ci[data-ci="${CUR}"]`)?.scrollIntoView({block:"nearest"});
+  drawClause();
 }
-$("#r-filter").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (!b) return;
-  FILTER = b.dataset.f; document.querySelectorAll("#r-filter button").forEach(x=>x.classList.toggle("on", x===b)); drawClauses($("#q").value); });
-$("#q").addEventListener("input", e => drawClauses(e.target.value));
-$("#clauses").addEventListener("click", e => { const h = e.target.closest("[data-toggle]"); if (h) h.parentElement.classList.toggle("open"); });
+
+function artCard(g, j){
+  const tag = g.role ? `<span class="role ${g.role}">${ROLE[g.role]}</span>` : "";
+  return `<button class="art${j===ART?" on":""}" data-art="${j}"><span class="rk">${j+1}</span><div class="bd">
+      <div class="hd">${esc(g.heading||g.citation)}${tag}${g.cited?`<span class="role cited">يحيل إليها البند</span>`:""}</div>
+      <div class="sub">${esc(g.regulation||g.document)}${g.page_start!=null?` · ${pages(g.page_start,g.page_end)}`:""}</div>
+      ${g.topic?`<div class="sub">الموضوع: ${esc(g.topic)}</div>`:""}
+      ${g.reason?`<div class="rs">${esc(g.reason)}</div>`:""}</div></button>`;
+}
+
+function loadFull(g){
+  // candidates keep only their related paragraphs in the review; fetch the whole article when opened
+  if (g.full_text || g.loading) return;
+  g.loading = true;
+  fetch("/api/articles/"+encodeURIComponent(g.id)).then(r => r.ok ? r.json() : null).then(j => {
+    g.loading = false; if (!j) return;
+    g.full_text = j.full_text; const el = $("#rtx"); if (el && el.dataset.id===g.id) el.textContent = j.full_text;
+  }).catch(() => { g.loading = false; });
+}
+
+function drawClause(){
+  const cl = result.output.clauses, c = cl[CUR], sel = chosen(c), rest = others(c), all = sel.concat(rest);
+  const g = all[ART];
+  $("#pane").innerHTML = `
+    <div class="pane-h"><div>
+        ${c.breadcrumb?`<div class="crumbs">${esc(c.breadcrumb)}</div>`:""}
+        <h2>${esc(c.title||"بند بدون عنوان")}</h2>
+        <div class="meta">
+          ${c.page_start!=null?`<span class="tag page">${pages(c.page_start,c.page_end)} من المستند</span>`:""}
+          ${c.from_ocr?`<span class="tag ocr">مستخرج بالـ OCR</span>`:""}
+          ${(c.topics||[]).map(t=>`<span class="topic">${esc(t)}</span>`).join("")}
+        </div></div>
+      <div class="stepper"><button data-step="-1"${CUR===0?" disabled":""}>→ السابق</button><button data-step="1"${CUR===cl.length-1?" disabled":""}>التالي ←</button></div>
+    </div>
+    <div class="cmp">
+      <div class="clausecol"><div class="lbl">نص البند</div><div class="ctext">${esc(c.body)}</div></div>
+      <div>
+        <div class="lbl">المواد النظامية المرتبطة</div>
+        ${sel.length ? `<div class="arts">${sel.map((x,j)=>artCard(x,j)).join("")}</div>`
+                     : `<div class="none">لم يختر الوكيل مادة تنطبق مباشرة على هذا البند. هذه المواد التي وجدها البحث:</div>`}
+        ${rest.length ? (sel.length ? `<details class="more"${ART>=sel.length?" open":""}><summary>مرشحات أخرى من البحث لم يخترها الوكيل (${rest.length})</summary><div class="arts">${rest.map((x,j)=>artCard(x,j+sel.length)).join("")}</div></details>`
+                                    : `<div class="arts">${rest.map((x,j)=>artCard(x,j)).join("")}</div>`) : ""}
+        ${g ? `<div class="reader"><div class="rh"><b>${esc(g.heading||g.citation)}</b><small>${esc(g.citation)}${g.page_start!=null?` · ${pages(g.page_start,g.page_end)} في وثيقة الهيئة`:""}${g.selected===false?" · لم يخترها الوكيل":""}</small></div>
+          ${g.reason?`<div class="why">${esc(g.reason)}</div>`:""}
+          <div class="rtx" id="rtx" data-id="${esc(g.id)}">${esc(g.full_text||g.excerpt||g.body)}</div></div>` : ""}
+      </div>
+    </div>`;
+  if (g) loadFull(g);
+}
+
+$("#navitems").addEventListener("click", e => { const b = e.target.closest("[data-ci]"); if (b) openClause(+b.dataset.ci); });
+$("#pane").addEventListener("click", e => {
+  const s = e.target.closest("[data-step]"); if (s){ openClause(CUR + +s.dataset.step); return; }
+  const a = e.target.closest("[data-art]"); if (a){ ART = +a.dataset.art; drawClause(); }
+});
+$("#q").addEventListener("input", e => drawNav(e.target.value));
+document.addEventListener("keydown", e => {   // ← next, → previous (right-to-left reading order)
+  if (!result || VIEW!=="clauses" || $("#v-results").classList.contains("hidden") || e.target.closest("input,textarea")) return;
+  if (e.key==="ArrowLeft") openClause(CUR+1);
+  if (e.key==="ArrowRight") openClause(CUR-1);
+});
 
 (async () => { const r = await _fetch("/api/auth/me"); r.ok ? enter(await r.json()) : showAuth(); })();
 </script>

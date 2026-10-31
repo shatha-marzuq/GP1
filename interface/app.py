@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import threading
 import time
@@ -124,7 +125,7 @@ def run_review(review_id, path):
     try:
         graph = build_graph(ENGINE["retriever"], on_status=on_status, k=K, search_kwargs=search_kwargs())
         state = graph.invoke({"review_id": review_id, "file_path": str(path), "results": []},
-                             {"max_concurrency": 4})
+                             {"max_concurrency": 8})
     except Exception as e:
         on_status(review_id, "failed", reason=f"{type(e).__name__}: {e}")
         state = {}
@@ -147,26 +148,15 @@ def cma_pages(pdf_pages):
     return (min(printed), max(printed)) if printed else (None, None)
 
 
-DOC_NAMES = {"IFR": "لائحة صناديق الاستثمار", "CMIR": "لائحة مؤسسات السوق المالية",
-             "CGR": "لائحة حوكمة الشركات", "SIFI": "تعليمات صناديق الاستثمار المبسطة"}
-
-
-def section_label(key):
-    """IFR-art092 → لائحة صناديق الاستثمار، المادة 92 (for the reference-mismatch note)."""
-    doc, _, sec = key.partition("-")
-    kind, num = ("المادة", sec[3:].lstrip("0")) if sec.startswith("art") else ("الملحق", sec[3:])
-    return f"{DOC_NAMES.get(doc, doc)}، {kind} {num}"
+PART = re.compile(r"\s*\(الجزء[^)]*\)")
 
 
 def agent_view(c):
-    """Pull what the interface shows out of the retrieval agent's steps (absent with plain search)."""
+    """What the interface needs from the agent's trace: whether its LLM steps ran for this clause.
+    Selection, role and reason of each provision are on the regulations themselves."""
     steps = c.get("retrieval_steps") or []
-    last = lambda action: next((s for s in reversed(steps) if s["action"] == action), {})
-    c["decision"] = c.get("retrieval_decision")
-    c["decision_reason"] = last("decide").get("reason")
-    c["llm_reason"] = last("llm_finish").get("reason")
-    c["llm_error"] = last("llm_error").get("error")
-    c["reference_mismatch"] = [section_label(k) for k in last("reference_mismatch").get("references", [])]
+    c["llm_error"] = next((s.get("error") for s in steps if s["action"] == "llm_error"), None)
+    c.setdefault("topics", [])
 
 
 def enrich(output):
@@ -175,13 +165,17 @@ def enrich(output):
         text = c["text"]
         if text.startswith("[") and "]" in text:      # segmentation prefixes a breadcrumb: [الشروط والأحكام › …]
             c["breadcrumb"], text = text[1:text.index("]")], text[text.index("]") + 1:].strip()
+        parts = [PART.sub("", x).strip() for x in (c.get("breadcrumb") or "").split("›")]
+        c["section"] = parts[1] if len(parts) > 1 else (parts[0] or c.get("title") or "")   # the T&C section
         c["body"] = text
         for n, reg in enumerate(c["regulations"], 1):
             reg["rank"] = n
             reg["page_start"], reg["page_end"] = cma_pages(reg.get("pdf_pages"))
             reg["document"] = reg["citation"].split("،")[0].strip()
-            body = reg["text"]
-            reg["body"] = body[body.index("]") + 1:].strip() if body.startswith("[") and "]" in body else body
+            body = reg.pop("text", None) or reg.get("excerpt") or ""      # plain search keeps the matched chunk
+            body = body[body.index("]") + 1:].strip() if body.startswith("[") and "]" in body else body
+            reg["heading"] = reg.get("heading") or reg["citation"]
+            reg["excerpt"] = reg.get("excerpt") or body   # full_text: selected / cited only, else /api/articles
     return output
 
 
@@ -191,12 +185,11 @@ def summary(r):
     return {k: r.get(k) for k in ("id", "filename", "size", "created", "finished", "status", "done", "total",
                                   "error", "mode", "llm")} | {
         "clauses": len(clauses),
-        "regulations": len({g["id"] for c in clauses for g in c["regulations"]}),
+        # distinct provisions the agent selected (all retrieved ones for plain search)
+        "regulations": len({g.get("section_key") or g["id"] for c in clauses for g in c["regulations"]
+                            if g.get("selected") is not False}),
         "needs_review": out.get("document_needs_review", False),
-        # retrieval agent: clauses to check by hand, references to an old numbering, LLM calls that failed
-        "to_review": sum(c.get("decision") in ("uncertain", "no_match") for c in clauses),
-        "mismatches": sum(bool(c.get("reference_mismatch")) for c in clauses),
-        "llm_errors": sum(bool(c.get("llm_error")) for c in clauses),
+        "llm_errors": sum(bool(c.get("llm_error")) for c in clauses),   # clauses that fell back to the rules
     }
 
 
@@ -271,6 +264,20 @@ def info(user=Depends(current_user)):
     return {"mode": MODE, "ready": ENGINE["ready"], "error": ENGINE["error"], "k": K, "llm": ENGINE["llm"]}
 
 
+@app.get("/api/articles/{chunk_id}")
+def article(chunk_id: str, user=Depends(current_user)):
+    """Full text of the provision a retrieved chunk belongs to (the whole article; an Annex 11 item alone),
+    for candidates whose full text is not stored in the review."""
+    base = ENGINE["retriever"]
+    base = getattr(base, "r", base)                       # the agent wraps the retriever
+    if not hasattr(base, "index") or chunk_id not in base.index:
+        raise HTTPException(404, "المادة غير موجودة")
+    key = base.metas[base.index[chunk_id]]["section_key"]
+    ids = [chunk_id] if key == "IFR-anx11" else [i for i, m in zip(base.ids, base.metas) if m["section_key"] == key]
+    strip = lambda t: t[t.index("]") + 1:].strip() if t.startswith("[") and "]" in t else t
+    return {"id": chunk_id, "section_key": key, "full_text": "\n\n".join(strip(base.docs[base.index[i]]) for i in ids)}
+
+
 @app.get("/api/reviews")
 def list_reviews(user=Depends(current_user)):
     with LOCK:
@@ -283,7 +290,20 @@ def get_review(review_id: str, user=Depends(current_user)):
         if review_id not in REVIEWS or not mine(REVIEWS[review_id], user):
             raise HTTPException(404, "المراجعة غير موجودة")
         r = REVIEWS[review_id]
-        return summary(r) | {"output": r.get("output")}
+        return summary(r) | {"output": for_browser(r.get("output"))}
+
+
+def for_browser(output):
+    """What the results page needs: the saved review (and its JSON download) keep everything, but the page gets
+    no agent trace and no excerpt except for the provisions the agent selected (others are fetched when opened)."""
+    if not output:
+        return output
+    clauses = []
+    for c in output["clauses"]:
+        regs = [{k: v for k, v in g.items() if not (k == "excerpt" and g.get("selected") is not True)}
+                for g in c["regulations"]]
+        clauses.append({k: v for k, v in c.items() if k != "retrieval_steps"} | {"regulations": regs})
+    return output | {"clauses": clauses}
 
 
 @app.get("/api/reviews/{review_id}/json")

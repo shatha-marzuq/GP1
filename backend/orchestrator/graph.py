@@ -6,7 +6,7 @@
 extract  = Document Processing Agent (docproc OCR, items with page numbers)
 segment  = segmentation.segment_clauses (paragraphs -> clauses)
 retrieve = plain search (pipeline/retriever.py over the Chroma vector DB) or the Regulatory Retrieval Agent
-           (pipeline/retrieval_agent.py: checks the top result, retries, flags uncertain clauses)
+           (pipeline/retrieval_agent.py: the LLM plans the searches and selects the applicable provisions)
 
 Every agent is passed in, so tests and demos can swap in stand-ins.
 The compliance verdict (LLM) is not part of this graph yet; it will consume the `results` this graph returns.
@@ -80,9 +80,9 @@ def build_graph(retriever, *,
     def retrieve_node(task: ClauseTask):
         clause = task["clause"]
         agent = None
-        if hasattr(retriever, "run"):  # وكيل الاسترجاع: يرجع النتائج + قراره وخطواته
+        if hasattr(retriever, "run"):  # وكيل الاسترجاع: يرجع المواد المختارة + موضوعات البند وخطواته
             out = retriever.run(clause["text"], title=clause.get("title"), k=k, **search_kwargs)
-            hits, agent = out["hits"], {"decision": out["decision"], "steps": out["steps"]}
+            hits, agent = out["hits"], {"topics": out.get("topics", []), "steps": out["steps"]}
         else:
             hits = retriever.search(clause["text"], k=k, **search_kwargs)
         with lock:
@@ -132,9 +132,11 @@ def _result(clause: dict, hits: list[dict], agent: dict | None = None) -> dict:
         "regulations": [{"id": h["id"], "score": h["score"], "citation": h["citation"],
                          "pdf_pages": h.get("pdf_pages"), "text": h["text"]} for h in hits],
     }
-    if agent:  # نحفظ قرار الوكيل وخطواته عشان نعرف ليش اختار هالمواد
-        out["retrieval_decision"] = agent["decision"]
+    if agent:  # موضوعات البند، ولكل مادة: هل اختارها الوكيل ودورها وسببها ونصها الكامل (لوكيل التحقق لاحقا)
+        out["topics"] = agent["topics"]
         out["retrieval_steps"] = agent["steps"]
         for reg, h in zip(out["regulations"], hits):
-            reg["found_by"] = h.get("found_by")
+            reg.update({f: h.get(f) for f in ("selected", "role", "reason", "cited", "heading", "regulation",
+                                               "excerpt", "full_text", "found_in", "section_key", "topic")})
+            del reg["text"]   # the matched chunk: its related paragraphs (excerpt) and full text replace it
     return out

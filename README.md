@@ -77,43 +77,66 @@ in the repo, so the knowledge base does not need rebuilding unless the regulatio
 `fund_type="private"` filter that drops look-alike public-fund articles. Defaults match MITHAQ's scope
 (`fund_type="private"`, `rerank=True`, Annex 11 pinned to rank 2).
 
-**`retrieval_agent.py`, the Regulatory Retrieval Agent.** For each clause:
+**`retrieval_agent.py`, the Regulatory Retrieval Agent.** It finds the provisions that *apply* to each clause, not
+just the textually similar ones, by coordinating the rule-based search with an LLM (two calls per clause):
 
-1. **analyse** the title and find explicit references ("وفقًا للمادة 76", "الملحق (11)");
-2. **search** as above, then **check** the top result against independent signals (BM25, article-title match);
-3. **retry** with other strategies (title + text, clause parts) if unsupported;
-4. **LLM step** (optional): the model reads the candidates, may read full articles (`read_section`) or search again
-   (`search_regulations`), and returns a ranking. A cited article stays first only if the LLM picks it; otherwise
-   a `reference_mismatch` is logged (T&Cs often cite an older numbering of the IFR);
-5. **decide**, with every step recorded in `retrieval_steps`:
+1. **understand** (LLM): the clause's regulatory topics, one search query per topic in the regulations' own
+   terminology, up to 3 articles named from the catalogue of private-fund IFR provisions, and the Annex 11 item the
+   clause's section corresponds to. Explicit references ("وفقًا للمادة 76") are found by rules.
+2. **retrieve** (rules): the clause text (dense + rerank), BM25, hybrid search per topic query and title match, each
+   20 deep, fused (RRF) into a pool of 18 candidates, after the cited, named and Annex 11 provisions. Everything is
+   filtered to the private-fund scope: CMIR, the IFR parts common to all funds, IFR Part 5 and its annexes. Public-fund
+   (IFR Part 4) and corporate-governance provisions never enter the pool unless the clause cites them.
+3. **select** (LLM): reads each candidate's paragraphs most related to the clause (BM25 + embedding similarity, not
+   the chunk's opening) and selects the provisions to read, each with a role (governing / disclosure / related) and a
+   one-line reason; it leaves out rules written only for public or real-estate funds and mismatched citations.
 
-| Decision | Meaning | Interface |
-|---|---|---|
-| `confirmed_by_llm` | rules and LLM independently agree on the top article | مؤكدة |
-| `confirmed_by_reference` | the clause cites the article and the LLM confirms its subject | مؤكدة |
-| `uncertain` | rules and LLM disagree, or no supporting signal | تحتاج مراجعة |
-| `no_match` | the LLM finds no governing article | لا توجد مادة مطابقة |
+Retrieval makes **no compliance or confidence decision**: that belongs to the Compliance Analysis Agent. Every
+candidate is kept: selected ones first (`selected: true`, role, reason, full text), then the others
+(`selected: false`, citation, heading, related paragraphs; full text on request). Without the LLM (no key, API
+error, 60 s timeout) `selected` is `null` and the rule ranking is used; the clause records `llm_error`.
+LLM answers are cached in `output/llm_cache/`, keyed on cache version, backend, endpoint, model, every call parameter
+and the full messages.
 
-Without a key, or if the API fails (no credit, timeout of 60 s), the agent falls back to its rule-based ranking and
-logs `llm_error`; the interface shows a warning for those clauses.
+**Depth and pool size** were chosen on the three labelled sets, locally (rule lists only, no LLM). Share of the
+expected articles that reach the candidate pool:
+
+| Search depth (pool 14) | BlomInvest | KB queries | Mulkia |
+|---|---|---|---|
+| 10 (previous) | 0.889 | 0.969 | 0.824 |
+| **20** | **0.914** | **0.980** | **0.869** |
+| 30 | 0.864 | 0.958 | 0.784 |
+
+At depth 30 weaker results crowd the right articles out of the fused pool. At depth 20, pools of 14 / 16 / 18 / 20
+reach 0.914 / 0.914 / 0.934 / 0.949 (BlomInvest) and 0.869 / 0.892 / 0.905 / 0.914 (Mulkia): 18 keeps most of the gain
+for ~10% fewer tokens and less noise than 20.
+Letting the cross-encoder re-score the top 40 first-stage results instead of 20 was tried and rejected: pool
+recall +0.036 on BlomInvest but −0.004 on the KB queries and −0.022 on Mulkia (held out).
 
 ## Evaluation
 
-Section-level metrics: a clause is a hit if any expected article appears at that rank.
+`pipeline/test_agent.py` measures each stage separately (section level; a clause is a hit if any expected article
+appears at that rank): **pool recall** (retrieval, before the LLM, against plain search at the same depth),
+**selection** recall and precision, and the **final ranking** (Hit@1/3/5, MRR, Cov@5 = share of the expected
+articles in the top 5). A run is valid only if every clause went through both LLM steps; otherwise it is reported
+as INVALID with the failing clauses, and exits with code 2. Labels that can never be retrieved are reported, with
+every metric also given without them; labels are never changed by the script.
 
-| Set (clauses) | Plain search Hit@1 / MRR | Agent + GPT-4o Hit@1 / MRR | `confirmed_by_llm` accuracy |
-|---|---|---|---|
-| Knowledge-base queries (36) | 0.889 / 0.933 | **0.944 / 0.972** | 28/28 |
-| Real private-fund T&C, BlomInvest (33) | 0.727 / 0.833 | **0.909 / 0.939** | 21/21 |
-| Second private-fund T&C, Mulkia (37), held out | 0.514 / 0.608 | **0.784 / 0.867** ¹ | 9/9 |
+Previous agent (tool-calling LLM step, before this redesign), GPT-4o, all clauses valid:
 
-¹ Measured before the reference-mismatch fix (the four remaining reference errors are what it targets); re-run with
-`cd pipeline && python test_agent.py --llm --sets mulkia` once API credit is available.
+| Set (clauses) | Plain search Hit@1 / MRR / Cov@5 | Previous agent Hit@1 / MRR / Cov@5 |
+|---|---|---|
+| Knowledge-base queries (36) | 0.889 / 0.933 / 0.889 | 0.972 / 0.986 / 0.924 |
+| Real private-fund T&C, BlomInvest (33) | 0.727 / 0.833 / 0.783 | 0.909 / 0.939 / 0.864 |
+| Second private-fund T&C, Mulkia (37), held out | 0.514 / 0.608 / 0.541 | 0.784 / 0.860 / 0.802 |
 
-- The rule-based agent alone does not beat plain search; the gain comes from the LLM step. When rules and LLM agree,
-  the top article was right in every evaluated case, so `uncertain` is a useful "needs review" signal.
-- Labels were made by one person; the Mulkia labels are strict (the specific governing article; Annex 11 only when no
-  specific article exists). The BlomInvest set was also used to tune the agent's prompt; Mulkia was not.
+The redesigned agent has not been evaluated with the LLM yet: `cd pipeline && python test_agent.py --llm --sets blom
+kb mulkia`. Offline checks: `cd pipeline && python -m pytest tests -q` (stand-in LLM, no API).
+
+- Labels were made by one person; the BlomInvest set was also used to tune the agent's prompts, Mulkia was not.
+- Known label issues, for review (not changed): IFR-art075 (public funds, unreachable) in B21 and C045; IFR-art086
+  (real-estate funds) in C046; different conventions between the sets for Annex 11 (e.g. fees, conflict of interest)
+  and for valuation errors (B21 vs C045). Details: `docproc/testset/eval/label_audit.md`.
 - Reports: `output/07_retrieval_eval` (search), `output/09_agent_eval` (agent). Test T&Cs, their labels and their
   reports stay out of the repo (`docproc/testset/`, git-ignored).
 
@@ -122,7 +145,8 @@ Section-level metrics: a clause is a hit if any expected article appears at that
 - **Compliance Verification Agent** (next phase): judge each clause as Compliant / Violation / Needs Review with
   quotations. It also needs a checklist of mandatory requirements (Annex 11, arts 80–98) to detect *missing* clauses,
   which clause-by-clause retrieval cannot find.
-- Text extraction maps `ق` to `ة` in some PDF fonts (`حةوق`); this weakens lexical matching.
+- Some PDF fonts store `ق` as `ة` (`حةوق`); docproc now repairs it inside words, but not when two words are glued
+  (`…ةال…`), and similar lam ligature errors (`المخحق`) remain.
 - Segmentation sometimes merges the front matter or trailing sections (Shariah controls, complaints) into one clause.
 - LLM results vary by a clause or two between runs; `segmentation_agent.py` still retries on HTTP 429 even when the
   account has no credit.
