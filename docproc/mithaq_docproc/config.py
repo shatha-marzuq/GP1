@@ -20,7 +20,8 @@ class Config:
     ocr_engine: str = "auto"          
     ocr_tables: bool = True
     ocr_lexicon_correction: bool = True
-    lexicon_dirs: tuple = ("lexicon",) 
+    lexicon_dirs: tuple = ("lexicon",)
+    ocr_dpi: int = 300
     ocr_max_side_px: int = 4200
     paddle_lang: str = "ar"
     tesseract_lang: str = "ara+eng"
