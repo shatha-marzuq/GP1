@@ -72,6 +72,7 @@ MAX_SELECTED = 8        # a clause may have up to 4 topics, each with its provis
 EXCERPT_CHARS = 1100    # of each candidate shown to the LLM: its paragraphs most related to the clause
 CLAUSE_CHARS = 3000
 CACHE_VERSION = "3"     # bump when the meaning of a cached answer changes without the request changing
+CATALOGUE_EXTRA = {"CMIR-art031", "CMIR-art063"}   # CMIR provisions listed in the step-1 catalogue
 LETTER_ITEM = re.compile(r"^\s*\(?[\u0621-\u064A]{1,2}\)\s")   # "أ) " "هـ) " starts a paragraph of an article
 
 UNDERSTAND_PROMPT = """You help the Regulatory Retrieval Agent of MITHAQ find the Capital Market Authority (CMA)
@@ -83,6 +84,9 @@ Read the clause and return JSON:
 - topics: the 1-{max_topics} distinct regulatory subjects the clause deals with (for example: the cap on retail
   investors, the minimum fund size, extending the offering period). Return [] for text with no regulatory subject
   (addresses, contact details, a table of contents, "not applicable").
+  A clause that limits or excludes the fund manager's liability, makes investors waive rights or claims, or makes
+  an investor right lapse (e.g. losing the right to object by not attending a meeting) ALWAYS has regulatory
+  subjects: the manager's liability, the nullity of liability exemptions, unitholders' rights. Never return [] for it.
   "topic": a short Arabic label (2-6 words).
   "query": an Arabic search query (8-20 words) in the regulations' own terminology: name the regulated concept the
   way the regulations name it (the catalogue titles below show their vocabulary) and add its synonyms; do not copy
@@ -94,7 +98,8 @@ Read the clause and return JSON:
 Annex 11 — contents required in a private fund's T&C:
 {items}
 
-Catalogue — Investment Funds Regulations provisions that apply to private funds (key: title):
+Catalogue — Investment Funds Regulations provisions that apply to private funds, plus key Capital Market
+Institutions Regulations provisions (key: title):
 {catalogue}"""
 
 SELECT_PROMPT = """You are the Regulatory Retrieval Agent of MITHAQ. For one clause of the Terms and Conditions of a
@@ -293,9 +298,12 @@ class RetrievalAgent:
             self.annex_titles.setdefault(n, t)
         self.items_text = "\n".join(f"{n}) {t}" for n, t in sorted(self.annex_titles.items()))
         # IFR provisions that govern private funds, shown to the LLM so its queries use the regulation's vocabulary
+        # + a few CMIR provisions T&C clauses often need but plain search misses (e.g. art 31: liability exemptions
+        #   are void; art 63: complaints), so the LLM can name them in step 1
         self.catalogue = "\n".join(f"{key}: {m.get('section_title')}" for key, m in first.items()
-                                   if m["doc_id"] == "investment_funds_regulations" and m.get("section_title")
-                                   and self.r._allowed(m, None, None, None, "private"))
+                                   if m.get("section_title") and (key in CATALOGUE_EXTRA or (
+                                       m["doc_id"] == "investment_funds_regulations"
+                                       and self.r._allowed(m, None, None, None, "private"))))
         self._paras, self._vecs = {}, {}                       # unit → paragraphs / their embeddings (memo)
 
     # ---------------------------------------------------------------- tools
