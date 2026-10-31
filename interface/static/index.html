@@ -402,7 +402,6 @@ tr:last-child td{border-bottom:0}
           <p class="sub">كل بند من المستند بجانب المواد النظامية التي تنطبق عليه. الحكم على امتثال البند مرحلة لاحقة.</p>
         </div>
         <div style="display:flex;gap:8px">
-          <a class="btn ghost" id="r-json" href="#" download>تنزيل النتائج (JSON)</a>
           <button class="btn primary" data-go="upload">مراجعة مستند آخر</button>
         </div>
       </div>
@@ -571,13 +570,12 @@ async function openReview(id){
 // ───────── results
 // provisions the agent selected for a clause, then the other candidates (plain search: everything is "selected")
 const chosen = c => c.regulations.filter(g => g.selected !== false);
-const others = c => c.regulations.filter(g => g.selected === false);
+// candidates the agent did not select are no longer shown (they added noise for the reviewer)
 
 function renderResults(r){
   result = r; show("results");
   const o = r.output, cl = o.clauses;
   $("#r-title").textContent = r.filename;
-  $("#r-json").href = `/api/reviews/${r.id}/json`;
   $("#r-stub").classList.toggle("hidden", r.mode!=="stub");
   const warn = (o.document_warnings||[]).map(w => typeof w==="string" ? w : (w.message_ar||w.code));
   if (o.document_needs_review) warn.unshift("بعض صفحات المستند تحتاج مراجعة بشرية بعد الـ OCR.");
@@ -652,7 +650,7 @@ function loadFull(g){
 }
 
 function drawClause(){
-  const cl = result.output.clauses, c = cl[CUR], sel = chosen(c), rest = others(c), all = sel.concat(rest);
+  const cl = result.output.clauses, c = cl[CUR], sel = chosen(c), rest = [], all = sel.concat(rest);
   const g = all[ART];
   $("#pane").innerHTML = `
     <div class="pane-h"><div>
@@ -670,7 +668,7 @@ function drawClause(){
       <div>
         <div class="lbl">المواد النظامية المرتبطة</div>
         ${sel.length ? `<div class="arts">${sel.map((x,j)=>artCard(x,j)).join("")}</div>`
-                     : `<div class="none">لم يختر الوكيل مادة تنطبق مباشرة على هذا البند. هذه المواد التي وجدها البحث:</div>`}
+                     : `<div class="none">لم يختر الوكيل مادة تنطبق مباشرة على هذا البند.</div>`}
         ${rest.length ? (sel.length ? `<details class="more"${ART>=sel.length?" open":""}><summary>مرشحات أخرى من البحث لم يخترها الوكيل (${rest.length})</summary><div class="arts">${rest.map((x,j)=>artCard(x,j+sel.length)).join("")}</div></details>`
                                     : `<div class="arts">${rest.map((x,j)=>artCard(x,j)).join("")}</div>`) : ""}
         ${g ? `<div class="reader"><div class="rh"><b>${esc(g.heading||g.citation)}</b><small>${esc(g.citation)}${g.page_start!=null?` · ${pages(g.page_start,g.page_end)} في وثيقة الهيئة`:""}${g.selected===false?" · لم يخترها الوكيل":""}</small></div>
