@@ -294,8 +294,8 @@ def get_review(review_id: str, user=Depends(current_user)):
 
 
 def for_browser(output):
-    """What the results page needs: the saved review (and its JSON download) keep everything, but the page gets
-    no agent trace and no excerpt except for the provisions the agent selected (others are fetched when opened)."""
+    """What the results page needs: the saved review keeps everything, but the page gets no agent trace and
+    no excerpt except for the provisions the agent selected (others are fetched when opened)."""
     if not output:
         return output
     clauses = []
@@ -306,13 +306,8 @@ def for_browser(output):
     return output | {"clauses": clauses}
 
 
-@app.get("/api/reviews/{review_id}/json")
-def download(review_id: str, user=Depends(current_user)):
-    r = REVIEWS.get(review_id)
-    if not r or not r.get("output") or not mine(r, user):
-        raise HTTPException(404, "لا توجد نتائج")
-    return JSONResponse(r["output"], headers={
-        "Content-Disposition": f'attachment; filename="mithaq-{review_id}.json"'})
+# The JSON export (/api/reviews/{id}/json) was removed: compliance officers don't need it. Reviews are still
+# saved to data/<id>.json on the server so they survive a restart.
 
 
 @app.delete("/api/reviews/{review_id}")
