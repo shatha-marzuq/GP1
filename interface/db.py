@@ -96,13 +96,12 @@ class Review(Base):
     total: Mapped[int] = mapped_column(Integer, default=0)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
     mode: Mapped[str | None] = mapped_column(String(20), nullable=True)
-    llm: Mapped[str | None] = mapped_column(String(100), nullable=True)
     stats: Mapped[dict | None] = mapped_column(JsonType, nullable=True)      # counts for the reviews list
     # the full result (clauses + regulations) is large: loaded only when one review is opened
     output: Mapped[dict | None] = mapped_column(JsonType, nullable=True, deferred=True)
 
     FIELDS = ("id", "owner", "filename", "size", "file_path", "host", "created", "finished", "status",
-              "done", "total", "error", "mode", "llm", "stats")
+              "done", "total", "error", "mode", "stats")
 
     def as_dict(self, with_output: bool = False) -> dict:
         d = {f: getattr(self, f) for f in self.FIELDS}

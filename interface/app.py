@@ -208,7 +208,7 @@ def output_stats(out):
 
 def summary(r):
     return {k: r.get(k) for k in ("id", "filename", "size", "created", "finished", "status", "done", "total",
-                                  "error", "mode", "llm")} | (r.get("stats") or output_stats(None))
+                                  "error", "mode")} | (r.get("stats") or output_stats(None))
 
 
 # ─────────────────────────────────────────── API ───────────────────────────────────────────
@@ -383,8 +383,7 @@ async def upload(file: UploadFile = File(...), user=Depends(current_user)):
     dest.write_bytes(data)
     with db.session() as s:
         s.add(db.Review(id=review_id, owner=user["id"], filename=name, size=len(data), file_path=str(dest),
-                        host=HOST, created=time.time(), status="received", done=0, total=0, mode=MODE,
-                        llm=ENGINE["llm"]))
+                        host=HOST, created=time.time(), status="received", done=0, total=0, mode=MODE))
     threading.Thread(target=run_review, args=(review_id, dest), daemon=True).start()
     return {"id": review_id}
 
