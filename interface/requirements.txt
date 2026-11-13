@@ -2,3 +2,7 @@
 fastapi
 uvicorn
 python-multipart
+# قاعدة البيانات (db.py): SQLite محلياً، أو PostgreSQL (Supabase) لو DATABASE_URL موجود في .env
+sqlalchemy>=2.0
+psycopg[binary]>=3.2
+python-dotenv

@@ -23,3 +23,6 @@ interface/data/
 # LLM answers cached by the retrieval agent, and the local vLLM log
 output/llm_cache/
 output/vllm.log
+
+# accounts (old phone-number accounts; accounts are in the database now)
+interface/accounts/

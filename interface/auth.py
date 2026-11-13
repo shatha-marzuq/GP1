@@ -1,27 +1,35 @@
-"""Compliance-officer accounts for the MITHAQ interface: sign up (name, phone number, password),
-log in with phone number + password, log out.
+"""Compliance-officer accounts for the MITHAQ interface: sign up (name, email, password) confirmed by a code
+sent to the email (mailer.py), log in with email + password, log out.
 
-Verifying the phone number with a one-time SMS code (2FA) is planned for the next sprint, together with
-the real backend database; accounts live in accounts/users.json until then.
+Sign-up is two steps: signup() checks the details and emails a 6-digit code (the details wait in
+pending_signups), verify() checks the code and only then creates the account.
+Accounts and login sessions live in the database (db.py), so a team sharing one DATABASE_URL shares them.
 """
 from __future__ import annotations
 
 import hashlib
 import hmac
-import json
 import re
 import secrets
 import threading
 import time
 import uuid
-from pathlib import Path
 
-STORE = Path(__file__).resolve().parent / "accounts" / "users.json"
-LOGIN_FAILS, LOCK_FOR = 5, 5 * 60   # wrong passwords before the number is locked, and for how long
+from sqlalchemy import delete, select
+from sqlalchemy.exc import IntegrityError
+
+import db
+import mailer
+
+LOGIN_FAILS, LOCK_FOR = 5, 5 * 60   # wrong passwords before the email is locked, and for how long
 SESSION_TTL = 8 * 3600
+CODE_TTL = 10 * 60                  # a code works for 10 minutes
+CODE_TRIES = 5                      # wrong codes before a new one must be requested
+RESEND_AFTER = 60                   # seconds before another code can be sent
+PENDING_TTL = 30 * 60               # a sign-up not confirmed within 30 minutes starts over
 
 ARABIC_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
-PHONE = re.compile(r"^(?:\+?966|00966|0)?(5\d{8})$")
+EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$")
 
 
 class AuthError(Exception):
@@ -30,10 +38,13 @@ class AuthError(Exception):
         self.message, self.status = message, status
 
 
-def normalize_phone(raw):
-    """05xxxxxxxx / 5xxxxxxxx / +9665xxxxxxxx (Arabic digits too) → 9665xxxxxxxx, or None."""
-    m = PHONE.match(re.sub(r"[\s\-()]", "", (raw or "").translate(ARABIC_DIGITS)))
-    return "966" + m.group(1) if m else None
+TAKEN = AuthError("هذا الإيميل مسجّل مسبقًا. سجّل الدخول بدلًا من ذلك.", 409)
+EXPIRED = AuthError("انتهت مهلة التسجيل. عبّئ بيانات إنشاء الحساب من جديد.", 410)
+
+
+def normalize_email(raw):
+    e = (raw or "").strip().lower()
+    return e if len(e) <= 254 and EMAIL.match(e) else None
 
 
 def hash_password(password, salt=None):
@@ -42,6 +53,8 @@ def hash_password(password, salt=None):
 
 
 def check_password(password, stored):
+    if "$" not in (stored or ""):
+        return False
     salt, _ = stored.split("$", 1)
     return hmac.compare_digest(hash_password(password, salt), stored)
 
@@ -54,67 +67,166 @@ def password_problem(pw):
     return None
 
 
+def _as_dict(u: db.User) -> dict:
+    return {"id": u.id, "name": u.name, "email": u.email, "password": u.password, "created": u.created}
+
+
 class Accounts:
-    def __init__(self, store=STORE):
-        self.store = store
+    def __init__(self):
         self.lock = threading.Lock()
-        self.users = json.loads(store.read_text(encoding="utf-8")) if store.exists() else {}
-        self.sessions: dict[str, dict] = {}
-        self.fails: dict[str, list] = {}      # phone -> [wrong passwords, locked until]
+        self.fails: dict[str, list] = {}      # email -> [wrong passwords, locked until]  (per server, in memory)
 
-    def _save(self):
-        self.store.parent.mkdir(exist_ok=True)
-        self.store.write_text(json.dumps(self.users, ensure_ascii=False, indent=1), encoding="utf-8")
-
-    def _session(self, user):
+    @staticmethod
+    def _session(s, user: db.User):
         token = secrets.token_urlsafe(32)
-        self.sessions[token] = {"phone": user["phone"], "expires": time.time() + SESSION_TTL}
-        return token, self.public(user)
+        s.add(db.LoginSession(token=token, user_id=user.id, expires=time.time() + SESSION_TTL))
+        return token, Accounts.public(_as_dict(user))
 
     @staticmethod
     def public(user):
-        return {"id": user["id"], "name": user["name"], "phone": "0" + user["phone"][3:]}
+        return {"id": user["id"], "name": user["name"], "email": user["email"]}
 
-    def signup(self, name, phone_raw, password):
+    # ─────────── sign-up, step 1: check the details and email the code
+    def signup(self, name, email_raw, password):
         name = (name or "").strip()
-        phone = normalize_phone(phone_raw)
+        email = normalize_email(email_raw)
         if len(name) < 2:
             raise AuthError("اكتب الاسم الكامل.")
-        if not phone:
-            raise AuthError("رقم الجوال غير صحيح. مثال: 05XXXXXXXX")
+        if not email:
+            raise AuthError("الإيميل غير صحيح. مثال: name@example.com")
         if problem := password_problem(password):
             raise AuthError(problem)
-        with self.lock:
-            if phone in self.users:
-                raise AuthError("هذا الرقم مسجّل مسبقًا. سجّل الدخول بدلًا من ذلك.", 409)
-            user = {"id": uuid.uuid4().hex[:10], "name": name, "phone": phone,
-                    "password": hash_password(password), "created": time.time()}
-            self.users[phone] = user
-            self._save()
-            return self._session(user)
+        if not mailer.configured():                  # no email account in .env: no code, the account is made now
+            return self._create(email, name, hash_password(password))
+        with db.session() as s:
+            if s.scalar(select(db.User).where(db.User.email == email)):
+                raise TAKEN
+            pending = s.get(db.PendingSignup, email)
+            if pending is None or pending.created + PENDING_TTL < time.time():
+                if pending is not None:
+                    s.delete(pending)
+                    s.flush()
+                pending = db.PendingSignup(email=email, created=time.time(), last_sent=0.0)
+                s.add(pending)
+            self._wait_before_resend(pending)
+            pending.name, pending.password = name, hash_password(password)   # the latest details count
+            self._send_code(pending)
+        return self._pending_view(email)
 
-    def login(self, phone_raw, password):
-        phone = normalize_phone(phone_raw)
+    def _create(self, email, name, password_hash):
+        """Sign-up without the email code (SMTP not set up): create the account and log in.
+        Returns (session, user) like verify()."""
+        try:
+            with db.session() as s:
+                if s.scalar(select(db.User).where(db.User.email == email)):
+                    raise TAKEN
+                user = db.User(id=uuid.uuid4().hex[:10], name=name, email=email, password=password_hash,
+                               created=time.time())
+                s.add(user)
+                s.flush()                         # the user row first, then its session (foreign key)
+                return self._session(s, user)
+        except IntegrityError:
+            raise TAKEN
+
+    # ─────────── sign-up, step 1b: email a new code
+    def resend(self, email_raw):
+        email = normalize_email(email_raw)
+        with db.session() as s:
+            pending = self._pending(s, email)
+            self._wait_before_resend(pending)
+            self._send_code(pending)
+        return self._pending_view(email)
+
+    # ─────────── sign-up, step 2: check the code, then create the account and log in
+    def verify(self, email_raw, code):
+        email = normalize_email(email_raw)
+        code = re.sub(r"\s", "", (code or "").translate(ARABIC_DIGITS))
+        if not re.fullmatch(r"\d{6}", code):
+            raise AuthError("اكتب الرمز المكوّن من 6 أرقام اللي وصلك بالإيميل.")
+        try:
+            with db.session() as s:
+                pending = self._pending(s, email)
+                if pending.attempts >= CODE_TRIES:
+                    raise AuthError("أدخلت رمزًا خاطئًا مرات كثيرة. اطلب رمزًا جديدًا.", 429)
+                if pending.code_expires < time.time():
+                    raise AuthError("انتهت صلاحية الرمز. اطلب رمزًا جديدًا.")
+                if not check_password(code, pending.code):
+                    pending.attempts += 1
+                    s.commit()                    # keep the count even though we answer with an error
+                    raise AuthError("الرمز غير صحيح.")
+                if s.scalar(select(db.User).where(db.User.email == email)):
+                    raise TAKEN
+                user = db.User(id=uuid.uuid4().hex[:10], name=pending.name, email=email,
+                               password=pending.password, created=time.time())
+                s.add(user)
+                s.delete(pending)
+                s.flush()                         # the user row first, then its session (foreign key)
+                return self._session(s, user)
+        except IntegrityError:                    # the same email confirmed on another device at the same moment
+            raise TAKEN
+
+    # ─────────── log in / out
+    def login(self, email_raw, password):
+        email = normalize_email(email_raw)
         with self.lock:
-            fails, until = self.fails.get(phone, [0, 0])
+            fails, until = self.fails.get(email, [0, 0])
             if until > time.time():
                 raise AuthError(f"محاولات كثيرة خاطئة. حاول بعد {int((until - time.time()) // 60) + 1} دقائق.", 429)
-            user = self.users.get(phone)
-            if not user or not check_password(password or "", user["password"]):
-                fails += 1
-                self.fails[phone] = [0, time.time() + LOCK_FOR] if fails >= LOGIN_FAILS else [fails, 0]
-                raise AuthError("رقم الجوال أو كلمة المرور غير صحيحة.", 401)
-            self.fails.pop(phone, None)
-            return self._session(user)
+        with db.session() as s:
+            user = s.scalar(select(db.User).where(db.User.email == email)) if email else None
+            if not user or not check_password(password or "", user.password):
+                with self.lock:
+                    fails += 1
+                    self.fails[email] = [0, time.time() + LOCK_FOR] if fails >= LOGIN_FAILS else [fails, 0]
+                raise AuthError("الإيميل أو كلمة المرور غير صحيحة.", 401)
+            with self.lock:
+                self.fails.pop(email, None)
+            return self._session(s, user)
 
     def user_for(self, session):
-        with self.lock:
-            s = self.sessions.get(session or "")
-            if not s or s["expires"] < time.time():
-                self.sessions.pop(session or "", None)
+        if not session:
+            return None
+        with db.session() as s:
+            row = s.get(db.LoginSession, session)
+            if not row:
                 return None
-            return self.users.get(s["phone"])
+            if row.expires < time.time():
+                s.delete(row)
+                return None
+            user = s.get(db.User, row.user_id)
+            return _as_dict(user) if user else None
 
     def logout(self, session):
-        with self.lock:
-            self.sessions.pop(session or "", None)
+        with db.session() as s:
+            s.execute(delete(db.LoginSession).where(db.LoginSession.token == (session or "")))
+
+    # ─────────── helpers
+    @staticmethod
+    def _send_code(pending):
+        code = f"{secrets.randbelow(10 ** 6):06d}"
+        try:
+            mailer.send_code(pending.email, pending.name, code, CODE_TTL // 60)
+        except mailer.MailError as e:
+            raise AuthError(e.message_ar, e.status)
+        pending.code, pending.code_expires = hash_password(code), time.time() + CODE_TTL
+        pending.attempts, pending.last_sent = 0, time.time()
+
+    @staticmethod
+    def _wait_before_resend(pending):
+        wait = int(pending.last_sent + RESEND_AFTER - time.time())
+        if wait > 0:
+            raise AuthError(f"انتظر {wait} ثانية قبل طلب رمز جديد.", 429)
+
+    @staticmethod
+    def _pending(s, email):
+        pending = s.get(db.PendingSignup, email) if email else None
+        if pending is None or pending.created + PENDING_TTL < time.time():
+            if pending is not None:
+                s.delete(pending)
+                s.commit()
+            raise EXPIRED
+        return pending
+
+    @staticmethod
+    def _pending_view(email):
+        return {"verify": True, "email": email, "resend_after": RESEND_AFTER}

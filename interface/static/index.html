@@ -38,6 +38,8 @@ svg{flex:none}
 .btn.block{width:100%;height:50px;border-radius:999px;font-size:15px}
 .link{color:var(--g-700);font-weight:600;display:inline-flex;align-items:center;gap:6px}
 .link:hover{color:var(--g-500)}
+button.link{border:0;background:none;padding:0;font:inherit;cursor:pointer}
+button.link:disabled{color:var(--faint);cursor:default}
 .field{position:relative}
 .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink)}
 .field .ic{position:absolute;inset-inline-end:14px;bottom:13px;color:var(--faint)}
@@ -295,19 +297,25 @@ svg{flex:none}
         <h1>مرحبًا بك في ميثاق</h1>
         <p class="sub" id="a-sub">سجّل دخولك لمتابعة مراجعة مستنداتك</p>
         <form class="form" id="f-login" autocomplete="on">
-          <div class="field"><label>رقم الجوال</label><input class="input ltr" name="phone" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" required><span class="ic" data-i="phone"></span></div>
+          <div class="field"><label>الإيميل</label><input class="input ltr" name="email" type="email" placeholder="name@example.com" autocomplete="email" required><span class="ic" data-i="mail"></span></div>
           <div class="field"><label>كلمة المرور</label><input class="input" name="password" type="password" autocomplete="current-password" required><span class="ic" data-i="lock"></span></div>
           <div class="err hidden"></div>
           <button class="btn primary block" type="submit">دخول</button>
         </form>
         <form class="form hidden" id="f-signup" autocomplete="on">
           <div class="field"><label>الاسم الكامل</label><input class="input" name="name" autocomplete="name" required><span class="ic" data-i="user"></span></div>
-          <div class="field"><label>رقم الجوال</label><input class="input ltr" name="phone" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" required><span class="ic" data-i="phone"></span></div>
+          <div class="field"><label>الإيميل</label><input class="input ltr" name="email" type="email" placeholder="name@example.com" autocomplete="email" required><span class="ic" data-i="mail"></span></div>
           <div class="field"><label>كلمة المرور</label><input class="input" name="password" type="password" autocomplete="new-password" required><span class="ic" data-i="lock"></span></div>
           <div class="hint" style="margin-top:-10px">8 خانات على الأقل، تجمع بين حروف وأرقام</div>
           <div class="field"><label>تأكيد كلمة المرور</label><input class="input" name="confirm" type="password" autocomplete="new-password" required><span class="ic" data-i="lock"></span></div>
           <div class="err hidden"></div>
           <button class="btn primary block" type="submit">إنشاء الحساب</button>
+        </form>
+        <form class="form hidden" id="f-code" autocomplete="off">
+          <div class="field"><label>رمز التحقق</label><input class="input ltr" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••" required><span class="ic" data-i="shield"></span></div>
+          <div class="err hidden"></div>
+          <button class="btn primary block" type="submit">تأكيد الرمز</button>
+          <div class="hint">ما وصلك؟ شوف مجلد الرسائل غير المرغوبة (Spam)، أو <button class="link" type="button" id="code-resend">أعد إرسال الرمز</button> <span id="code-timer"></span> · <button class="link" type="button" id="code-back">تعديل البيانات</button></div>
         </form>
       </div>
     </div>
@@ -445,6 +453,7 @@ let OPEN = new Set(), OPENART = new Set(), CLOSEDSEC = new Set();
 const P = {
   phone:'<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
   lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
@@ -496,6 +505,7 @@ function enter(u){
   result = null; show("dash");
 }
 function tab(t){
+  clearInterval(codeTimer); $(".tabs").classList.remove("hidden"); $("#f-code").classList.add("hidden");
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on", b.dataset.tab===t));
   $("#f-login").classList.toggle("hidden", t!=="login"); $("#f-signup").classList.toggle("hidden", t!=="signup");
   $("#a-sub").textContent = t==="login" ? "سجّل دخولك لمتابعة مراجعة مستنداتك" : "أنشئ حسابك كموظف امتثال للبدء في ميثاق";
@@ -505,15 +515,47 @@ function fail(form, msg){ const e = form.querySelector(".err"); e.textContent = 
 document.querySelector(".tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) tab(b.dataset.tab); });
 $("#f-login").addEventListener("submit", async e => {
   e.preventDefault(); const f = e.target;
-  const r = await post("/api/auth/login", {phone:f.phone.value, password:f.password.value}); const j = await r.json();
+  const r = await post("/api/auth/login", {email:f.email.value, password:f.password.value}); const j = await r.json();
   r.ok ? enter(j) : fail(f, j.detail);
 });
 $("#f-signup").addEventListener("submit", async e => {
   e.preventDefault(); const f = e.target;
   if (f.password.value !== f.confirm.value) return fail(f, "كلمتا المرور غير متطابقتين.");
-  const r = await post("/api/auth/signup", {name:f.name.value, phone:f.phone.value, password:f.password.value}); const j = await r.json();
-  r.ok ? enter(j) : fail(f, j.detail);
+  const b = f.querySelector("button[type=submit]"); b.disabled = true;     // sending the email takes a few seconds
+  const r = await post("/api/auth/signup", {name:f.name.value, email:f.email.value, password:f.password.value}); const j = await r.json();
+  b.disabled = false;
+  if (!r.ok) fail(f, j.detail); else j.verify ? showCode(j) : enter(j);   // no code when email isn't set up
 });
+
+// sign-up step 2: the code sent by email (the account is created only after it is confirmed)
+let codeEmail = null, codeTimer = null;
+function showCode(j){
+  codeEmail = j.email;
+  $(".tabs").classList.add("hidden"); $("#f-signup").classList.add("hidden"); $("#f-code").classList.remove("hidden");
+  $("#a-sub").textContent = `أرسلنا رمز تحقق من 6 أرقام إلى ${j.email}. اكتبه هنا لإكمال إنشاء الحساب.`;
+  $("#f-code").reset(); $("#f-code .err").classList.add("hidden"); $("#f-code").code.focus();
+  countdown(j.resend_after);
+}
+function countdown(sec){
+  clearInterval(codeTimer); const b = $("#code-resend"), t = $("#code-timer"); b.disabled = true;
+  const tick = () => { if (sec <= 0){ clearInterval(codeTimer); b.disabled = false; t.textContent = ""; return; }
+                       t.textContent = `(بعد ${sec} ثانية)`; sec--; };
+  tick(); codeTimer = setInterval(tick, 1000);
+}
+$("#f-code").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target;
+  const r = await post("/api/auth/verify", {email:codeEmail, code:f.code.value}); const j = await r.json();
+  if (r.ok) { clearInterval(codeTimer); enter(j); }
+  else if (r.status===410) { tab("signup"); fail($("#f-signup"), j.detail); }
+  else fail(f, j.detail);
+});
+$("#code-resend").addEventListener("click", async () => {
+  $("#code-resend").disabled = true;
+  const r = await post("/api/auth/resend", {email:codeEmail}); const j = await r.json();
+  if (r.ok) { $("#f-code .err").classList.add("hidden"); countdown(j.resend_after); }
+  else { $("#code-resend").disabled = false; r.status===410 ? (tab("signup"), fail($("#f-signup"), j.detail)) : fail($("#f-code"), j.detail); }
+});
+$("#code-back").addEventListener("click", () => tab("signup"));
 $("#logout").addEventListener("click", async () => { await post("/api/auth/logout"); showAuth(); });
 
 // ───────── navigation

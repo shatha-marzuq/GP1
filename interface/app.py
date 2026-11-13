@@ -1,6 +1,6 @@
 """MITHAQ demo interface: upload a T&C file, watch it go through the orchestrator, browse the clauses
-with their closest CMA regulations.  Compliance officers sign up / log in with phone number + password
-(auth.py) and each sees their own reviews.
+with their closest CMA regulations.  Compliance officers sign up with email + password (confirmed by a code
+sent to the email) and log in with email + password (auth.py); each sees their own reviews.
 
     cd interface
     python app.py                    # Regulatory Retrieval Agent + its LLM step (OpenAI, key in .env)
@@ -15,8 +15,8 @@ Then open http://127.0.0.1:8000
 from __future__ import annotations
 
 import argparse
-import json
 import re
+import socket
 import sys
 import threading
 import time
@@ -37,10 +37,13 @@ from fastapi.responses import FileResponse, JSONResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
-import auth  # noqa: E402
+from sqlalchemy import or_, select  # noqa: E402
 
-UPLOADS = HERE / "uploads"
-DATA = HERE / "data"            # finished reviews, so they survive a restart (handy before a demo)
+import auth  # noqa: E402
+import db  # noqa: E402
+
+UPLOADS = HERE / "uploads"      # uploaded files stay on the device that processed them; reviews go to the database
+HOST = socket.gethostname()
 ALLOWED = {".pdf", ".docx"}
 K = 5
 
@@ -90,31 +93,35 @@ def attach_llm(agent):
 
 
 # ─────────────────────────────────────────── reviews ───────────────────────────────────────────
-REVIEWS: dict[str, dict] = {}
+# Reviews live in the database (db.py). LOCK keeps this server's progress updates for one review in order.
 LOCK = threading.Lock()
+RUNNING = ("received", "extracting", "segmenting", "retrieving")
 
 
-def load_saved():
-    DATA.mkdir(exist_ok=True)
-    for f in DATA.glob("*.json"):
-        r = json.loads(f.read_text(encoding="utf-8"))
-        REVIEWS[r["id"]] = r
-
-
-def save(r):
-    DATA.mkdir(exist_ok=True)
-    (DATA / f"{r['id']}.json").write_text(json.dumps(r, ensure_ascii=False), encoding="utf-8")
+def init_db():
+    """Create the tables, bring in the old JSON files, and close reviews this device was processing when it
+    stopped (they would otherwise stay "in progress" forever)."""
+    db.init()
+    with db.session() as s:
+        for r in s.scalars(select(db.Review).where(db.Review.host == HOST, db.Review.status.in_(RUNNING))):
+            r.status, r.error, r.finished = "failed", "توقف الخادم أثناء المعالجة. ارفع الملف مرة ثانية.", time.time()
+        for r in s.scalars(select(db.Review).where(db.Review.stats.is_(None), db.Review.status == "done")):
+            r.stats = output_stats(r.output)                                   # reviews from the JSON files
 
 
 def on_status(review_id, status, **info):
-    with LOCK:
-        r = REVIEWS[review_id]
-        r["status"] = status
+    with LOCK, db.session() as s:
+        r = s.get(db.Review, review_id)
+        if r is None:                                       # deleted while it was running
+            return
+        r.status = status
         if status == "retrieving":
-            r["total"] = info.get("total", r.get("total", 0))
-            r["done"] = info.get("done", 0)
+            if "total" in info:                             # first update: done 0 of total
+                r.total, r.done = info["total"], info.get("done", 0)
+            else:                                           # parallel branches can report out of order
+                r.done = max(r.done or 0, info.get("done", 0))
         if status == "failed":
-            r["error"] = info.get("reason")
+            r.error = info.get("reason")
 
 
 def run_review(review_id, path):
@@ -123,7 +130,6 @@ def run_review(review_id, path):
             on_status(review_id, "failed", reason="تعذر تشغيل محرك البحث في الأنظمة: " + ENGINE["error"])
             return
         time.sleep(0.5)
-    r = REVIEWS[review_id]
     try:
         segment = SegmentationAgent(use_llm=USE_LLM) if SEG_AGENT else default_segment
         graph = build_graph(ENGINE["retriever"], segment=segment, on_status=on_status, k=K,
@@ -133,14 +139,17 @@ def run_review(review_id, path):
     except Exception as e:
         on_status(review_id, "failed", reason=f"{type(e).__name__}: {e}")
         state = {}
-    with LOCK:
+    with LOCK, db.session() as s:
+        r = s.get(db.Review, review_id)
+        if r is None:
+            return
         if state.get("output"):
-            r["output"] = enrich(state["output"])
-            r["status"] = "done"
-        elif r["status"] != "failed":
-            r["status"], r["error"] = "failed", state.get("error") or "لم يُستخرج نص أو بنود من الملف."
-        r["finished"] = time.time()
-        save(r)
+            r.output = enrich(state["output"])
+            r.stats = output_stats(r.output)
+            r.status = "done"
+        elif r.status != "failed":
+            r.status, r.error = "failed", state.get("error") or "لم يُستخرج نص أو بنود من الملف."
+        r.finished = time.time()
 
 
 def cma_pages(pdf_pages):
@@ -183,11 +192,11 @@ def enrich(output):
     return output
 
 
-def summary(r):
-    out = r.get("output") or {}
+def output_stats(out):
+    """Counts shown in the reviews list, saved with the review so the list doesn't load every result."""
+    out = out or {}
     clauses = out.get("clauses", [])
-    return {k: r.get(k) for k in ("id", "filename", "size", "created", "finished", "status", "done", "total",
-                                  "error", "mode", "llm")} | {
+    return {
         "clauses": len(clauses),
         # distinct provisions the agent selected (all retrieved ones for plain search)
         "regulations": len({g.get("section_key") or g["id"] for c in clauses for g in c["regulations"]
@@ -195,6 +204,11 @@ def summary(r):
         "needs_review": out.get("document_needs_review", False),
         "llm_errors": sum(bool(c.get("llm_error")) for c in clauses),   # clauses that fell back to the rules
     }
+
+
+def summary(r):
+    return {k: r.get(k) for k in ("id", "filename", "size", "created", "finished", "status", "done", "total",
+                                  "error", "mode", "llm")} | (r.get("stats") or output_stats(None))
 
 
 # ─────────────────────────────────────────── API ───────────────────────────────────────────
@@ -222,13 +236,22 @@ def mine(r, user):
 
 class SignUp(BaseModel):
     name: str
-    phone: str
+    email: str
     password: str
 
 
 class Login(BaseModel):
-    phone: str
+    email: str
     password: str
+
+
+class Email(BaseModel):
+    email: str
+
+
+class Verify(BaseModel):
+    email: str
+    code: str
 
 
 def start_session(response, session, user):
@@ -238,12 +261,26 @@ def start_session(response, session, user):
 
 @app.post("/api/auth/signup")
 def signup(body: SignUp, response: Response):
-    return start_session(response, *ACCOUNTS.signup(body.name, body.phone, body.password))
+    """With SMTP in .env: checks the details and emails a code; the account is created by /api/auth/verify.
+    Without it: the account is created and logged in right away (no code)."""
+    out = ACCOUNTS.signup(body.name, body.email, body.password)
+    return out if isinstance(out, dict) else start_session(response, *out)
+
+
+@app.post("/api/auth/resend")
+def resend(body: Email):
+    return ACCOUNTS.resend(body.email)
+
+
+@app.post("/api/auth/verify")
+def verify(body: Verify, response: Response):
+    """Step 2: the code from the email. Creates the account and logs in."""
+    return start_session(response, *ACCOUNTS.verify(body.email, body.code))
 
 
 @app.post("/api/auth/login")
 def login(body: Login, response: Response):
-    return start_session(response, *ACCOUNTS.login(body.phone, body.password))
+    return start_session(response, *ACCOUNTS.login(body.email, body.password))
 
 
 @app.post("/api/auth/logout")
@@ -260,7 +297,8 @@ def me(user=Depends(current_user)):
 
 @app.get("/")
 def index():
-    return FileResponse(HERE / "static" / "index.html")
+    # no-cache: the browser always asks for the latest page (an old copy kept the old sign-up screen)
+    return FileResponse(HERE / "static" / "index.html", headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/api/info")
@@ -283,19 +321,29 @@ def article(chunk_id: str, user=Depends(current_user)):
     return {"id": chunk_id, "section_key": key, "full_text": "\n\n".join(strip(base.docs[base.index[i]]) for i in ids)}
 
 
+def owned_by(user):
+    return or_(db.Review.owner == user["id"], db.Review.owner.is_(None))
+
+
+def find_review(s, review_id, user, with_output=False):
+    r = s.get(db.Review, review_id)
+    if r is None or not mine(r.as_dict(), user):
+        raise HTTPException(404, "المراجعة غير موجودة")
+    return r.as_dict(with_output)
+
+
 @app.get("/api/reviews")
 def list_reviews(user=Depends(current_user)):
-    with LOCK:
-        return sorted((summary(r) for r in REVIEWS.values() if mine(r, user)), key=lambda s: -s["created"])
+    with db.session() as s:
+        rows = s.scalars(select(db.Review).where(owned_by(user)).order_by(db.Review.created.desc()))
+        return [summary(r.as_dict()) for r in rows]
 
 
 @app.get("/api/reviews/{review_id}")
 def get_review(review_id: str, user=Depends(current_user)):
-    with LOCK:
-        if review_id not in REVIEWS or not mine(REVIEWS[review_id], user):
-            raise HTTPException(404, "المراجعة غير موجودة")
-        r = REVIEWS[review_id]
-        return summary(r) | {"output": for_browser(r.get("output"))}
+    with db.session() as s:
+        r = find_review(s, review_id, user, with_output=True)
+    return summary(r) | {"output": for_browser(r.get("output"))}
 
 
 def for_browser(output):
@@ -311,17 +359,15 @@ def for_browser(output):
     return output | {"clauses": clauses}
 
 
-# The JSON export (/api/reviews/{id}/json) was removed: compliance officers don't need it. Reviews are still
-# saved to data/<id>.json on the server so they survive a restart.
+# The JSON export (/api/reviews/{id}/json) was removed: compliance officers don't need it. Reviews are
+# saved in the database (db.py), so they survive a restart and the team sees them on every device.
 
 
 @app.delete("/api/reviews/{review_id}")
 def delete(review_id: str, user=Depends(current_user)):
-    with LOCK:
-        if review_id not in REVIEWS or not mine(REVIEWS[review_id], user):
-            raise HTTPException(404, "المراجعة غير موجودة")
-        REVIEWS.pop(review_id)
-    (DATA / f"{review_id}.json").unlink(missing_ok=True)
+    with LOCK, db.session() as s:
+        find_review(s, review_id, user)
+        s.delete(s.get(db.Review, review_id))
     return {"ok": True}
 
 
@@ -335,9 +381,10 @@ async def upload(file: UploadFile = File(...), user=Depends(current_user)):
     dest.parent.mkdir(parents=True, exist_ok=True)
     data = await file.read()
     dest.write_bytes(data)
-    with LOCK:
-        REVIEWS[review_id] = {"id": review_id, "filename": name, "size": len(data), "created": time.time(),
-                              "status": "received", "done": 0, "total": 0, "mode": MODE, "llm": ENGINE["llm"], "owner": user["id"]}
+    with db.session() as s:
+        s.add(db.Review(id=review_id, owner=user["id"], filename=name, size=len(data), file_path=str(dest),
+                        host=HOST, created=time.time(), status="received", done=0, total=0, mode=MODE,
+                        llm=ENGINE["llm"]))
     threading.Thread(target=run_review, args=(review_id, dest), daemon=True).start()
     return {"id": review_id}
 
@@ -352,10 +399,11 @@ def main():
     ap.add_argument("--port", type=int, default=8000)
     a = ap.parse_args()
     MODE, USE_LLM, SEG_AGENT = a.retriever, not a.no_llm, a.seg_agent
-    load_saved()
+    init_db()
     threading.Thread(target=load_engine, daemon=True).start()
     import uvicorn
-    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'}{', segmentation agent' if SEG_AGENT else ''})\n")
+    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'}{', segmentation agent' if SEG_AGENT else ''}"
+          f" | database: {db.describe()})\n")
     uvicorn.run(app, host=a.host, port=a.port, log_level="warning")
 
 
