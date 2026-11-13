@@ -3,418 +3,427 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ميثاق — مراجعة الشروط والأحكام</title>
+<title>ميثاق | منصة الامتثال الذكية</title>
 <link rel="icon" href="/static/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --green-900:#0B3B2C; --green-800:#0E4A37; --green-700:#106047; --green-600:#14785A; --green-500:#1B946F;
+  --g-950:#08291F; --g-900:#0B3B2C; --g-800:#0E4A37; --g-700:#106047; --g-600:#14785A; --g-500:#1B946F;
   --mint-100:#DDF2E8; --mint-50:#EFF8F3;
   --gold-600:#A87A2F; --gold-500:#CF9F55; --gold-300:#E8CC98; --gold-100:#FBF0DA; --gold-50:#FDF8EE;
-  --cream:#FAF6EE; --card:#FFFFFF; --line:#EDE5D4; --line-2:#F3EEE3;
+  --cream:#F7F4EE; --card:#FFFFFF; --line:#ECE6DA; --line-2:#F4F0E8;
   --ink:#1D2A23; --muted:#66706A; --faint:#98A09A;
-  --red:#C2543F; --red-50:#FCEDEA;
-  --shadow:0 1px 2px rgba(16,60,44,.05),0 6px 22px rgba(16,60,44,.06);
-  --r:16px;
+  --red:#C2543F; --red-50:#FCEDEA; --amber:#B7791F; --amber-50:#FFF6E3;
+  --shadow:0 1px 2px rgba(16,60,44,.04),0 8px 28px rgba(16,60,44,.07);
+  --r:18px;
 }
-*{box-sizing:border-box}
-html,body{margin:0}
-body{font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;background:var(--cream);color:var(--ink);font-size:14.5px;line-height:1.7}
-button{font:inherit;cursor:pointer}
-a{color:inherit}
-.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;background:var(--cream);color:var(--ink);font-size:14.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+svg{flex:none}
+.hidden{display:none!important}
+.ltr{direction:ltr;text-align:right}
 
-/* sidebar */
-.side{background:linear-gradient(180deg,#fff 0%,var(--gold-50) 100%);border-inline-start:1px solid var(--line);padding:26px 18px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
-.brand{text-align:center;padding-bottom:18px;border-bottom:1px solid var(--line)}
-.brand img{width:118px;display:block;margin:0 auto 6px}
-.brand small{color:var(--muted);font-size:12px}
-.nav{display:flex;flex-direction:column;gap:6px}
-.nav button{display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:11px 14px;border-radius:12px;color:var(--ink);font-weight:500;text-align:right}
-.nav button:hover{background:var(--mint-50)}
-.nav button.on{background:var(--green-700);color:#fff;box-shadow:0 6px 16px rgba(16,96,71,.25)}
-.nav button.on svg{color:var(--gold-300)}
-.nav button[disabled]{opacity:.55;cursor:default}
-.nav svg{width:18px;height:18px;flex:none}
-.soon{margin-inline-start:auto;font-size:11px;background:var(--gold-100);color:var(--gold-600);padding:1px 8px;border-radius:99px;font-weight:600}
-.scope{margin-top:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:12.5px;color:var(--muted)}
-.scope b{display:block;color:var(--green-700);font-size:12px;margin-bottom:4px}
-.scope strong{color:var(--ink);font-weight:600}
-
-/* main */
-.main{min-width:0}
-.top{display:flex;align-items:center;justify-content:space-between;padding:16px 34px;background:rgba(255,255,255,.75);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-.crumb{color:var(--muted);font-size:13px}
-.crumb b{color:var(--ink);font-weight:600}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--faint)}
-.dot.ok{background:var(--green-500);box-shadow:0 0 0 3px var(--mint-100)}
-.dot.wait{background:var(--gold-500);animation:pulse 1.2s infinite}
-.dot.bad{background:var(--red)}
-@keyframes pulse{50%{opacity:.35}}
-.page{padding:30px 34px 60px;max-width:1280px}
-.eyebrow{color:var(--gold-600);font-size:12.5px;font-weight:600}
-h1{font-size:28px;margin:2px 0 4px;color:var(--green-900)}
-.sub{color:var(--muted);margin:0}
-.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:10px 18px;font-weight:600}
-.btn.primary{background:var(--green-700);color:#fff;box-shadow:0 6px 16px rgba(16,96,71,.22)}
-.btn.primary:hover{background:var(--green-600)}
-.btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
-.btn.ghost:hover{border-color:var(--gold-300)}
-.btn svg{width:16px;height:16px}
-
+/* ─── buttons, inputs ─── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 22px;border-radius:12px;font-weight:600;transition:.15s;white-space:nowrap}
+.btn.primary{background:var(--g-800);color:#fff}
+.btn.primary:hover{background:var(--g-700)}
+.btn.gold{background:var(--gold-500);color:var(--g-950)}
+.btn.gold:hover{background:var(--gold-300)}
+.btn.ghost{border:1px solid var(--line);background:#fff;color:var(--g-800)}
+.btn.ghost:hover{border-color:var(--g-600)}
+.btn.block{width:100%;height:50px;border-radius:999px;font-size:15px}
+.link{color:var(--g-700);font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.link:hover{color:var(--g-500)}
+.field{position:relative}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink)}
+.field .ic{position:absolute;inset-inline-end:14px;bottom:13px;color:var(--faint)}
+.input{width:100%;height:48px;border:1px solid var(--line);border-radius:12px;background:#FCFBF8;padding:0 14px;padding-inline-end:44px;outline:none;transition:.15s}
+.input:focus{border-color:var(--g-600);background:#fff;box-shadow:0 0 0 4px rgba(20,120,90,.09)}
+.hint{font-size:12px;color:var(--faint);margin-top:5px}
+.err{background:var(--red-50);color:var(--red);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:500}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
-.stat{padding:18px 20px;position:relative;overflow:hidden}
-.stat .lbl{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px}
-.stat .lbl i{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--mint-50);color:var(--green-600);font-style:normal}
-.stat .num{font-size:34px;font-weight:700;color:var(--green-900);margin-top:6px;line-height:1.2}
-.stat .hint{color:var(--faint);font-size:12px}
-.stat.hero{background:linear-gradient(135deg,var(--green-700),var(--green-500));color:#fff;border:0}
-.stat.hero .lbl,.stat.hero .hint{color:rgba(255,255,255,.85)}
-.stat.hero .num{color:#fff}
-.stat.hero .lbl i{background:rgba(255,255,255,.18);color:var(--gold-300)}
-.stat.hero::after{content:"";position:absolute;inset-inline-end:-40px;bottom:-60px;width:160px;height:160px;border-radius:50%;border:22px solid rgba(232,204,152,.22)}
-
-.banner{display:flex;gap:12px;align-items:flex-start;background:var(--gold-50);border:1px solid var(--gold-300);border-radius:14px;padding:13px 16px;margin-bottom:22px;font-size:13px;color:#6b5428}
-.banner b{color:var(--gold-600)}
-.banner.info{background:var(--mint-50);border-color:var(--mint-100);color:var(--green-800)}
-
-.section-h{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line-2)}
-.section-h h2{margin:0;font-size:17px;color:var(--green-900)}
-.section-h p{margin:0;color:var(--muted);font-size:12.5px}
-table{width:100%;border-collapse:collapse}
-th{font-size:12px;color:var(--muted);font-weight:500;text-align:right;padding:10px 22px;background:#FCFAF5;border-bottom:1px solid var(--line-2)}
-td{padding:14px 22px;border-bottom:1px solid var(--line-2);vertical-align:middle}
-tr:last-child td{border-bottom:0}
-.docname{display:flex;gap:12px;align-items:center}
-.docicon{width:36px;height:36px;border-radius:10px;background:var(--gold-50);border:1px solid var(--gold-100);display:grid;place-items:center;color:var(--gold-600);flex:none}
-.docname b{display:block;font-weight:600}
-.docname small{color:var(--faint);font-size:12px}
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 11px;border-radius:99px;white-space:nowrap}
-.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
-.pill.done{background:var(--mint-50);color:var(--green-600)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 12px;border-radius:999px;white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.done{background:var(--mint-100);color:var(--g-700)}
 .pill.run{background:var(--gold-100);color:var(--gold-600)}
 .pill.fail{background:var(--red-50);color:var(--red)}
-.link{border:0;background:none;color:var(--green-600);font-weight:600;padding:0}
-.link:hover{text-decoration:underline}
-.empty{padding:40px;text-align:center;color:var(--muted)}
+.spin{width:16px;height:16px;border:2px solid var(--gold-300);border-top-color:var(--gold-600);border-radius:50%;animation:sp 1s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-.split{display:grid;grid-template-columns:1.45fr 1fr;gap:18px;margin-top:22px}
-.bars{padding:18px 22px;display:flex;flex-direction:column;gap:12px}
-.bar{display:grid;grid-template-columns:170px 1fr 34px;gap:10px;align-items:center;font-size:13px}
-.bar .track{height:10px;background:var(--line-2);border-radius:99px;overflow:hidden}
-.bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-500),var(--green-500))}
-.next{background:linear-gradient(150deg,var(--green-800),var(--green-600));color:#fff;border:0;padding:22px}
-.next .eyebrow{color:var(--gold-300)}
-.next h3{margin:4px 0 8px;font-size:18px}
-.next p{color:rgba(255,255,255,.82);font-size:13px;margin:0 0 14px}
-.next ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px}
-.next li{display:flex;gap:8px;align-items:center}
-.next li span{font-size:11px;background:rgba(232,204,152,.2);color:var(--gold-300);padding:1px 8px;border-radius:99px;margin-inline-start:auto}
+/* ─── auth ─── */
+.auth{min-height:100vh;display:grid;grid-template-columns:4.5fr 5.5fr;background:var(--cream);overflow:hidden}
+.auth-side{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;padding:40px 28px}
+.auth-card{width:100%;max-width:560px;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);background:#FBFAF6}
+.tabs button{height:62px;font-size:15.5px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;transition:.15s}
+.tabs button.on{color:var(--g-800);background:#fff;border-bottom-color:var(--g-800)}
+.auth-body{padding:40px 48px 48px}
+.auth-body .input{height:56px}
+.auth-body .field .ic{bottom:17px}
+.auth-logo{display:block;height:108px;margin:0 auto 18px}
+.auth-body h1{font-size:27px;text-align:center;color:var(--g-900)}
+.auth-body .sub{text-align:center;color:var(--muted);font-size:13.5px;margin:4px 0 24px}
+.form{display:grid;gap:16px}
+.form .btn{margin-top:6px}
+/* the photo ends on a slant with a clean edge: ~45% of the page wide at the top, ~55% at the bottom */
+.auth-brand{position:relative;overflow:hidden;color:#fff;padding:48px 48px 48px;clip-path:polygon(0 0,82% 0,100% 100%,0 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;gap:48px;
+  background:linear-gradient(180deg,rgba(247,244,238,.5),rgba(247,244,238,0) 38%),url(/static/auth-bg.jpg) 30% 60%/cover,var(--g-900)}
+.auth-brand>*{position:relative;z-index:1;width:100%;max-width:560px;margin-inline:auto}
+/* the headline sits in the sky, between the tower and the slanted edge, a third of the way down */
+.brand-copy{position:absolute!important;top:33%;right:15%;transform:translateY(-50%);width:360px;max-width:360px!important;margin:0!important;text-align:center}
+.auth-brand h2{font-size:32px;line-height:1.5;margin:0 0 14px;font-weight:700;color:var(--g-900);white-space:nowrap}
+.auth-brand h2 span{color:var(--gold-600)}
+.auth-brand p{color:var(--g-900);font-size:15.5px;font-weight:600;line-height:2;text-shadow:0 1px 10px rgba(247,244,238,.8)}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:560px}
+.feat{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;font-size:13.5px;color:rgba(255,255,255,.9)}
+.feat span{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:var(--gold-300)}
 
-/* upload */
-.upgrid{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
-.drop{display:block;cursor:pointer;margin:20px 22px 22px;border:2px dashed var(--gold-300);border-radius:16px;background:var(--gold-50);padding:44px 20px;text-align:center;transition:.15s}
-.drop.over{border-color:var(--green-500);background:var(--mint-50)}
-.drop .ic{width:58px;height:58px;border-radius:18px;background:#fff;display:grid;place-items:center;margin:0 auto 12px;color:var(--green-600);box-shadow:var(--shadow)}
-.drop h3{margin:0 0 4px;font-size:17px}
-.drop p{margin:0 0 14px;color:var(--muted);font-size:13px}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:20px 22px 0}
-.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
-.field div{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#FCFAF5;font-size:13px}
-.steps{padding:12px 22px 22px;display:flex;flex-direction:column}
-.step{display:grid;grid-template-columns:34px 1fr;gap:12px;position:relative;padding:12px 0}
-.step:not(:last-child)::after{content:"";position:absolute;right:16px;top:44px;bottom:-10px;width:2px;background:var(--line)}
-.step.ok:not(:last-child)::after{background:var(--green-500)}
-.step .b{position:relative;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);background:#fff;color:var(--faint);font-size:13px;font-weight:700;z-index:1}
-.step.ok .b{background:var(--green-600);border-color:var(--green-600);color:#fff}
-.step.now .b{border-color:var(--gold-500);color:var(--gold-600);background:var(--gold-50)}
-.step.now .b::after{content:"";position:absolute;inset:-2px;width:34px;height:34px;border-radius:50%;border:2px solid var(--gold-500);border-top-color:transparent;animation:spin 0.9s linear infinite}
-.step.later{opacity:.6}
-.step.later .b{border-style:dashed}
-.step.err .b{background:var(--red);border-color:var(--red);color:#fff}
-@keyframes spin{to{transform:rotate(360deg)}}
-.step h4{margin:4px 0 0;font-size:14.5px}
-.step p{margin:0;color:var(--muted);font-size:12.5px}
-.step .meta{font-size:12px;color:var(--gold-600);font-weight:600}
-.step.ok .meta{color:var(--green-600)}
-.progress{height:8px;border-radius:99px;background:var(--line-2);overflow:hidden;margin:6px 0 2px;max-width:260px}
-.progress div{height:100%;background:linear-gradient(90deg,var(--gold-500),var(--green-500));transition:width .3s}
-.pct{font-size:30px;font-weight:700;color:var(--green-700)}
+/* ─── app shell ─── */
+.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.side{background:linear-gradient(180deg,var(--g-900),var(--g-950));color:#fff;padding:26px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.side .logo{display:flex;justify-content:center;padding:4px 0 26px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:20px}
+.side .logo img{height:78px;padding:8px 12px;border-radius:16px;background:var(--cream)}
+.nav{display:grid;gap:6px}
+.nav button{display:flex;align-items:center;gap:12px;height:48px;padding:0 16px;border-radius:12px;color:rgba(255,255,255,.75);font-weight:500;text-align:start;transition:.15s}
+.nav button:hover:not(:disabled){background:rgba(255,255,255,.07);color:#fff}
+.nav button.on{background:rgba(255,255,255,.12);color:#fff;font-weight:600;box-shadow:inset -3px 0 0 var(--gold-500)}
+.nav button:disabled{opacity:.45;cursor:default}
+.nav small{margin-inline-start:auto;font-size:11px;background:rgba(207,159,85,.22);color:var(--gold-300);padding:1px 8px;border-radius:999px}
+.side .out{margin-top:auto;display:flex;align-items:center;gap:12px;height:48px;padding:0 16px;border-radius:12px;color:rgba(255,255,255,.75)}
+.side .out:hover{background:rgba(255,255,255,.07);color:#fff}
+.main{position:relative;min-width:0;padding:22px 34px 48px}
+.main>*{position:relative}
+/* dashboard: the photo sits behind the top of the page and fades into the cream under the cards */
+.main.dash-bg::before{content:"";position:absolute;inset:0 0 auto 0;height:480px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(247,244,238,0) 45%,var(--cream) 96%),
+             linear-gradient(270deg,rgba(247,244,238,.65),rgba(247,244,238,0) 50%),url(/static/hero-bg.jpg) center 30%/cover}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:12px}
+.crumb{color:var(--muted);font-size:13px}
+.crumb b{color:var(--ink)}
+.user{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 16px;box-shadow:var(--shadow)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--g-800);color:#fff;display:grid;place-items:center;font-weight:700}
+.user b{font-size:13.5px;font-weight:600}
+.page h1{font-size:26px;color:var(--g-900);line-height:1.4}
+.page .sub{color:var(--muted)}
 
-/* results */
-.rhead{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:16px}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 13px;font-size:12.5px;color:var(--muted)}
-.chip b{color:var(--green-800)}
-.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-width:280px}
-.search input{border:0;outline:0;font:inherit;width:100%;background:transparent}
-.tag{font-size:11.5px;padding:2px 9px;border-radius:7px;background:var(--line-2);color:var(--muted)}
-.tag.page{background:var(--gold-50);color:var(--gold-600);border:1px solid var(--gold-100)}
-.tag.ocr{background:#EEF1FB;color:#4659A8}
-/* results workspace: clause list | clause next to its provisions */
-.ws{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}
-.navl{position:sticky;top:78px;max-height:calc(100vh - 100px);display:flex;flex-direction:column;overflow:hidden}
-.navl .search{margin:12px;min-width:0}
-.navl .items{overflow:auto;padding:0 8px 10px}
-.grp{font-size:11.5px;color:var(--gold-600);font-weight:600;padding:12px 8px 4px}
-.ci{display:flex;gap:8px;align-items:flex-start;width:100%;border:0;background:transparent;text-align:right;padding:7px 8px;border-radius:10px;color:var(--ink)}
-.ci:hover{background:var(--mint-50)}
-.ci.on{background:var(--green-700);color:#fff}
-.ci .n{flex:none;min-width:24px;font-size:12px;font-weight:700;color:var(--green-700);padding-top:1px}
-.ci.on .n{color:var(--gold-300)}
-.ci .tt{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ci .c{margin-inline-start:auto;flex:none;font-size:11px;color:var(--faint);padding-top:2px}
-.ci.on .c{color:rgba(255,255,255,.75)}
-.pane{min-width:0}
-.pane-h{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line-2)}
-.pane-h .crumbs{font-size:12px;color:var(--faint)}
-.pane-h h2{margin:2px 0 8px;font-size:18px;color:var(--green-900);line-height:1.6}
-.meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.topic{font-size:12px;padding:2px 10px;border-radius:99px;background:var(--mint-50);color:var(--green-700)}
-.stepper{display:flex;gap:6px;flex:none}
-.stepper button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px;font-size:12.5px;color:var(--muted)}
-.stepper button:hover:not([disabled]){border-color:var(--gold-300);color:var(--ink)}
-.stepper button[disabled]{opacity:.4;cursor:default}
-.cmp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
-.cmp>div{padding:18px 22px;min-width:0}
-.cmp .clausecol{border-inline-end:1px solid var(--line-2);background:#FDFBF7}
-.lbl{font-size:12px;color:var(--gold-600);font-weight:600;margin-bottom:10px}
-.ctext{white-space:pre-wrap;font-size:14px;line-height:1.95;max-height:68vh;overflow:auto}
-.arts{display:flex;flex-direction:column;gap:8px}
-.art{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;cursor:pointer;text-align:right;width:100%;font:inherit;color:inherit}
-.art:hover{border-color:var(--gold-300)}
-.art.on{border-color:var(--green-500);box-shadow:0 0 0 3px var(--mint-50)}
-.art .rk{flex:none;width:24px;height:24px;border-radius:7px;background:var(--line-2);color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700}
-.art.on .rk{background:var(--green-600);color:#fff}
+/* ─── dashboard ─── */
+.hero{position:relative;padding:46px 24px 120px;color:var(--g-900)}
+.hero>*{position:relative}
+.hero h1{color:var(--g-900);font-size:30px}
+.hero p{color:var(--g-800)}
+.hero .row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:-62px 24px 0;position:relative}
+.stat{padding:20px 22px;text-align:center}
+.stat .ic{width:46px;height:46px;border-radius:14px;margin:0 auto 10px;display:grid;place-items:center;background:var(--mint-50);color:var(--g-700)}
+.stat.gold .ic{background:var(--gold-100);color:var(--gold-600)}
+.stat .num{font-size:30px;font-weight:700;color:var(--g-900);line-height:1.2}
+.stat .lbl{color:var(--muted);font-size:13px}
+.grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;margin-top:22px}
+.sec{padding:22px 24px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-h h2{font-size:17px;color:var(--g-900)}
+.docs{display:grid}
+.doc{display:flex;align-items:center;gap:14px;padding:13px 4px;border-top:1px solid var(--line-2)}
+.doc:first-child{border-top:0}
+.doc .fi{width:42px;height:42px;border-radius:12px;background:var(--mint-50);color:var(--g-700);display:grid;place-items:center}
+.doc .nm{flex:1;min-width:0}
+.doc .nm b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc .nm small{color:var(--faint);font-size:12px}
+.doc .act{display:flex;align-items:center;gap:12px}
+.icon-btn{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--faint)}
+.icon-btn:hover{background:var(--red-50);color:var(--red)}
+.empty{color:var(--faint);text-align:center;padding:28px 10px;font-size:13.5px}
+.donut{display:flex;align-items:center;gap:22px}
+.donut svg{width:150px;height:150px}
+.legend{flex:1;display:grid;gap:12px}
+.legend div{display:flex;align-items:center;gap:10px;font-size:13px}
+.legend i{width:11px;height:11px;border-radius:50%}
+.legend span{flex:1;color:var(--ink)}
+.legend b{color:var(--muted);font-weight:600}
+
+/* ─── upload ─── */
+.up{display:grid;grid-template-columns:1.25fr 1fr;overflow:hidden}
+.up-main{padding:32px 34px}
+.up-main h1{display:flex;align-items:center;gap:10px}
+.up-main h1 svg{color:var(--g-700)}
+.drop{margin-top:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;min-height:270px;border:2px dashed #D9D0BE;border-radius:20px;background:#FCFBF8;cursor:pointer;transition:.15s;padding:24px}
+.drop:hover,.drop.over{border-color:var(--g-600);background:var(--mint-50)}
+.drop .cloud{color:var(--g-700);margin-bottom:6px}
+.drop h3{font-size:17px}
+.drop h3 u{color:var(--g-700);text-underline-offset:5px}
+.drop p{color:var(--faint);font-size:13px}
+.note{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px 16px;border-radius:14px;background:var(--mint-50);color:var(--g-800);font-size:13px}
+.up-side{background:linear-gradient(180deg,#FBF9F4,#F4F0E7);border-inline-start:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;gap:10px}
+.up-side h3{font-size:18px;color:var(--g-900)}
+.up-side p{color:var(--muted);font-size:13.5px;max-width:300px}
+.ring{position:relative;width:170px;height:170px;margin-bottom:8px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:2px;direction:ltr;font-size:34px;font-weight:700;color:var(--g-800)}
+.ring .pct small{font-size:16px}
+.fname{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:12.5px;max-width:100%}
+.fname span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.now{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13.5px}
+.docart{color:#C9D3CC}
+
+/* ─── results ─── */
+.r-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.back{color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:6px;margin-bottom:4px}
+.back:hover{color:var(--g-700)}
+.picker{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px 14px;box-shadow:var(--shadow);min-width:280px;max-width:420px}
+.picker svg{color:var(--red)}
+.picker select{flex:1;border:0;outline:none;background:none;height:34px;font-weight:600;min-width:0;cursor:pointer}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:12.5px;color:var(--muted)}
+.chip b{color:var(--g-800)}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 10px;margin-bottom:16px}
+.vtabs{display:flex;gap:4px}
+.vtabs button{height:40px;padding:0 18px;border-radius:10px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:8px}
+.vtabs button.on{background:var(--mint-50);color:var(--g-800)}
+.search{display:flex;align-items:center;gap:8px;height:40px;border:1px solid var(--line);border-radius:10px;padding:0 12px;background:#FCFBF8;width:280px;max-width:100%}
+.search input{border:0;outline:none;background:none;flex:1;min-width:0}
+.ws{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.tree{padding:16px 10px;position:sticky;top:18px;max-height:calc(100vh - 36px);overflow:auto}
+.tree h3{font-size:15px;padding:0 10px 10px;color:var(--g-900)}
+.grp>button{width:100%;display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;font-weight:600;font-size:13.5px;text-align:start}
+.grp>button:hover{background:var(--line-2)}
+.grp>button em{font-style:normal;color:var(--faint);font-weight:500}
+.i-chev{transition:transform .2s;color:var(--faint)}
+.grp>button .i-chev{transform:rotate(-90deg)}
+.closed>button .i-chev{transform:none}
+.closed .ci-list{display:none}
+.ci-list{display:grid;gap:2px;padding:2px 0 6px}
+.ci{display:flex;align-items:center;gap:10px;padding:8px 12px;padding-inline-start:26px;border-radius:10px;text-align:start;font-size:13px;color:var(--muted)}
+.ci:hover{background:var(--line-2);color:var(--ink)}
+.ci.on{background:var(--mint-100);color:var(--g-900);font-weight:600}
+.ci .tt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci .c{min-width:22px;height:22px;border-radius:7px;background:var(--line-2);color:var(--g-700);font-size:11.5px;display:grid;place-items:center;font-weight:700}
+.ci.on .c{background:#fff}
+.pane{padding:26px 28px}
+.pane-h{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.crumbs{font-size:12px;color:var(--faint);margin-bottom:2px}
+.pane-h h2{font-size:21px;color:var(--g-900);line-height:1.5}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:8px;background:var(--line-2);color:var(--muted)}
+.tag.ocr{background:var(--gold-50);color:var(--gold-600)}
+.stepper{display:flex;gap:6px}
+.stepper button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;color:var(--g-800);background:#fff}
+.stepper button:disabled{opacity:.35;cursor:default}
+.ctext{margin-top:18px;padding:18px 20px;border-radius:14px;background:#FCFBF8;border:1px solid var(--line-2);line-height:2;white-space:pre-wrap}
+.arts-h{display:flex;align-items:center;gap:10px;margin:26px 0 12px}
+.arts-h h3{font-size:16px;color:var(--g-900)}
+.arts-h span{color:var(--faint);font-size:13px}
+.acc{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;background:#fff}
+.acc>.ah{width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:start}
+.acc>.ah:hover{background:#FCFBF8}
+.acc>.ah .nm{flex:1;font-weight:600}
+.acc>.ah .n{font-size:12px;font-weight:700;min-width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
+.acc .dot{width:10px;height:10px;border-radius:50%}
+.acc.governing .dot{background:var(--g-700)} .acc.governing .n{background:var(--mint-100);color:var(--g-700)}
+.acc.disclosure .dot{background:var(--gold-500)} .acc.disclosure .n{background:var(--gold-100);color:var(--gold-600)}
+.acc.related .dot,.acc.other .dot{background:#9DB3A8} .acc.related .n,.acc.other .n{background:var(--line-2);color:var(--muted)}
+.acc .ah .i-chev{transform:rotate(-90deg)}
+.acc.open>.ah .i-chev{transform:rotate(90deg)}
+.acc>.ab{display:none;border-top:1px solid var(--line-2);padding:6px 10px 10px}
+.acc.open>.ab{display:block}
+.art{border-radius:12px;margin-top:4px}
+.art>button{width:100%;display:flex;align-items:center;gap:12px;padding:12px 10px;text-align:start;border-radius:12px}
+.art>button:hover{background:#FCFBF8}
 .art .bd{flex:1;min-width:0}
-.art .hd{font-weight:600;font-size:13.5px;line-height:1.6}
-.art .sub{font-size:12px;color:var(--faint)}
-.art .rs{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.6}
-.role{font-size:11px;padding:1px 8px;border-radius:6px;white-space:nowrap;margin-inline-start:6px}
-.role.governing{background:var(--mint-50);color:var(--green-600)}
-.role.disclosure{background:var(--gold-50);color:var(--gold-600)}
-.role.related,.role.cited{background:var(--line-2);color:var(--muted)}
-.more{margin-top:10px}
-.more summary{font-size:12.5px;color:var(--muted);cursor:pointer}
-.more .arts{margin-top:8px}
-.none{font-size:13px;color:var(--muted);background:var(--line-2);border-radius:12px;padding:10px 14px;margin-bottom:8px}
-.reader{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
-.reader .rh{padding:12px 16px;border-bottom:1px solid var(--line-2);background:#FCFAF5}
-.reader .rh b{display:block;font-size:14px;color:var(--green-900);line-height:1.6}
-.reader .rh small{color:var(--faint);font-size:12px}
-.reader .why{font-size:12.5px;color:var(--green-800);background:var(--mint-50);padding:8px 16px}
-.reader .rtx{white-space:pre-wrap;font-size:13.5px;line-height:1.95;padding:14px 16px;max-height:52vh;overflow:auto}
-.hidden{display:none!important}
-
-/* account */
-.user{display:flex;align-items:center;gap:10px}
-.avatar{width:36px;height:36px;border-radius:50%;background:var(--gold-100);color:var(--gold-600);display:grid;place-items:center;font-weight:700}
-.user b{display:block;font-size:13px;line-height:1.3}
-.user small{color:var(--faint);font-size:11.5px}
-.btn.sm{padding:6px 12px;font-size:12.5px;border-radius:10px}
-.auth{min-height:100vh;display:grid;grid-template-columns:1fr 1.05fr}
-.auth-brand{background:radial-gradient(circle at 80% 15%,rgba(232,204,152,.35),transparent 45%),linear-gradient(160deg,var(--green-800),var(--green-500));color:#fff;padding:56px;display:flex;flex-direction:column;justify-content:space-between}
-.auth-brand .logo{background:var(--cream);border-radius:22px;padding:18px 22px;width:max-content;box-shadow:0 12px 30px rgba(0,0,0,.15)}
-.auth-brand .logo img{width:150px;display:block}
-.auth-brand h2{font-size:30px;margin:28px 0 10px;line-height:1.5}
-.auth-brand p{color:rgba(255,255,255,.85);max-width:430px;margin:0}
-.auth-brand ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:14px}
-.auth-brand li{display:flex;gap:10px;align-items:center}
-.auth-brand li i{width:28px;height:28px;border-radius:9px;background:rgba(255,255,255,.14);color:var(--gold-300);display:grid;place-items:center;font-style:normal;flex:none}
-.auth-side{display:grid;place-items:center;padding:40px 24px}
-.auth-card{width:100%;max-width:420px}
-.auth-card h1{font-size:26px}
-.tabs{display:flex;background:#F3EEE3;border-radius:12px;padding:4px;margin:20px 0 22px}
-.tabs button{flex:1;border:0;background:transparent;padding:9px;border-radius:9px;font-weight:600;color:var(--muted)}
-.tabs button.on{background:#fff;color:var(--green-700);box-shadow:var(--shadow)}
-.form{display:flex;flex-direction:column;gap:14px}
-.form label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:5px;font-weight:500}
-.input{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px;font:inherit;outline:0;transition:.15s}
-.input:focus{border-color:var(--green-500);box-shadow:0 0 0 3px var(--mint-50)}
-.input.ltr{direction:ltr;text-align:right}
-.hint2{font-size:11.5px;color:var(--faint);margin-top:4px}
-.form .btn.primary{justify-content:center;padding:12px;margin-top:4px}
-.form .err{margin:0}
-.running{padding:22px;display:flex;flex-direction:column;gap:10px}
-.running .row{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.running h3{margin:0;font-size:16px;color:var(--green-900)}
-.running .progress{max-width:none;height:10px}
-.running .now{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px}
-.spin{width:14px;height:14px;border-radius:50%;border:2px solid var(--gold-500);border-top-color:transparent;animation:spin .9s linear infinite}
-.vtabs{display:flex;gap:6px;margin-bottom:14px}
-.vtabs button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 14px;font-size:13px;color:var(--muted);font-weight:500}
-.vtabs button.on{background:var(--gold-50);border-color:var(--gold-300);color:var(--gold-600)}
-.doctext{padding:26px 30px;font-size:14.5px;line-height:2}
-.doctext .pg{display:flex;align-items:center;gap:10px;color:var(--gold-600);font-size:12px;font-weight:600;margin:18px 0 8px}
+.art .hd{font-weight:600;font-size:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.art .sb{color:var(--faint);font-size:12.5px}
+.art .cited{font-size:11px;font-weight:600;background:var(--gold-100);color:var(--gold-600);padding:1px 8px;border-radius:999px}
+.art .i-chev{transform:rotate(-90deg)}
+.art.open{background:#FCFBF8}
+.art.open>button .i-chev{transform:rotate(90deg)}
+.art .more{display:none;padding:0 12px 14px}
+.art.open .more{display:block}
+.why{display:flex;gap:8px;font-size:13px;background:var(--mint-50);color:var(--g-800);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.why b{white-space:nowrap}
+.rtx{white-space:pre-wrap;font-size:13.5px;line-height:2;max-height:340px;overflow:auto;padding:12px 14px;border-radius:10px;background:#fff;border:1px solid var(--line-2)}
+.none{color:var(--faint);padding:16px;border:1px dashed var(--line);border-radius:14px;text-align:center}
+.banner{display:flex;align-items:flex-start;gap:10px;padding:13px 18px;border-radius:14px;background:var(--amber-50);border:1px solid #F3DFB1;color:#7A5413;font-size:13.5px;margin-bottom:12px}
+.banner svg{color:var(--amber);margin-top:2px}
+.doctext{padding:28px 32px;line-height:2.1}
+.doctext .pg{display:flex;align-items:center;gap:12px;color:var(--gold-600);font-size:12px;font-weight:600;margin:22px 0 10px}
 .doctext .pg::after{content:"";flex:1;height:1px;background:var(--line)}
-.doctext h4{margin:14px 0 2px;color:var(--green-800);font-size:15px}
-.doctext p{margin:0;white-space:pre-wrap}
-@media (max-width:900px){.auth{grid-template-columns:1fr}.auth-brand{padding:32px 20px}.auth-brand ul{display:none}}
+.doctext .pg:first-child{margin-top:0}
+.doctext h4{color:var(--g-900);margin-top:10px}
 
-@media (max-width:1050px){
-  .app{grid-template-columns:1fr}
-  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:14px 16px}
-  .brand{border:0;padding:0}.brand img{width:70px}.brand small{display:none}
-  .nav{flex-direction:row;flex-wrap:wrap}.scope{display:none}
+@media (max-width:1100px){
+  .grid2,.up{grid-template-columns:1fr}
+  .up-side{border-inline-start:0;border-top:1px solid var(--line)}
+  .ws{grid-template-columns:1fr}
+  .tree{position:static;max-height:320px}
   .stats{grid-template-columns:repeat(2,1fr)}
-  .split,.upgrid,.ws,.cmp{grid-template-columns:1fr}
-  .navl{position:static;max-height:320px}
-  .page,.top{padding-inline:16px}
+}
+@media (max-width:860px){
+  .auth{grid-template-columns:1fr}
+  .auth-brand{padding:36px 24px;min-height:auto;gap:28px;clip-path:none}
+  .brand-copy{position:relative!important;top:auto;right:auto;transform:none;width:100%;max-width:none!important}
+  .auth-brand h2{font-size:22px;white-space:normal}
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;align-items:center;gap:10px;padding:10px 12px;overflow-x:auto}
+  .side .logo{border:0;padding:0;margin:0}
+  .side .logo img{height:44px;padding:4px 8px;border-radius:10px}
+  .nav{display:flex}
+  .nav button{height:40px;padding:0 12px;white-space:nowrap}
+  .nav small{display:none}
+  .side .out{margin:0;height:40px}
+  .main{padding:16px 16px 40px}
+  .hero{padding:26px 6px 96px}
+  .stats{margin:-62px 10px 0}
+  .pane,.up-main,.doctext{padding:20px 18px}
+  .vtabs button{padding:0 12px;font-size:13px}
+  .vtabs button svg{display:none}
 }
 </style>
 </head>
 <body>
+
+<!-- ═════════════ sign in / sign up ═════════════ -->
 <div class="auth hidden" id="auth">
-  <section class="auth-brand">
-    <div>
-      <div class="logo"><img src="/static/logo.png" alt="ميثاق"></div>
-      <h2>مراجعة الشروط والأحكام<br>مقابل لوائح هيئة السوق المالية</h2>
-      <p>ارفع شروط وأحكام الصندوق، واطّلع على كل بند والمواد النظامية التي تحكمه في مكان واحد.</p>
-    </div>
-    <ul>
-      <li><i>▤</i>رفع ملفات PDF و Word، بما فيها الممسوحة ضوئيًا</li>
-      <li><i>§</i>ربط كل بند بمواد لوائح الهيئة مع أرقام صفحاتها</li>
-      <li><i>✓</i>حساب خاص لكل موظف امتثال</li>
-    </ul>
-  </section>
   <section class="auth-side">
     <div class="auth-card">
-      <div id="a-forms">
-        <div class="eyebrow">مرحبًا بك في ميثاق</div>
-        <h1 id="a-title">تسجيل الدخول</h1>
-        <p class="sub" id="a-sub">ادخل برقم جوالك وكلمة المرور.</p>
-        <div class="tabs"><button data-tab="login" class="on">تسجيل الدخول</button><button data-tab="signup">إنشاء حساب</button></div>
+      <div class="tabs"><button data-tab="login" class="on">دخول</button><button data-tab="signup">إنشاء حساب</button></div>
+      <div class="auth-body">
+        <img class="auth-logo" src="/static/logo.png" alt="ميثاق">
+        <h1>مرحبًا بك في ميثاق</h1>
+        <p class="sub" id="a-sub">سجّل دخولك لمتابعة مراجعة مستنداتك</p>
         <form class="form" id="f-login" autocomplete="on">
-          <div><label>رقم الجوال</label><input class="input ltr" name="phone" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" required></div>
-          <div><label>كلمة المرور</label><input class="input" name="password" type="password" autocomplete="current-password" required></div>
+          <div class="field"><label>رقم الجوال</label><input class="input ltr" name="phone" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" required><span class="ic" data-i="phone"></span></div>
+          <div class="field"><label>كلمة المرور</label><input class="input" name="password" type="password" autocomplete="current-password" required><span class="ic" data-i="lock"></span></div>
           <div class="err hidden"></div>
-          <button class="btn primary" type="submit">تسجيل الدخول</button>
+          <button class="btn primary block" type="submit">دخول</button>
         </form>
         <form class="form hidden" id="f-signup" autocomplete="on">
-          <div><label>الاسم الكامل</label><input class="input" name="name" autocomplete="name" required></div>
-          <div><label>رقم الجوال</label><input class="input ltr" name="phone" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" required></div>
-          <div><label>كلمة المرور</label><input class="input" name="password" type="password" autocomplete="new-password" required><div class="hint2">8 خانات على الأقل، تجمع بين حروف وأرقام.</div></div>
-          <div><label>تأكيد كلمة المرور</label><input class="input" name="confirm" type="password" autocomplete="new-password" required></div>
+          <div class="field"><label>الاسم الكامل</label><input class="input" name="name" autocomplete="name" required><span class="ic" data-i="user"></span></div>
+          <div class="field"><label>رقم الجوال</label><input class="input ltr" name="phone" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" required><span class="ic" data-i="phone"></span></div>
+          <div class="field"><label>كلمة المرور</label><input class="input" name="password" type="password" autocomplete="new-password" required><span class="ic" data-i="lock"></span></div>
+          <div class="hint" style="margin-top:-10px">8 خانات على الأقل، تجمع بين حروف وأرقام</div>
+          <div class="field"><label>تأكيد كلمة المرور</label><input class="input" name="confirm" type="password" autocomplete="new-password" required><span class="ic" data-i="lock"></span></div>
           <div class="err hidden"></div>
-          <button class="btn primary" type="submit">إنشاء الحساب</button>
+          <button class="btn primary block" type="submit">إنشاء الحساب</button>
         </form>
       </div>
     </div>
   </section>
+  <section class="auth-brand">
+    <div class="brand-copy">
+      <h2>مراجعة أذكى.. <span>لامتثال أضمن</span></h2>
+      <p>منصة سعودية تساعد موظف الامتثال على مراجعة الشروط والأحكام لصناديق الاستثمار الخاصة، وربط كل بند بلوائح هيئة السوق المالية.</p>
+    </div>
+    <div class="feats">
+      <div class="feat"><span data-i="shield"></span>دقة في الربط بالأنظمة</div>
+      <div class="feat"><span data-i="clock"></span>سرعة في المراجعة</div>
+      <div class="feat"><span data-i="scan"></span>يدعم الملفات الممسوحة ضوئيًا</div>
+    </div>
+  </section>
 </div>
+
+<!-- ═════════════ app ═════════════ -->
 <div class="app hidden" id="app">
   <aside class="side">
-    <div class="brand">
-      <img src="/static/logo.png" alt="ميثاق">
-      <small>منصة المراجعة التنظيمية الذكية</small>
-    </div>
+    <div class="logo"><img src="/static/logo.png" alt="ميثاق"></div>
     <nav class="nav">
-      <button data-view="dash" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>لوحة المتابعة</button>
-      <button data-view="upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3-3 3 3"/></svg>رفع ومراجعة مستند</button>
-      <button disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>تقارير الامتثال<span class="soon">قريبًا</span></button>
+      <button data-view="dash" class="on"><span data-i="home"></span>لوحة المتابعة</button>
+      <button data-view="upload"><span data-i="upload"></span>رفع مستند</button>
+      <button data-view="results" id="nav-results" disabled><span data-i="file"></span>نتائج المراجعة</button>
+      <button disabled><span data-i="chart"></span>التقارير<small>قريبًا</small></button>
     </nav>
-    <div class="scope">
-      <b>نطاق المراجعة</b>
-      <strong>شروط وأحكام صناديق الاستثمار الخاصة</strong><br>
-      مقابل لوائح هيئة السوق المالية: صناديق الاستثمار، مؤسسات السوق المالية، حوكمة الشركات، والصناديق المبسطة.
-    </div>
+    <button class="out" id="logout"><span data-i="logout"></span>تسجيل الخروج</button>
   </aside>
 
   <main class="main">
     <header class="top">
-      <div class="crumb" id="crumb">ميثاق ‹ <b>لوحة المتابعة</b></div>
-      <div class="user"><span class="avatar" id="u-av"></span><div><b id="u-name"></b><small>موظف امتثال</small></div>
-        <button class="btn ghost sm" id="logout">تسجيل الخروج</button></div>
+      <div class="crumb" id="crumb"></div>
+      <div class="user"><span class="avatar" id="u-av"></span><b>أهلًا، <span id="u-name"></span></b></div>
     </header>
 
-    <!-- ───────────── dashboard ───────────── -->
+    <!-- dashboard -->
     <section class="page" id="v-dash">
-      <div class="head">
-        <div>
-          <div class="eyebrow">مساحة العمل</div>
-          <h1>لوحة المتابعة</h1>
-          <p class="sub">نظرة سريعة على المستندات التي رُفعت ونتائج تحليلها.</p>
+      <div class="hero">
+        <div class="row">
+          <div><h1>لوحة المتابعة</h1><p>نظرة عامة على مستنداتك ونتائج مراجعتها</p></div>
+          <button class="btn gold" data-go="upload"><span data-i="plus"></span>رفع مستند جديد</button>
         </div>
-        <button class="btn primary" data-go="upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>رفع مستند جديد</button>
       </div>
       <div class="stats">
-        <div class="card stat hero"><div class="lbl"><i>▤</i>المستندات المرفوعة</div><div class="num" id="s-docs">0</div><div class="hint">شروط وأحكام صناديق خاصة</div></div>
-        <div class="card stat"><div class="lbl"><i>≡</i>البنود المستخرجة</div><div class="num" id="s-clauses">0</div><div class="hint">بعد استخراج النص وتقسيمه</div></div>
-        <div class="card stat"><div class="lbl"><i>§</i>مواد نظامية مرتبطة</div><div class="num" id="s-regs">0</div><div class="hint">مادة أو بند مختلف من لوائح الهيئة</div></div>
-        <div class="card stat"><div class="lbl"><i>↻</i>قيد المعالجة</div><div class="num" id="s-run">0</div><div class="hint">مستندات يجري تحليلها الآن</div></div>
+        <div class="card stat"><div class="ic" data-i="folder"></div><div class="num" id="s-docs">0</div><div class="lbl">مستندات مرفوعة</div></div>
+        <div class="card stat"><div class="ic" data-i="list"></div><div class="num" id="s-clauses">0</div><div class="lbl">بنود مستخرجة</div></div>
+        <div class="card stat"><div class="ic" data-i="check"></div><div class="num" id="s-regs">0</div><div class="lbl">مادة نظامية مرتبطة</div></div>
+        <div class="card stat gold"><div class="ic" data-i="doc"></div><div class="num" id="s-run">0</div><div class="lbl">مستندات قيد المعالجة</div></div>
       </div>
-      <div class="card">
-        <div class="section-h"><div><h2>المستندات الأخيرة</h2><p>حالة كل مستند ونتائج تحليله</p></div></div>
-        <table>
-          <thead><tr><th>المستند</th><th>تاريخ الرفع</th><th>الحالة</th><th>البنود</th><th>المواد المرتبطة</th><th></th></tr></thead>
-          <tbody id="docs"></tbody>
-        </table>
-        <div class="empty hidden" id="docs-empty">لا توجد مستندات بعد. ابدأ برفع ملف شروط وأحكام.</div>
-      </div>
-      <div class="card" style="margin-top:22px">
-        <div class="section-h"><div><h2>اللوائح الأكثر ارتباطًا</h2><p>أقرب مادة لكل بند، مجمّعة حسب اللائحة</p></div></div>
-        <div class="bars" id="bars"><div class="empty">ستظهر هنا بعد أول مراجعة.</div></div>
+      <div class="grid2">
+        <div class="card sec">
+          <div class="sec-h"><h2>مستنداتك الأخيرة</h2></div>
+          <div class="docs" id="docs"></div>
+          <div class="empty hidden" id="docs-empty">لا توجد مستندات بعد. ابدأ برفع ملف شروط وأحكام.</div>
+        </div>
+        <div class="card sec">
+          <div class="sec-h"><h2>أكثر اللوائح ارتباطًا</h2></div>
+          <div id="donut"><div class="empty">ستظهر هنا بعد أول مراجعة.</div></div>
+        </div>
       </div>
     </section>
 
-    <!-- ───────────── upload & review ───────────── -->
+    <!-- upload -->
     <section class="page hidden" id="v-upload">
-      <div class="head">
-        <div>
-          <div class="eyebrow">مراجعة جديدة</div>
-          <h1>رفع ومراجعة مستند</h1>
-          <p class="sub">ارفع ملف الشروط والأحكام، وسيعرض لك ميثاق بنوده والمواد النظامية المرتبطة بكل بند.</p>
-        </div>
-        <button class="btn ghost" data-go="dash">→ العودة للوحة المتابعة</button>
-      </div>
-      <div class="card running hidden" id="running" style="margin-bottom:18px">
-        <div class="row"><h3 id="cur-file"></h3><div class="pct" id="pct">0%</div></div>
-        <div class="progress"><div id="bar" style="width:0"></div></div>
-        <div class="now" id="now"></div>
-        <div class="err hidden" id="run-err" style="margin:0"></div>
-      </div>
-      <div class="card">
-          <div class="section-h"><div><h2>المستند محل المراجعة</h2><p>PDF أو Word (docx)</p></div></div>
-          <div class="fields">
-            <div class="field"><label>نوع المستند</label><div>شروط وأحكام صندوق خاص</div></div>
-            <div class="field"><label>المرجع التنظيمي</label><div>لوائح هيئة السوق المالية</div></div>
-          </div>
+      <div class="card up">
+        <div class="up-main">
+          <h1><span data-i="cloud"></span>رفع مستند جديد</h1>
+          <p class="sub">ارفع ملف الشروط والأحكام لصندوق خاص بصيغة PDF أو Word</p>
           <label class="drop" id="drop">
-            <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 18a4.5 4.5 0 0 1-.9-8.9A6 6 0 0 1 17.7 8 4.5 4.5 0 0 1 17 18"/><path d="M12 12v9M9 15l3-3 3 3"/></svg></div>
-            <h3>اسحب المستند هنا أو اختر ملفًا</h3>
-            <p>ملف PDF (نصي أو ممسوح ضوئيًا) أو Word</p>
-            <span class="btn primary">اختيار ملف</span>
+            <span class="cloud" data-i="cloudBig"></span>
+            <h3>اسحب الملف هنا أو <u>اختر ملفًا</u></h3>
+            <p>(PDF, Word)</p>
             <input type="file" id="file" accept=".pdf,.docx" hidden>
           </label>
-          <div class="err hidden" id="up-err"></div>
+          <div class="err hidden" id="up-err" style="margin-top:12px"></div>
+          <div class="note"><span data-i="info"></span>يمكنك رفع مستند ممسوح ضوئيًا، وسنتولى استخراج نصه تلقائيًا.</div>
+        </div>
+        <div class="up-side" id="state">
+          <div id="st-idle">
+            <svg class="docart" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+            <h3>لم يُرفع مستند بعد</h3>
+            <p>بعد الرفع ستظهر هنا نسبة تقدّم المراجعة، ثم تنتقل للنتائج تلقائيًا.</p>
+          </div>
+          <div id="st-run" class="hidden" style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#ECE6DA" stroke-width="10"/><circle id="ring" cx="60" cy="60" r="52" fill="none" stroke="#106047" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" style="transition:stroke-dashoffset .5s"/></svg><div class="pct" id="pct">0<small>%</small></div></div>
+            <h3 id="st-title">جاري مراجعة مستندك...</h3>
+            <div class="fname"><span data-i="doc"></span><span id="cur-file"></span></div>
+            <div class="now" id="now"></div>
+            <div class="err hidden" id="run-err"></div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ───────────── results ───────────── -->
+    <!-- results -->
     <section class="page hidden" id="v-results">
-      <div class="head">
+      <div class="r-head">
         <div>
-          <div class="eyebrow">نتائج التحليل</div>
-          <h1 id="r-title">—</h1>
-          <p class="sub">كل بند من المستند بجانب المواد النظامية التي تنطبق عليه. الحكم على امتثال البند مرحلة لاحقة.</p>
+          <button class="back" data-go="dash"><span data-i="arrowR"></span>العودة إلى لوحة المتابعة</button>
+          <h1>نتائج المراجعة</h1>
+          <p class="sub">بنود مستندك والمواد النظامية المرتبطة بكل بند</p>
         </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn primary" data-go="upload">مراجعة مستند آخر</button>
-        </div>
+        <div class="picker"><span data-i="pdf"></span><select id="r-pick" aria-label="المستند"></select></div>
       </div>
-      <div class="banner hidden" id="r-stub"><span>⚠</span><div><b>وضع تجريبي:</b> البحث في الأنظمة يعمل ببديل ثابت، فالمواد المعروضة ليست نتيجة بحث حقيقي.</div></div>
-      <div class="banner hidden" id="r-warn"><span>ⓘ</span><div id="r-warn-t"></div></div>
-      <div class="banner hidden" id="r-llm"><span>ⓘ</span><div id="r-llm-t"></div></div>
-      <div class="rhead"><div class="chips" id="r-chips"></div></div>
-      <div class="vtabs" id="vtabs"><button data-v="clauses" class="on">البنود والمواد النظامية</button><button data-v="text">النص المستخرج من المستند</button></div>
+      <div class="banner hidden" id="r-stub"><span data-i="warn"></span><div><b>وضع تجريبي:</b> البحث في الأنظمة يعمل ببديل ثابت، فالمواد المعروضة ليست نتيجة بحث حقيقي.</div></div>
+      <div class="banner hidden" id="r-warn"><span data-i="warn"></span><div id="r-warn-t"></div></div>
+      <div class="banner hidden" id="r-llm"><span data-i="warn"></span><div id="r-llm-t"></div></div>
+      <div class="banner hidden" id="r-seg"><span data-i="info"></span><div id="r-seg-t"></div></div>
+      <div class="chips" id="r-chips"></div>
+      <div class="card toolbar">
+        <div class="vtabs" id="vtabs"><button data-v="clauses" class="on"><span data-i="list"></span>البنود والمواد النظامية</button><button data-v="text"><span data-i="doc"></span>النص المستخرج</button></div>
+        <label class="search"><span data-i="search"></span><input id="q" placeholder="ابحث في البنود..."></label>
+      </div>
       <div class="ws" id="clauses">
-        <aside class="card navl">
-          <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98A09A" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="ابحث في البنود أو المواد…"></div>
-          <div class="items" id="navitems"></div>
-        </aside>
+        <aside class="card tree"><h3>أقسام المستند</h3><div id="navitems"></div></aside>
         <section class="card pane" id="pane"></section>
       </div>
       <div class="card doctext hidden" id="doctext"></div>
@@ -425,12 +434,47 @@ tr:last-child td{border-bottom:0}
 <script>
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const fmtDate = t => new Date(t*1000).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn",{day:"numeric",month:"long",year:"numeric"});
-const pages = (a,b) => a==null ? "" : (a===b||b==null ? `ص ${a}` : `ص ${a}–${b}`);
-const ORDER = ["received","extracting","segmenting","retrieving","done"];
-const STATUS = {received:"قيد المراجعة",extracting:"قيد المراجعة",segmenting:"قيد المراجعة",retrieving:"قيد المراجعة",done:"اكتملت المراجعة",failed:"تعذّرت المراجعة"};
-let current = null, poll = null, result = null, VIEW = "clauses", CUR = 0, ART = 0;
-const ROLE = {governing:"حكم نظامي", disclosure:"متطلب إفصاح", related:"ذات صلة"};
+const fmtDate = t => new Date(t*1000).toLocaleDateString("en-CA");
+const pages = (a,b) => a==null ? "" : (a===b||b==null ? `صفحة ${a}` : `صفحة ${a}–${b}`);
+const STATUS = {received:"قيد المراجعة",extracting:"قيد المراجعة",segmenting:"قيد المراجعة",retrieving:"قيد المراجعة",done:"اكتملت",failed:"تعذّرت"};
+const ROLE = {governing:"حكم نظامي", disclosure:"متطلب إفصاح", related:"ذات صلة", other:"مواد مرتبطة"};
+let current = null, poll = null, result = null, VIEW = "clauses", CUR = 0, LIST = [];
+let OPEN = new Set(), OPENART = new Set(), CLOSEDSEC = new Set();
+
+// ───────── icons (simple line icons, filled in wherever data-i="name" appears)
+const P = {
+  phone:'<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  scan:'<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 12h10"/>',
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  upload:'<path d="M7 18a4.5 4.5 0 0 1-.9-8.9A6 6 0 0 1 17.7 8 4.5 4.5 0 0 1 17 18"/><path d="M12 12v8M9 15l3-3 3 3"/>',
+  cloud:'<path d="M7 18a4.5 4.5 0 0 1-.9-8.9A6 6 0 0 1 17.7 8 4.5 4.5 0 0 1 17 18"/><path d="M12 12v8M9 15l3-3 3 3"/>',
+  file:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  logout:'<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  list:'<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>',
+  check:'<circle cx="12" cy="12" r="9"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  warn:'<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17h.01"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  arrowR:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  chev:'<path d="M15 6l-6 6 6 6"/>',
+  next:'<path d="M15 6l-6 6 6 6"/>', prev:'<path d="M9 6l6 6-6 6"/>',
+  trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  pdf:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+  cloudBig:'<path d="M7 18a4.5 4.5 0 0 1-.9-8.9A6 6 0 0 1 17.7 8 4.5 4.5 0 0 1 17 18"/><path d="M12 12v8M9 15l3-3 3 3"/>',
+};
+const ic = (n, s=20, w=1.9) => `<svg class="i-${n}" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
+const fillIcons = root => root.querySelectorAll("[data-i]").forEach(el => {
+  const n = el.dataset.i; el.innerHTML = ic(n, n==="cloudBig"?64:n==="pdf"?20:el.closest(".feat,.stat")?24:18, n==="cloudBig"?1.4:1.9);
+});
+fillIcons(document);
 
 // ───────── account: sign up / log in / log out
 const _fetch = window.fetch;
@@ -447,15 +491,14 @@ function showAuth(){
 }
 function enter(u){
   $("#auth").classList.add("hidden"); $("#app").classList.remove("hidden");
-  $("#u-name").textContent = u.name; $("#u-av").textContent = u.name.trim()[0];
+  $("#u-name").textContent = u.name.trim().split(/\s+/).slice(0,2).join(" "); $("#u-av").textContent = u.name.trim()[0];
   document.querySelectorAll("#auth form").forEach(f=>f.reset());
-  show("dash");
+  result = null; show("dash");
 }
 function tab(t){
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on", b.dataset.tab===t));
   $("#f-login").classList.toggle("hidden", t!=="login"); $("#f-signup").classList.toggle("hidden", t!=="signup");
-  $("#a-title").textContent = t==="login" ? "تسجيل الدخول" : "إنشاء حساب";
-  $("#a-sub").textContent = t==="login" ? "ادخل برقم جوالك وكلمة المرور." : "أنشئ حسابك كموظف امتثال للوصول إلى ميثاق.";
+  $("#a-sub").textContent = t==="login" ? "سجّل دخولك لمتابعة مراجعة مستنداتك" : "أنشئ حسابك كموظف امتثال للبدء في ميثاق";
   document.querySelectorAll("#auth .err").forEach(e=>e.classList.add("hidden"));
 }
 function fail(form, msg){ const e = form.querySelector(".err"); e.textContent = msg; e.classList.remove("hidden"); }
@@ -474,57 +517,81 @@ $("#f-signup").addEventListener("submit", async e => {
 $("#logout").addEventListener("click", async () => { await post("/api/auth/logout"); showAuth(); });
 
 // ───────── navigation
+const TITLES = {dash:"لوحة المتابعة", upload:"رفع مستند", results:"نتائج المراجعة"};
 function show(view){
+  if (view==="results" && !result){ const d = LIST.find(r=>r.status==="done"); if (d) openReview(d.id); return; }
   for (const v of ["dash","upload","results"]) $("#v-"+v).classList.toggle("hidden", v!==view);
-  document.querySelectorAll(".nav button[data-view]").forEach(b => b.classList.toggle("on", b.dataset.view===(view==="results"?"upload":view)));
-  $("#crumb").innerHTML = "ميثاق ‹ <b>" + ({dash:"لوحة المتابعة",upload:"رفع ومراجعة مستند",results:"نتائج التحليل"})[view] + "</b>";
+  $(".main").classList.toggle("dash-bg", view==="dash");
+  document.querySelectorAll(".nav button[data-view]").forEach(b => b.classList.toggle("on", b.dataset.view===view));
+  $("#nav-results").disabled = !result && !LIST.some(r=>r.status==="done");
+  $("#crumb").innerHTML = "ميثاق ‹ <b>" + TITLES[view] + "</b>";
   if (view==="dash") loadDash();
+  if (view==="upload" && !poll) resetUpload();
   scrollTo(0,0);
 }
 document.addEventListener("click", e => {
-  const b = e.target.closest("[data-view],[data-go]"); if (b) show(b.dataset.view || b.dataset.go);
+  const b = e.target.closest("[data-view],[data-go]"); if (b && !b.disabled) show(b.dataset.view || b.dataset.go);
   const o = e.target.closest("[data-open]"); if (o) openReview(o.dataset.open);
+  const d = e.target.closest("[data-del]"); if (d) delReview(d.dataset.del);
 });
 
 // ───────── dashboard
 async function loadDash(){
-  const list = await (await fetch("/api/reviews")).json();
+  const list = LIST = await (await fetch("/api/reviews")).json();
+  $("#nav-results").disabled = !result && !list.some(r=>r.status==="done");
   $("#s-docs").textContent = list.length;
   $("#s-clauses").textContent = list.reduce((a,r)=>a+r.clauses,0);
   $("#s-run").textContent = list.filter(r=>!["done","failed"].includes(r.status)).length;
   $("#docs-empty").classList.toggle("hidden", list.length>0);
-  $("#docs").innerHTML = list.map(r => {
+  $("#docs").innerHTML = list.slice(0,6).map(r => {
     const cls = r.status==="done"?"done":r.status==="failed"?"fail":"run";
-    const act = r.status==="done" ? `<button class="link" data-open="${r.id}">← عرض النتائج</button>`
-              : r.status==="failed" ? `<span style="color:var(--faint);font-size:12px">${esc(r.error||"")}</span>`
-              : `<button class="link" data-open="${r.id}">← متابعة المراجعة</button>`;
-    return `<tr><td><div class="docname"><div class="docicon">▤</div><div><b>${esc(r.filename)}</b><small>شروط وأحكام · ${(r.size/1024/1024).toFixed(1)} ميجابايت</small></div></div></td>
-      <td>${fmtDate(r.created)}</td><td><span class="pill ${cls}">${STATUS[r.status]}</span></td>
-      <td>${r.clauses||"—"}</td><td>${r.regulations||"—"}</td><td>${act}</td></tr>`;
+    const act = r.status==="done" ? `<button class="link" data-open="${r.id}">عرض النتائج ${ic("next",15)}</button>`
+              : r.status==="failed" ? "" : `<button class="link" data-open="${r.id}">متابعة ${ic("next",15)}</button>`;
+    return `<div class="doc"><div class="fi">${ic("doc")}</div>
+      <div class="nm"><b title="${esc(r.filename)}">${esc(r.filename)}</b><small>${fmtDate(r.created)}${r.clauses?` · ${r.clauses} بند`:""}${r.status==="failed"&&r.error?` · ${esc(r.error)}`:""}</small></div>
+      <div class="act"><span class="pill ${cls}"><i></i>${STATUS[r.status]}</span>${act}
+      <button class="icon-btn" data-del="${r.id}" title="حذف المستند">${ic("trash",16)}</button></div></div>`;
   }).join("");
   // regulations across finished reviews
   const done = list.filter(r=>r.status==="done");
-  const docs = {}; let regs = new Set();
+  const docs = {}; const regs = new Set();
   for (const r of done){
     const full = await (await fetch("/api/reviews/"+r.id)).json();
     for (const c of full.output.clauses){
-      c.regulations.forEach(g=>regs.add(g.id));
-      const top = c.regulations[0]; if (top) docs[top.document] = (docs[top.document]||0)+1;
+      chosen(c).forEach(g=>regs.add(g.section_key||g.id));
+      const top = chosen(c)[0]; if (top) docs[top.document] = (docs[top.document]||0)+1;
     }
   }
   $("#s-regs").textContent = regs.size;
-  const rows = Object.entries(docs).sort((a,b)=>b[1]-a[1]); const max = Math.max(1,...rows.map(r=>r[1]));
-  if (rows.length) $("#bars").innerHTML = rows.map(([d,n]) =>
-    `<div class="bar"><span>${esc(d)}</span><div class="track"><div class="fill" style="width:${n/max*100}%"></div></div><b>${n}</b></div>`).join("");
+  drawDonut(Object.entries(docs).sort((a,b)=>b[1]-a[1]));
+}
+function drawDonut(rows){
+  if (!rows.length){ $("#donut").innerHTML = `<div class="empty">ستظهر هنا بعد أول مراجعة.</div>`; return; }
+  if (rows.length > 4) rows = [...rows.slice(0,3), ["لوائح أخرى", rows.slice(3).reduce((a,r)=>a+r[1],0)]];
+  const COL = ["#106047","#1B946F","#CF9F55","#B9CFC4"], total = rows.reduce((a,r)=>a+r[1],0), C = 2*Math.PI*44;
+  let off = 0;
+  const arcs = rows.map(([,n],i) => { const len = n/total*C; const s = `<circle cx="60" cy="60" r="44" fill="none" stroke="${COL[i]}" stroke-width="20" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}"/>`; off += len; return s; }).join("");
+  $("#donut").innerHTML = `<div class="donut"><div class="legend">${rows.map(([d,n],i) =>
+    `<div><i style="background:${COL[i]}"></i><span>${esc(d)}</span><b>${Math.round(n/total*100)}%</b></div>`).join("")}</div>
+    <svg viewBox="0 0 120 120" style="transform:rotate(-90deg)">${arcs}</svg></div>`;
+}
+async function delReview(id){
+  const btn = document.querySelector(`[data-del="${id}"]`);
+  if (btn.dataset.sure !== "1"){ btn.dataset.sure = "1"; btn.title = "اضغط مرة ثانية للتأكيد"; btn.style.background = "var(--red-50)"; btn.style.color = "var(--red)";
+    setTimeout(()=>{ if (btn.isConnected){ btn.dataset.sure=""; btn.removeAttribute("style"); btn.title="حذف المستند"; } }, 3000); return; }
+  await fetch("/api/reviews/"+id, {method:"DELETE"});
+  if (result && result.id===id) result = null;
+  loadDash();
 }
 
-// ───────── upload & progress
+// ───────── upload & progress (one percentage, no technical steps)
 const drop = $("#drop");
 ["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over")}));
 ["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over")}));
 drop.addEventListener("drop", e => e.dataTransfer.files[0] && upload(e.dataTransfer.files[0]));
 $("#file").addEventListener("change", e => e.target.files[0] && upload(e.target.files[0]));
 
+function resetUpload(){ $("#st-idle").classList.remove("hidden"); $("#st-run").classList.add("hidden"); $("#up-err").classList.add("hidden"); }
 async function upload(f){
   $("#up-err").classList.add("hidden");
   const fd = new FormData(); fd.append("file", f);
@@ -534,67 +601,73 @@ async function upload(f){
   $("#file").value = "";
   track(j.id);
 }
-
 function renderProgress(r){
-  const NOW = {received:"تم استلام المستند", extracting:"جاري قراءة المستند واستخراج نصه",
-               segmenting:"جاري تحديد بنود المستند",
-               retrieving: r.total ? `جاري مطابقة البنود مع لوائح هيئة السوق المالية (${r.done} من ${r.total})` : "جاري مطابقة البنود مع لوائح هيئة السوق المالية",
-               done:"اكتملت المراجعة"};
+  const NOW = {received:"تم استلام المستند", extracting:"نقرأ المستند ونستخرج نصه", segmenting:"نحدد بنود المستند",
+               retrieving: r.total ? `نربط البنود باللوائح (${r.done} من ${r.total})` : "نربط البنود باللوائح", done:"اكتملت المراجعة"};
   const base = {received:5,extracting:15,segmenting:35,retrieving:40,done:100}[r.status] ?? 0;
   const pct = r.status==="retrieving" && r.total ? Math.round(40 + 60*r.done/r.total) : base;
-  $("#running").classList.remove("hidden");
+  const failed = r.status==="failed";
+  $("#st-idle").classList.add("hidden"); $("#st-run").classList.remove("hidden");
   $("#cur-file").textContent = r.filename;
-  $("#pct").textContent = r.status==="failed" ? "—" : pct+"%";
-  $("#bar").style.width = (r.status==="failed" ? 0 : pct) + "%";
-  $("#now").innerHTML = r.status==="failed" ? "" : (r.status==="done" ? "✓ " : '<span class="spin"></span>') + esc(NOW[r.status]||"");
-  $("#run-err").classList.toggle("hidden", r.status!=="failed");
-  if (r.status==="failed") $("#run-err").textContent = r.error || "تعذّرت مراجعة المستند";
+  $("#pct").innerHTML = failed ? "—" : `${pct}<small>%</small>`;
+  $("#ring").style.strokeDashoffset = 326.7 * (1 - (failed ? 0 : pct)/100);
+  $("#ring").setAttribute("stroke", r.status==="done" ? "#1B946F" : "#106047");
+  $("#st-title").textContent = failed ? "تعذّرت مراجعة المستند" : r.status==="done" ? "اكتملت المراجعة" : "جاري مراجعة مستندك...";
+  $("#now").innerHTML = failed ? "" : (r.status==="done" ? "" : '<span class="spin"></span>') + esc(NOW[r.status]||"");
+  $("#run-err").classList.toggle("hidden", !failed);
+  if (failed) $("#run-err").textContent = r.error || "تعذّرت مراجعة المستند";
 }
-
 function track(id){
-  current = id; show("upload"); clearTimeout(poll); $("#running").classList.add("hidden");
+  current = id; clearTimeout(poll); poll = null; show("upload");
   const tick = async () => {
     const r = await (await fetch("/api/reviews/"+id)).json();
+    if (current!==id) return;
     renderProgress(r);
-    if (r.status==="done"){ setTimeout(()=>renderResults(r), 900); return; }
-    if (r.status!=="failed" && current===id) poll = setTimeout(tick, 700);
+    if (r.status==="done"){ poll = null; setTimeout(()=>renderResults(r), 900); return; }
+    poll = r.status!=="failed" ? setTimeout(tick, 700) : null;
   };
   tick();
 }
-
 async function openReview(id){
   const r = await (await fetch("/api/reviews/"+id)).json();
   r.status==="done" ? renderResults(r) : track(id);
 }
 
 // ───────── results
-// provisions the agent selected for a clause, then the other candidates (plain search: everything is "selected")
 const chosen = c => c.regulations.filter(g => g.selected !== false);
-// candidates the agent did not select are no longer shown (they added noise for the reviewer)
 
-function renderResults(r){
-  result = r; show("results");
+async function renderResults(r){
+  result = r; OPEN = new Set(); OPENART = new Set(); CLOSEDSEC = new Set(); show("results");
   const o = r.output, cl = o.clauses;
-  $("#r-title").textContent = r.filename;
+  if (!LIST.some(x=>x.id===r.id)) LIST = await (await fetch("/api/reviews")).json();
+  $("#r-pick").innerHTML = LIST.filter(x=>x.status==="done").map(x=>`<option value="${x.id}"${x.id===r.id?" selected":""}>${esc(x.filename)}</option>`).join("");
   $("#r-stub").classList.toggle("hidden", r.mode!=="stub");
   const warn = (o.document_warnings||[]).map(w => typeof w==="string" ? w : (w.message_ar||w.code));
-  if (o.document_needs_review) warn.unshift("بعض صفحات المستند تحتاج مراجعة بشرية بعد الـ OCR.");
-  $("#r-warn").classList.toggle("hidden", !warn.length); $("#r-warn-t").innerHTML = warn.map(esc).join("<br>");
+  if (o.document_needs_review) warn.unshift("بعض أجزاء المستند قُرئت من صور، وقد تحتوي أخطاء في النص.");
+  $("#r-warn").classList.toggle("hidden", !warn.length); $("#r-warn-t").innerHTML = "<b>تنبيه:</b> " + warn.map(esc).join("<br>");
   const errs = cl.filter(c=>c.llm_error).length;
   $("#r-llm").classList.toggle("hidden", !errs);
-  $("#r-llm-t").innerHTML = `لم يكن النموذج اللغوي متاحًا لـ <b>${errs}</b> بند (مثلًا انقطاع الاتصال أو انتهاء رصيد OpenAI)، فعُرضت لها نتائج البحث مباشرة.`;
+  $("#r-llm-t").innerHTML = `لم يكن النموذج اللغوي متاحًا لـ <b>${errs}</b> بند، فعُرضت لها نتائج البحث مباشرة.`;
+  // Segmentation Agent's report (absent when the document was split by the rules only)
+  const seg = o.segmentation, fixedN = cl.filter(c=>c.fixed_by_agent).length;
+  const segMsg = !seg ? "" : seg.status==="fixed" ? `راجع وكيل التقسيم بنود المستند وصحّح <b>${fixedN || seg.changes.length}</b> منها.`
+    : seg.status==="needs_review" ? `<b>وكيل التقسيم:</b> تقسيم بعض بنود المستند يحتاج مراجعة. ${esc(seg.summary||"")}`
+    : seg.status==="error" ? "تعذّر تشغيل وكيل التقسيم، فقُسّم المستند بالطريقة المعتادة." : "";
+  $("#r-seg").classList.toggle("hidden", !segMsg); $("#r-seg-t").innerHTML = segMsg;
   const pg = cl.map(c=>c.page_end).filter(x=>x!=null);
   $("#r-chips").innerHTML = [
     ["البنود", cl.length], ["الصفحات", pg.length? Math.max(...pg):"—"],
     ["مواد نظامية مرتبطة", new Set(cl.flatMap(c=>chosen(c).map(g=>g.section_key||g.id))).size],
-    ...(cl.some(c=>c.from_ocr) ? [["بنود من صفحات ممسوحة (OCR)", cl.filter(c=>c.from_ocr).length]] : []),
+    ...(cl.some(c=>c.from_ocr) ? [["بنود من صفحات ممسوحة", cl.filter(c=>c.from_ocr).length]] : []),
   ].map(([k,v])=>`<span class="chip">${k}: <b>${v}</b></span>`).join("");
-  $("#q").value = ""; drawNav(""); openClause(0); drawText(); view("clauses");
+  $("#q").value = ""; CUR = 0; drawNav(""); openClause(0); drawText(); view("clauses");
 }
+$("#r-pick").addEventListener("change", e => openReview(e.target.value));
 
 function view(v){
   VIEW = v; document.querySelectorAll("#vtabs button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
   $("#clauses").classList.toggle("hidden", v!=="clauses"); $("#doctext").classList.toggle("hidden", v!=="text");
+  $(".search").classList.toggle("hidden", v!=="clauses");
 }
 $("#vtabs").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (b) view(b.dataset.v); });
 
@@ -608,85 +681,90 @@ function drawText(){
   $("#doctext").innerHTML = h || `<div class="empty">لا يوجد نص.</div>`;
 }
 
-// clause list, grouped by the section of the T&C it belongs to
+// clause tree: the T&C sections, each one folds open / closed
 function drawNav(q){
   const n = s => (s||"").replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآ]/g,"ا");
-  const qq = n(q.trim()), cl = result.output.clauses;
-  let h = "", group = null;
+  const qq = n(q.trim()), cl = result.output.clauses, groups = [];
   cl.forEach((c,i) => {
-    if (qq && !n(c.title+" "+c.body+" "+c.regulations.map(g=>(g.heading||"")+" "+g.citation+" "+(g.full_text||g.excerpt||g.body||"")).join(" ")).includes(qq)) return;
-    if (c.section !== group){ group = c.section; h += `<div class="grp">${esc(group||"—")}</div>`; }
-    h += `<button class="ci${i===CUR?" on":""}" data-ci="${i}"><span class="n">${esc(c.clause_id.replace(/^C0*/,""))}</span>
-      <span class="tt">${esc(c.title||c.body.slice(0,80))}</span><span class="c">${chosen(c).length||""}</span></button>`;
+    if (qq && !n(c.title+" "+c.body+" "+c.regulations.map(g=>(g.heading||"")+" "+g.citation).join(" ")).includes(qq)) return;
+    const s = c.section || "—";
+    if (!groups.length || groups.at(-1).s !== s) groups.push({s, items:[]});
+    groups.at(-1).items.push(i);
   });
-  $("#navitems").innerHTML = h || `<div class="empty">لا توجد نتائج مطابقة.</div>`;
+  $("#navitems").innerHTML = groups.map((g,k) => {
+    const closed = !qq && CLOSEDSEC.has(g.s) && !g.items.includes(CUR);
+    return `<div class="grp${closed?" closed":""}"><button data-sec="${esc(g.s)}">${ic("chev",15)}<span style="flex:1">${esc(g.s)}</span><em>(${g.items.length})</em></button>
+    <div class="ci-list">${g.items.map(i => { const c = cl[i];
+      return `<button class="ci${i===CUR?" on":""}" data-ci="${i}"><span class="tt">${esc(c.title||c.body.slice(0,70))}</span><span class="c">${chosen(c).length||"–"}</span></button>`; }).join("")}</div></div>`;
+  }).join("") || `<div class="empty">لا توجد نتائج مطابقة.</div>`;
 }
 
 function openClause(i){
   const cl = result.output.clauses; if (!cl.length){ $("#pane").innerHTML = `<div class="empty">لا توجد بنود.</div>`; return; }
-  CUR = Math.max(0, Math.min(i, cl.length-1)); ART = 0;
-  document.querySelectorAll("#navitems .ci").forEach(b => b.classList.toggle("on", +b.dataset.ci===CUR));
+  CUR = Math.max(0, Math.min(i, cl.length-1)); OPEN = new Set(); OPENART = new Set();
+  drawNav($("#q").value);
   document.querySelector(`#navitems .ci[data-ci="${CUR}"]`)?.scrollIntoView({block:"nearest"});
   drawClause();
 }
 
-function artCard(g, j){
-  const tag = g.role ? `<span class="role ${g.role}">${ROLE[g.role]}</span>` : "";
-  return `<button class="art${j===ART?" on":""}" data-art="${j}"><span class="rk">${j+1}</span><div class="bd">
-      <div class="hd">${esc(g.heading||g.citation)}${tag}${g.cited?`<span class="role cited">يحيل إليها البند</span>`:""}</div>
-      <div class="sub">${esc(g.regulation||g.document)}${g.page_start!=null?` · ${pages(g.page_start,g.page_end)}`:""}</div>
-      ${g.topic?`<div class="sub">الموضوع: ${esc(g.topic)}</div>`:""}
-      ${g.reason?`<div class="rs">${esc(g.reason)}</div>`:""}</div></button>`;
-}
-
 function loadFull(g){
-  // candidates keep only their related paragraphs in the review; fetch the whole article when opened
+  // the review keeps only the related paragraphs of an article; fetch the whole article when it is opened
   if (g.full_text || g.loading) return;
   g.loading = true;
   fetch("/api/articles/"+encodeURIComponent(g.id)).then(r => r.ok ? r.json() : null).then(j => {
     g.loading = false; if (!j) return;
-    g.full_text = j.full_text; const el = $("#rtx"); if (el && el.dataset.id===g.id) el.textContent = j.full_text;
+    g.full_text = j.full_text; const el = document.querySelector(`.rtx[data-id="${CSS.escape(g.id)}"]`); if (el) el.textContent = j.full_text;
   }).catch(() => { g.loading = false; });
 }
 
-function drawClause(){
-  const cl = result.output.clauses, c = cl[CUR], sel = chosen(c), rest = [], all = sel.concat(rest);
-  const g = all[ART];
-  $("#pane").innerHTML = `
-    <div class="pane-h"><div>
-        ${c.breadcrumb?`<div class="crumbs">${esc(c.breadcrumb)}</div>`:""}
-        <h2>${esc(c.title||"بند بدون عنوان")}</h2>
-        <div class="meta">
-          ${c.page_start!=null?`<span class="tag page">${pages(c.page_start,c.page_end)} من المستند</span>`:""}
-          ${c.from_ocr?`<span class="tag ocr">مستخرج بالـ OCR</span>`:""}
-          ${(c.topics||[]).map(t=>`<span class="topic">${esc(t)}</span>`).join("")}
-        </div></div>
-      <div class="stepper"><button data-step="-1"${CUR===0?" disabled":""}>→ السابق</button><button data-step="1"${CUR===cl.length-1?" disabled":""}>التالي ←</button></div>
-    </div>
-    <div class="cmp">
-      <div class="clausecol"><div class="lbl">نص البند</div><div class="ctext">${esc(c.body)}</div></div>
-      <div>
-        <div class="lbl">المواد النظامية المرتبطة</div>
-        ${sel.length ? `<div class="arts">${sel.map((x,j)=>artCard(x,j)).join("")}</div>`
-                     : `<div class="none">لم يختر الوكيل مادة تنطبق مباشرة على هذا البند.</div>`}
-        ${rest.length ? (sel.length ? `<details class="more"${ART>=sel.length?" open":""}><summary>مرشحات أخرى من البحث لم يخترها الوكيل (${rest.length})</summary><div class="arts">${rest.map((x,j)=>artCard(x,j+sel.length)).join("")}</div></details>`
-                                    : `<div class="arts">${rest.map((x,j)=>artCard(x,j)).join("")}</div>`) : ""}
-        ${g ? `<div class="reader"><div class="rh"><b>${esc(g.heading||g.citation)}</b><small>${esc(g.citation)}${g.page_start!=null?` · ${pages(g.page_start,g.page_end)} في وثيقة الهيئة`:""}${g.selected===false?" · لم يخترها الوكيل":""}</small></div>
-          ${g.reason?`<div class="why">${esc(g.reason)}</div>`:""}
-          <div class="rtx" id="rtx" data-id="${esc(g.id)}">${esc(g.full_text||g.excerpt||g.body)}</div></div>` : ""}
-      </div>
-    </div>`;
-  if (g) loadFull(g);
+function artRow(g, key){
+  const open = OPENART.has(key);
+  if (open) loadFull(g);
+  return `<div class="art${open?" open":""}"><button data-art="${key}">
+    <div class="bd"><div class="hd">${esc(g.heading||g.citation)}${g.cited?`<span class="cited">يحيل إليها البند</span>`:""}</div>
+    <div class="sb">${esc(g.regulation||g.document)}${g.page_start!=null?` · ${pages(g.page_start,g.page_end)}`:""}</div></div>${ic("chev",16)}</button>
+    <div class="more">${g.reason?`<div class="why"><b>سبب الربط:</b><span>${esc(g.reason)}</span></div>`:""}
+    <div class="rtx" data-id="${esc(g.id)}">${esc(g.full_text||g.excerpt||g.body||"…")}</div></div></div>`;
 }
 
-$("#navitems").addEventListener("click", e => { const b = e.target.closest("[data-ci]"); if (b) openClause(+b.dataset.ci); });
+function drawClause(){
+  const cl = result.output.clauses, c = cl[CUR], sel = chosen(c);
+  const groups = {};
+  sel.forEach((g,j) => (groups[ROLE[g.role] ? g.role : "other"] ??= []).push([g,j]));
+  const order = ["governing","disclosure","related","other"].filter(k=>groups[k]);
+  $("#pane").innerHTML = `
+    <div class="pane-h"><div>
+      ${c.breadcrumb?`<div class="crumbs">${esc(c.breadcrumb)}</div>`:""}
+      <h2>${esc(c.title||"بند بدون عنوان")}</h2>
+      <div class="meta">
+        ${c.page_start!=null?`<span class="tag">${ic("doc",14)}${pages(c.page_start,c.page_end)} من المستند</span>`:""}
+        ${c.from_ocr?`<span class="tag ocr">مستخرج من صفحة ممسوحة</span>`:""}
+        ${c.fixed_by_agent?`<span class="tag ocr" title="${esc(c.agent_note||"")}">صحّح وكيل التقسيم هذا البند</span>`:""}
+        ${(c.topics||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}
+      </div></div>
+      <div class="stepper"><button data-step="-1" title="البند السابق"${CUR===0?" disabled":""}>${ic("prev",18)}</button><button data-step="1" title="البند التالي"${CUR===cl.length-1?" disabled":""}>${ic("next",18)}</button></div>
+    </div>
+    <div class="ctext">${esc(c.body)}</div>
+    <div class="arts-h"><h3>المواد النظامية المرتبطة</h3><span>${sel.length ? `(${sel.length})` : ""}</span></div>
+    ${order.length ? order.map(k => `<div class="acc ${k}${OPEN.has(k)?" open":""}">
+        <button class="ah" data-acc="${k}"><i class="dot"></i><span class="nm">${ROLE[k]}</span><span class="n">${groups[k].length}</span>${ic("chev",17)}</button>
+        <div class="ab">${groups[k].map(([g,j]) => artRow(g, j)).join("")}</div></div>`).join("")
+      : `<div class="none">لم يُعثر على مادة تنطبق مباشرة على هذا البند.</div>`}`;
+}
+
+$("#navitems").addEventListener("click", e => {
+  const s = e.target.closest("[data-sec]");
+  if (s){ const k = s.dataset.sec; CLOSEDSEC.has(k) ? CLOSEDSEC.delete(k) : CLOSEDSEC.add(k); s.parentElement.classList.toggle("closed"); return; }
+  const b = e.target.closest("[data-ci]"); if (b) openClause(+b.dataset.ci);
+});
 $("#pane").addEventListener("click", e => {
   const s = e.target.closest("[data-step]"); if (s){ openClause(CUR + +s.dataset.step); return; }
-  const a = e.target.closest("[data-art]"); if (a){ ART = +a.dataset.art; drawClause(); }
+  const a = e.target.closest("[data-acc]"); if (a){ const k = a.dataset.acc; OPEN.has(k) ? OPEN.delete(k) : OPEN.add(k); drawClause(); return; }
+  const r = e.target.closest("[data-art]"); if (r){ const k = +r.dataset.art; OPENART.has(k) ? OPENART.delete(k) : OPENART.add(k); drawClause(); }
 });
 $("#q").addEventListener("input", e => drawNav(e.target.value));
 document.addEventListener("keydown", e => {   // ← next, → previous (right-to-left reading order)
-  if (!result || VIEW!=="clauses" || $("#v-results").classList.contains("hidden") || e.target.closest("input,textarea")) return;
+  if (!result || VIEW!=="clauses" || $("#v-results").classList.contains("hidden") || e.target.closest("input,textarea,select")) return;
   if (e.key==="ArrowLeft") openClause(CUR+1);
   if (e.key==="ArrowRight") openClause(CUR-1);
 });

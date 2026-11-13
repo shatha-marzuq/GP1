@@ -5,6 +5,7 @@ with their closest CMA regulations.  Compliance officers sign up / log in with p
     cd interface
     python app.py                    # Regulatory Retrieval Agent + its LLM step (OpenAI, key in .env)
     python app.py --no-llm           # the agent with its rule-based steps only
+    python app.py --seg-agent        # + the Segmentation Agent (its LLM checks/fixes the clauses; with --no-llm: rules + check)
     python app.py --retriever full   # plain search: BGE-M3 + reranker over the Chroma store, no agent
     python app.py --retriever bm25   # real regulations, lexical search only (no models to download)
     python app.py --retriever stub   # stand-in regulation (OCR + segmentation only)
@@ -28,7 +29,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 sys.path.insert(0, str(HERE))
 
 from orchestrator import paths  # noqa: E402,F401  (makes docproc / pipeline / backend importable)
-from orchestrator.graph import build_graph  # noqa: E402
+from orchestrator.graph import SegmentationAgent, build_graph, default_segment  # noqa: E402
 from orchestrator.stubs import StubRetriever  # noqa: E402
 
 from fastapi import Depends, FastAPI, File, HTTPException, Request, Response, UploadFile  # noqa: E402
@@ -46,6 +47,7 @@ K = 5
 # ─────────────────────────── retriever (built once, warmed in the background) ───────────────────────────
 MODE = "agent"
 USE_LLM = True
+SEG_AGENT = False   # --seg-agent: segment through the Segmentation Agent instead of the rules only
 ENGINE = {"ready": False, "error": None, "retriever": None, "llm": None}
 
 
@@ -123,7 +125,9 @@ def run_review(review_id, path):
         time.sleep(0.5)
     r = REVIEWS[review_id]
     try:
-        graph = build_graph(ENGINE["retriever"], on_status=on_status, k=K, search_kwargs=search_kwargs())
+        segment = SegmentationAgent(use_llm=USE_LLM) if SEG_AGENT else default_segment
+        graph = build_graph(ENGINE["retriever"], segment=segment, on_status=on_status, k=K,
+                            search_kwargs=search_kwargs())
         state = graph.invoke({"review_id": review_id, "file_path": str(path), "results": []},
                              {"max_concurrency": 8})
     except Exception as e:
@@ -261,7 +265,8 @@ def index():
 
 @app.get("/api/info")
 def info(user=Depends(current_user)):
-    return {"mode": MODE, "ready": ENGINE["ready"], "error": ENGINE["error"], "k": K, "llm": ENGINE["llm"]}
+    return {"mode": MODE, "ready": ENGINE["ready"], "error": ENGINE["error"], "k": K, "llm": ENGINE["llm"],
+            "seg_agent": SEG_AGENT}
 
 
 @app.get("/api/articles/{chunk_id}")
@@ -338,18 +343,19 @@ async def upload(file: UploadFile = File(...), user=Depends(current_user)):
 
 
 def main():
-    global MODE, USE_LLM
+    global MODE, USE_LLM, SEG_AGENT
     ap = argparse.ArgumentParser()
     ap.add_argument("--retriever", default="agent", choices=["agent", "full", "bm25", "stub"])
     ap.add_argument("--no-llm", action="store_true", help="agent without its LLM step")
+    ap.add_argument("--seg-agent", action="store_true", help="segment through the Segmentation Agent")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8000)
     a = ap.parse_args()
-    MODE, USE_LLM = a.retriever, not a.no_llm
+    MODE, USE_LLM, SEG_AGENT = a.retriever, not a.no_llm, a.seg_agent
     load_saved()
     threading.Thread(target=load_engine, daemon=True).start()
     import uvicorn
-    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'})\n")
+    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'}{', segmentation agent' if SEG_AGENT else ''})\n")
     uvicorn.run(app, host=a.host, port=a.port, log_level="warning")
 
 

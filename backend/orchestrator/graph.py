@@ -4,7 +4,8 @@
        └──────────┴─► failed
 
 extract  = Document Processing Agent (docproc OCR, items with page numbers)
-segment  = segmentation.segment_clauses (paragraphs -> clauses)
+segment  = segmentation.segment_clauses (paragraphs -> clauses), or the Segmentation Agent
+           (segmentation_agent.py: the LLM checks the rule-based clauses and fixes their starts)
 retrieve = plain search (pipeline/retriever.py over the Chroma vector DB) or the Regulatory Retrieval Agent
            (pipeline/retrieval_agent.py: the LLM plans the searches and selects the applicable provisions)
 
@@ -40,6 +41,25 @@ def default_segment(items: list[dict]) -> list[dict]:
     return segment_clauses(items)
 
 
+class SegmentationAgent:
+    """Segmentation Agent (backend/segmentation_agent.py): the rule-based segmentation, then the LLM checks it
+    and moves clause starts where it is wrong. Same clauses as segment_clauses, plus fixed_by_agent / agent_note,
+    and a report (status ok / fixed / needs_review). use_llm=False runs the rules and the check only (no API call).
+    If the agent fails (no key, the API is down …) the review goes on with the rule-based clauses."""
+
+    def __init__(self, use_llm: bool = True):
+        self.use_llm = use_llm
+
+    def __call__(self, items: list[dict], document: dict | None = None) -> tuple[list[dict], dict]:
+        from . import paths  # noqa: F401
+        from segmentation_agent import run_segmentation_agent
+        try:
+            return run_segmentation_agent(items, document, use_llm=self.use_llm, verbose=False)
+        except Exception as e:
+            return default_segment(items), {"status": "error", "summary": f"{type(e).__name__}: {e}",
+                                            "problems_found": [], "changes": [], "steps": []}
+
+
 def build_graph(retriever, *,
                 extract: Callable[[str], dict] = docproc_extract,
                 segment: Callable[[list[dict]], list[dict]] = default_segment,
@@ -61,6 +81,9 @@ def build_graph(retriever, *,
 
     def segment_node(state: ReviewState):
         on_status(state["review_id"], "segmenting")
+        if isinstance(segment, SegmentationAgent):   # وكيل التقسيم: يحتاج اسم الملف ويرجع تقريره مع البنود
+            clauses, report = segment(state["items"], state.get("document"))
+            return {"clauses": clauses, "segmentation": report}
         return {"clauses": segment(state["items"])}
 
     def failed_node(state: ReviewState):
@@ -101,6 +124,7 @@ def build_graph(retriever, *,
             "filename": doc.get("filename"),
             "document_needs_review": bool(doc.get("needs_review")),
             "document_warnings": doc.get("warnings", []),
+            "segmentation": state.get("segmentation"),   # Segmentation Agent's report (None with the rules only)
             "clauses": results,
         }
         on_status(rid, "done", clauses=len(results))
@@ -128,6 +152,8 @@ def _result(clause: dict, hits: list[dict], agent: dict | None = None) -> dict:
         "page_start": clause.get("page_start"),
         "page_end": clause.get("page_end"),
         "from_ocr": clause.get("from_ocr"),
+        "fixed_by_agent": clause.get("fixed_by_agent", False),   # the Segmentation Agent moved this clause's start
+        "agent_note": clause.get("agent_note"),
         "text": clause["text"],
         "regulations": [{"id": h["id"], "score": h["score"], "citation": h["citation"],
                          "pdf_pages": h.get("pdf_pages"), "text": h["text"]} for h in hits],
