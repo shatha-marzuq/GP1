@@ -11,6 +11,7 @@ class ReviewState(TypedDict, total=False):
     document: dict       # docproc's "document" block: filename, needs_review, warnings …
     items: list[dict]    # docproc's "items": headings / paragraphs / tables with page numbers
     clauses: list[dict]  # segmentation.segment_clauses output
+    segmentation: dict   # the Segmentation Agent's report, when it is used (status, summary, changes …)
     results: Annotated[list[dict], operator.add]  # parallel clause branches append here
     output: dict
     error: str

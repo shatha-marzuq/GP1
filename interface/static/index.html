@@ -416,6 +416,7 @@ svg{flex:none}
       <div class="banner hidden" id="r-stub"><span data-i="warn"></span><div><b>وضع تجريبي:</b> البحث في الأنظمة يعمل ببديل ثابت، فالمواد المعروضة ليست نتيجة بحث حقيقي.</div></div>
       <div class="banner hidden" id="r-warn"><span data-i="warn"></span><div id="r-warn-t"></div></div>
       <div class="banner hidden" id="r-llm"><span data-i="warn"></span><div id="r-llm-t"></div></div>
+      <div class="banner hidden" id="r-seg"><span data-i="info"></span><div id="r-seg-t"></div></div>
       <div class="chips" id="r-chips"></div>
       <div class="card toolbar">
         <div class="vtabs" id="vtabs"><button data-v="clauses" class="on"><span data-i="list"></span>البنود والمواد النظامية</button><button data-v="text"><span data-i="doc"></span>النص المستخرج</button></div>
@@ -647,6 +648,12 @@ async function renderResults(r){
   const errs = cl.filter(c=>c.llm_error).length;
   $("#r-llm").classList.toggle("hidden", !errs);
   $("#r-llm-t").innerHTML = `لم يكن النموذج اللغوي متاحًا لـ <b>${errs}</b> بند، فعُرضت لها نتائج البحث مباشرة.`;
+  // Segmentation Agent's report (absent when the document was split by the rules only)
+  const seg = o.segmentation, fixedN = cl.filter(c=>c.fixed_by_agent).length;
+  const segMsg = !seg ? "" : seg.status==="fixed" ? `راجع وكيل التقسيم بنود المستند وصحّح <b>${fixedN || seg.changes.length}</b> منها.`
+    : seg.status==="needs_review" ? `<b>وكيل التقسيم:</b> تقسيم بعض بنود المستند يحتاج مراجعة. ${esc(seg.summary||"")}`
+    : seg.status==="error" ? "تعذّر تشغيل وكيل التقسيم، فقُسّم المستند بالطريقة المعتادة." : "";
+  $("#r-seg").classList.toggle("hidden", !segMsg); $("#r-seg-t").innerHTML = segMsg;
   const pg = cl.map(c=>c.page_end).filter(x=>x!=null);
   $("#r-chips").innerHTML = [
     ["البنود", cl.length], ["الصفحات", pg.length? Math.max(...pg):"—"],
@@ -732,6 +739,7 @@ function drawClause(){
       <div class="meta">
         ${c.page_start!=null?`<span class="tag">${ic("doc",14)}${pages(c.page_start,c.page_end)} من المستند</span>`:""}
         ${c.from_ocr?`<span class="tag ocr">مستخرج من صفحة ممسوحة</span>`:""}
+        ${c.fixed_by_agent?`<span class="tag ocr" title="${esc(c.agent_note||"")}">صحّح وكيل التقسيم هذا البند</span>`:""}
         ${(c.topics||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}
       </div></div>
       <div class="stepper"><button data-step="-1" title="البند السابق"${CUR===0?" disabled":""}>${ic("prev",18)}</button><button data-step="1" title="البند التالي"${CUR===cl.length-1?" disabled":""}>${ic("next",18)}</button></div>

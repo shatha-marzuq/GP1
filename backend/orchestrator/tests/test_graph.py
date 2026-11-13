@@ -1,5 +1,5 @@
 """Graph behaviour with a stand-in retriever.  Run from backend/:  python -m pytest orchestrator/tests -q"""
-from orchestrator.graph import build_graph
+from orchestrator.graph import SegmentationAgent, build_graph
 from orchestrator.stubs import StubRetriever
 
 CLAUSES = [
@@ -61,3 +61,43 @@ def test_failed_extraction_ends_without_output():
         raise ValueError("ملف تالف")
     state = run(StubRetriever(), extract=broken)
     assert state["error"] == "ملف تالف" and "output" not in state
+
+
+class FakeSegmentationAgent(SegmentationAgent):
+    """The Segmentation Agent's interface without the LLM: moves one clause and reports it."""
+    def __call__(self, items, document=None):
+        self.document = document
+        fixed = [dict(CLAUSES[0], fixed_by_agent=True, agent_note="نُقلت بداية البند"), CLAUSES[1]]
+        return fixed, {"status": "fixed", "summary": "صُحّح بند واحد", "problems_found": [],
+                       "changes": [{"clause": 1, "reason": "نُقلت بداية البند"}], "steps": []}
+
+
+def test_segmentation_agent_gets_the_document_and_its_report_reaches_the_output():
+    agent = FakeSegmentationAgent()
+    graph = build_graph(StubRetriever(), extract=fake_extract, segment=agent, on_status=lambda *a, **k: None)
+    out = graph.invoke({"review_id": "t", "file_path": "t.pdf", "results": []})["output"]
+    assert agent.document["filename"] == "t.pdf"
+    assert out["segmentation"]["status"] == "fixed"
+    assert [c["fixed_by_agent"] for c in out["clauses"]] == [True, False]
+    assert out["clauses"][0]["agent_note"] == "نُقلت بداية البند"
+
+
+def test_rules_only_segmentation_has_no_report():
+    out = run(StubRetriever())["output"]
+    assert out["segmentation"] is None
+    assert not any(c["fixed_by_agent"] for c in out["clauses"])
+
+
+def test_segmentation_agent_failure_falls_back_to_the_rules(monkeypatch):
+    import segmentation_agent
+    from orchestrator import graph as g
+
+    def broken(*a, **k):
+        raise RuntimeError("no API key")
+    monkeypatch.setattr(segmentation_agent, "run_segmentation_agent", broken)
+    monkeypatch.setattr(g, "default_segment", lambda items: CLAUSES)
+    graph = build_graph(StubRetriever(), extract=fake_extract, segment=SegmentationAgent(),
+                        on_status=lambda *a, **k: None)
+    out = graph.invoke({"review_id": "t", "file_path": "t.pdf", "results": []})["output"]
+    assert out["segmentation"]["status"] == "error" and "no API key" in out["segmentation"]["summary"]
+    assert [c["clause_id"] for c in out["clauses"]] == ["C001", "C002"]
