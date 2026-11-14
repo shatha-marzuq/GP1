@@ -37,7 +37,7 @@ from fastapi.responses import FileResponse, JSONResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
-from sqlalchemy import or_, select  # noqa: E402
+from sqlalchemy import select  # noqa: E402
 
 import auth  # noqa: E402
 import db  # noqa: E402
@@ -231,7 +231,7 @@ def current_user(request: Request):
 
 
 def mine(r, user):
-    return r.get("owner") in (None, user["id"])   # reviews saved before accounts existed stay visible
+    return r.get("owner") == user["id"]   # each user sees only their own reviews
 
 
 class SignUp(BaseModel):
@@ -322,7 +322,7 @@ def article(chunk_id: str, user=Depends(current_user)):
 
 
 def owned_by(user):
-    return or_(db.Review.owner == user["id"], db.Review.owner.is_(None))
+    return db.Review.owner == user["id"]
 
 
 def find_review(s, review_id, user, with_output=False):
