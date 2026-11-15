@@ -14,6 +14,7 @@
   --gold-600:#A87A2F; --gold-500:#CF9F55; --gold-300:#E8CC98; --gold-100:#FBF0DA; --gold-50:#FDF8EE;
   --cream:#F7F4EE; --card:#FFFFFF; --line:#ECE6DA; --line-2:#F4F0E8;
   --ink:#1D2A23; --muted:#66706A; --faint:#98A09A;
+  --blue-700:#2F4E7A; --blue-500:#5B7DB0; --blue-300:#A9BCD8; --blue-100:#E3EAF4; --blue-50:#F1F5FA;
   --red:#C2543F; --red-50:#FCEDEA; --amber:#B7791F; --amber-50:#FFF6E3;
   --shadow:0 1px 2px rgba(16,60,44,.04),0 8px 28px rgba(16,60,44,.07);
   --r:18px;
@@ -199,10 +200,10 @@ button.link:disabled{color:var(--faint);cursor:default}
 .closed>button .i-chev{transform:none}
 .closed .ci-list{display:none}
 .ci-list{display:grid;gap:2px;padding:2px 0 6px}
-.ci{display:flex;align-items:center;gap:10px;padding:8px 12px;padding-inline-start:26px;border-radius:10px;text-align:start;font-size:13px;color:var(--muted)}
+.ci{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;padding-inline-start:26px;border-radius:10px;text-align:start;font-size:13px;color:var(--muted)}
 .ci:hover{background:var(--line-2);color:var(--ink)}
 .ci.on{background:var(--mint-100);color:var(--g-900);font-weight:600}
-.ci .tt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci .tt{flex:1;min-width:0;line-height:1.7;overflow-wrap:anywhere}
 .ci .c{min-width:22px;height:22px;border-radius:7px;background:var(--line-2);color:var(--g-700);font-size:11.5px;display:grid;place-items:center;font-weight:700}
 .ci.on .c{background:#fff}
 .pane{padding:26px 28px}
@@ -212,6 +213,8 @@ button.link:disabled{color:var(--faint);cursor:default}
 .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:8px;background:var(--line-2);color:var(--muted)}
 .tag.ocr{background:var(--gold-50);color:var(--gold-600)}
+a.tag.go{cursor:pointer;color:var(--blue-700);background:var(--blue-50)}
+a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
 .stepper{display:flex;gap:6px}
 .stepper button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;color:var(--g-800);background:#fff}
 .stepper button:disabled{opacity:.35;cursor:default}
@@ -225,9 +228,9 @@ button.link:disabled{color:var(--faint);cursor:default}
 .acc>.ah .nm{flex:1;font-weight:600}
 .acc>.ah .n{font-size:12px;font-weight:700;min-width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
 .acc .dot{width:10px;height:10px;border-radius:50%}
-.acc.governing .dot{background:var(--g-700)} .acc.governing .n{background:var(--mint-100);color:var(--g-700)}
-.acc.disclosure .dot{background:var(--gold-500)} .acc.disclosure .n{background:var(--gold-100);color:var(--gold-600)}
-.acc.related .dot,.acc.other .dot{background:#9DB3A8} .acc.related .n,.acc.other .n{background:var(--line-2);color:var(--muted)}
+.acc.governing .dot{background:var(--blue-700)} .acc.governing .n{background:var(--blue-100);color:var(--blue-700)}
+.acc.disclosure .dot{background:var(--blue-500)} .acc.disclosure .n{background:var(--blue-50);color:var(--blue-500)}
+.acc.related .dot,.acc.other .dot{background:var(--blue-300)} .acc.related .n,.acc.other .n{background:var(--line-2);color:var(--muted)}
 .acc .ah .i-chev{transform:rotate(-90deg)}
 .acc.open>.ah .i-chev{transform:rotate(90deg)}
 .acc>.ab{display:none;border-top:1px solid var(--line-2);padding:6px 10px 10px}
@@ -238,13 +241,13 @@ button.link:disabled{color:var(--faint);cursor:default}
 .art .bd{flex:1;min-width:0}
 .art .hd{font-weight:600;font-size:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .art .sb{color:var(--faint);font-size:12.5px}
-.art .cited{font-size:11px;font-weight:600;background:var(--gold-100);color:var(--gold-600);padding:1px 8px;border-radius:999px}
+.art .cited{font-size:11px;font-weight:600;background:var(--blue-100);color:var(--blue-700);padding:1px 8px;border-radius:999px}
 .art .i-chev{transform:rotate(-90deg)}
 .art.open{background:#FCFBF8}
 .art.open>button .i-chev{transform:rotate(90deg)}
 .art .more{display:none;padding:0 12px 14px}
 .art.open .more{display:block}
-.why{display:flex;gap:8px;font-size:13px;background:var(--mint-50);color:var(--g-800);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.why{display:flex;gap:8px;font-size:13px;background:var(--blue-50);color:var(--blue-700);border-radius:10px;padding:10px 12px;margin-bottom:10px}
 .why b{white-space:nowrap}
 .rtx{white-space:pre-wrap;font-size:13.5px;line-height:2;max-height:340px;overflow:auto;padding:12px 14px;border-radius:10px;background:#fff;border:1px solid var(--line-2)}
 .none{color:var(--faint);padding:16px;border:1px dashed var(--line);border-radius:14px;text-align:center}
@@ -255,6 +258,9 @@ button.link:disabled{color:var(--faint);cursor:default}
 .doctext .pg::after{content:"";flex:1;height:1px;background:var(--line)}
 .doctext .pg:first-child{margin-top:0}
 .doctext h4{color:var(--g-900);margin-top:10px}
+.doctext .pg,.doctext .dc{scroll-margin-top:24px}
+.doctext .dc{border-radius:10px;transition:background .6s}
+.doctext .hl{background:var(--gold-50);box-shadow:0 0 0 8px var(--gold-50)}
 
 @media (max-width:1100px){
   .grid2,.up{grid-template-columns:1fr}
@@ -716,10 +722,10 @@ $("#vtabs").addEventListener("click", e => { const b = e.target.closest("[data-v
 function drawText(){
   // the document's text as OCR read it, in reading order, with its page numbers
   let page = null, h = "";
-  for (const c of result.output.clauses){
-    if (c.page_start!=null && c.page_start!==page){ page = c.page_start; h += `<div class="pg">صفحة ${page}</div>`; }
-    h += `${c.title && !c.body.startsWith(c.title)?`<h4>${esc(c.title)}</h4>`:""}<p>${esc(c.body)}</p>`;
-  }
+  result.output.clauses.forEach((c,i) => {
+    if (c.page_start!=null && c.page_start!==page){ page = c.page_start; h += `<div class="pg" id="pg-${page}">صفحة ${page}</div>`; }
+    h += `<div class="dc" id="dc-${i}">${c.title && !c.body.startsWith(c.title)?`<h4>${esc(c.title)}</h4>`:""}<p>${esc(c.body)}</p></div>`;
+  });
   $("#doctext").innerHTML = h || `<div class="empty">لا يوجد نص.</div>`;
 }
 
@@ -779,10 +785,9 @@ function drawClause(){
       ${c.breadcrumb?`<div class="crumbs">${esc(c.breadcrumb)}</div>`:""}
       <h2>${esc(c.title||"بند بدون عنوان")}</h2>
       <div class="meta">
-        ${c.page_start!=null?`<span class="tag">${ic("doc",14)}${pages(c.page_start,c.page_end)} من المستند</span>`:""}
+        ${c.page_start!=null?`<a class="tag go" data-goto="${CUR}" title="اعرض هذا البند في النص المستخرج">${ic("doc",14)}${pages(c.page_start,c.page_end)} من المستند</a>`:""}
         ${c.from_ocr?`<span class="tag ocr">مستخرج من صفحة ممسوحة</span>`:""}
         ${c.fixed_by_agent?`<span class="tag ocr" title="${esc(c.agent_note||"")}">صحّح وكيل التقسيم هذا البند</span>`:""}
-        ${(c.topics||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}
       </div></div>
       <div class="stepper"><button data-step="-1" title="البند السابق"${CUR===0?" disabled":""}>${ic("prev",18)}</button><button data-step="1" title="البند التالي"${CUR===cl.length-1?" disabled":""}>${ic("next",18)}</button></div>
     </div>
@@ -800,11 +805,20 @@ $("#navitems").addEventListener("click", e => {
   const b = e.target.closest("[data-ci]"); if (b) openClause(+b.dataset.ci);
 });
 $("#pane").addEventListener("click", e => {
+  const go = e.target.closest("[data-goto]"); if (go){ gotoText(+go.dataset.goto); return; }
   const s = e.target.closest("[data-step]"); if (s){ openClause(CUR + +s.dataset.step); return; }
   const a = e.target.closest("[data-acc]"); if (a){ const k = a.dataset.acc; OPEN.has(k) ? OPEN.delete(k) : OPEN.add(k); drawClause(); return; }
   const r = e.target.closest("[data-art]"); if (r){ const k = +r.dataset.art; OPENART.has(k) ? OPENART.delete(k) : OPENART.add(k); drawClause(); }
 });
 $("#q").addEventListener("input", e => drawNav(e.target.value));
+function gotoText(i){
+  // jump from a clause to its exact place (and page) in the extracted text, and flash it
+  view("text");
+  const el = document.getElementById("dc-"+i); if (!el) return;
+  const pg = el.previousElementSibling?.classList.contains("pg") ? el.previousElementSibling : el;   // show the page number too
+  pg.scrollIntoView({block:"start", behavior:"smooth"});
+  el.classList.add("hl"); setTimeout(() => el.classList.remove("hl"), 1800);
+}
 document.addEventListener("keydown", e => {   // ← next, → previous (right-to-left reading order)
   if (!result || VIEW!=="clauses" || $("#v-results").classList.contains("hidden") || e.target.closest("input,textarea,select")) return;
   if (e.key==="ArrowLeft") openClause(CUR+1);

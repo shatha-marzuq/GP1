@@ -70,6 +70,25 @@ def is_contents_line(text):
     return bool(re.search(r"\.{4,}|-{4,}|…", text) or re.search(r"\s\d{1,3}$", text))
 
 
+# the table of contents itself: its heading ("الفهرس"), or text made of entries "title ... page"
+# it is not a clause, so it is left out of the clauses (the agent still reads it from the items)
+CONTENTS_HEADINGS = ["الفهرس", "فهرس المحتويات", "المحتويات", "جدول المحتويات"]
+CONTENTS_ENTRY = r"(?:\.{3,}|…)\s*\d{1,3}(?!\d)"
+
+
+def is_contents_item(item):
+    if item.get("type") == "table":
+        return False
+    text = get_item_text(item)
+    if text.strip(" :") in CONTENTS_HEADINGS:
+        return True
+    entries = len(re.findall(CONTENTS_ENTRY, text))
+    if entries >= 3:
+        return True
+    # one entry on its own line ex: "1- اسم الصندوق ونوعه ... 6"
+    return entries == 1 and count_words(text) <= 20 and re.search(CONTENTS_ENTRY + r"\s*$", text) is not None
+
+
 # clause title does not end with a full stop, a list item usually does
 def is_sentence(text):
     return text.rstrip().endswith((".", "؛"))
@@ -443,6 +462,9 @@ def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأ
                 current["items"].append(title_item)
             else:
                 current["items"].append(item)
+
+        elif is_contents_item(item):
+            continue
 
         elif is_annex_heading(item) and current_number > 0:
             in_annex = True
