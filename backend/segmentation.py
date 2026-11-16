@@ -521,6 +521,7 @@ def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأ
             norm_texts = []
             item_ids = []
             pages = []
+            line_pages = []   # the page of each line of content, to show where a clause goes on to the next page
             marker = None
             has_table = False
             from_ocr = False
@@ -528,6 +529,7 @@ def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأ
                 texts.append(get_item_text(item))
                 norm_texts.append(get_item_text(item, "text_norm"))
                 item_ids.append(item["id"])
+                line_pages += [item.get("page")] * (get_item_text(item).count("\n") + 1)
                 if item.get("page") and item["page"] not in pages:
                     pages.append(item["page"])
                 if marker is None and item.get("marker"):
@@ -557,6 +559,7 @@ def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأ
                 "page_start": min(pages) if pages else None,
                 "page_end": max(pages) if pages else None,
                 "pages": sorted(pages),
+                "line_pages": line_pages,
                 "item_ids": item_ids,
                 "word_count": words,
                 "oversize": words > max_words,

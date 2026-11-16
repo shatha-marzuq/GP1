@@ -151,6 +151,7 @@ def _result(clause: dict, hits: list[dict], agent: dict | None = None) -> dict:
         "title": clause.get("title"),
         "page_start": clause.get("page_start"),
         "page_end": clause.get("page_end"),
+        "line_pages": clause.get("line_pages"),   # page of each line of the clause text
         "from_ocr": clause.get("from_ocr"),
         "fixed_by_agent": clause.get("fixed_by_agent", False),   # the Segmentation Agent moved this clause's start
         "agent_note": clause.get("agent_note"),
