@@ -159,7 +159,7 @@ def start_vllm(model=VLLM_MODEL, port=VLLM_PORT):
             raise RuntimeError(f"another vLLM server on port {port} serves {served}, not {model}")
         return url
     try:
-        import vllm  # noqa: F401
+        import vllm  
     except ImportError:
         raise RuntimeError("vLLM is not installed (pip install vllm). It runs on Linux / WSL2 with an NVIDIA GPU")
     os.makedirs(os.path.dirname(VLLM_LOG), exist_ok=True)
