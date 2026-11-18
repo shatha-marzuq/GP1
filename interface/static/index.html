@@ -263,12 +263,56 @@ a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
 .doctext .dc{border-radius:10px;transition:background .6s}
 .doctext .hl{background:var(--gold-50);box-shadow:0 0 0 8px var(--gold-50)}
 
+/* ─── my account ─── */
+.user[data-go]{cursor:pointer;transition:border-color .15s}
+.user[data-go]:hover{border-color:var(--g-600)}
+.page:not(.hidden){animation:fadeUp .28s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.me-hero{overflow:hidden;margin-bottom:20px;padding-bottom:26px}
+.me-band{height:100px;position:relative;background:linear-gradient(120deg,var(--g-900),var(--g-700) 60%,var(--g-600))}
+.me-band::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 130%,rgba(207,159,85,.38),transparent 45%)}
+.me-id{display:flex;align-items:flex-start;gap:18px;padding:0 28px;margin-top:-40px;position:relative}
+.me-av{width:96px;height:96px;font-size:38px;border:5px solid #fff;box-shadow:var(--shadow);flex:none}
+.me-who{flex:1;min-width:0;padding-top:50px}
+.me-who h1{font-size:24px;color:var(--g-900);line-height:1.4;min-height:34px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-mail{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13.5px}
+.me-role{margin-top:56px}
+#a-err{margin-bottom:20px}
+.me-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.me-box{padding:24px 26px;display:grid;gap:16px}
+.me-bh,.me-dh{display:flex;align-items:center;gap:14px}
+.me-bh h2,.me-dh h2{font-size:16.5px;color:var(--g-900);line-height:1.4}
+.me-bh p,.me-dh p{font-size:13px;color:var(--muted)}
+.me-dh>div{flex:1}
+.me-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--mint-50);color:var(--g-700);flex:none}
+.me-ic.red{background:var(--red-50);color:var(--red)}
+.me-box .input:disabled{color:var(--muted);background:var(--line-2);cursor:not-allowed}
+.me-box .hint{margin-top:-8px}
+.me-act{display:flex;gap:10px;justify-content:flex-end}
+#v-account .btn:disabled{opacity:.5;cursor:default}
+.me-danger{margin-top:20px;padding:20px 26px;border-color:#F1D3CC}
+.me-dform{display:grid;gap:14px;max-height:0;overflow:hidden;opacity:0;transition:max-height .35s ease,opacity .25s,margin .35s}
+.me-danger.open .me-dform{max-height:320px;opacity:1;margin-top:18px}
+.me-danger.open #del-open{visibility:hidden}
+.btn.danger{background:var(--red);color:#fff}
+.btn.danger:hover{background:#A9442F}
+.btn.ghost-red{border:1px solid #F1D3CC;background:#fff;color:var(--red)}
+.btn.ghost-red:hover{background:var(--red-50)}
+.btn.busy{pointer-events:none;opacity:.8}
+.btn.busy::before{content:"";width:15px;height:15px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:sp .8s linear infinite}
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,20px);z-index:50;display:flex;align-items:center;gap:8px;
+  background:var(--g-900);color:#fff;padding:12px 20px;border-radius:12px;box-shadow:var(--shadow);font-size:14px;font-weight:500;
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast svg{color:var(--gold-300)}
+
 @media (max-width:1100px){
   .grid2,.up{grid-template-columns:1fr}
   .up-side{border-inline-start:0;border-top:1px solid var(--line)}
   .ws{grid-template-columns:1fr}
   .tree{position:static;max-height:320px}
   .stats{grid-template-columns:repeat(2,1fr)}
+  .me-grid{grid-template-columns:1fr}
 }
 @media (max-width:860px){
   .auth{grid-template-columns:1fr}
@@ -286,6 +330,9 @@ a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
   .main{padding:16px 16px 40px}
   .hero{padding:26px 6px 96px}
   .stats{margin:-62px 10px 0}
+  .me-id{flex-wrap:wrap;padding:0 18px}
+  .me-box,.me-danger{padding:20px}
+  .me-dh{flex-wrap:wrap}
   .pane,.up-main,.doctext{padding:20px 18px}
   .vtabs button{padding:0 12px;font-size:13px}
   .vtabs button svg{display:none}
@@ -348,6 +395,7 @@ a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
       <button data-view="dash" class="on"><span data-i="home"></span>لوحة المتابعة</button>
       <button data-view="upload"><span data-i="upload"></span>رفع مستند</button>
       <button data-view="results" id="nav-results" disabled><span data-i="file"></span>نتائج المراجعة</button>
+      <button data-view="account"><span data-i="user"></span>حسابي</button>
       <button disabled><span data-i="chart"></span>التقارير<small>قريبًا</small></button>
     </nav>
     <button class="out" id="logout"><span data-i="logout"></span>تسجيل الخروج</button>
@@ -356,7 +404,7 @@ a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
   <main class="main">
     <header class="top">
       <div class="crumb" id="crumb"></div>
-      <div class="user"><span class="avatar" id="u-av"></span><b>أهلًا، <span id="u-name"></span></b></div>
+      <div class="user" data-go="account" title="حسابي"><span class="avatar" id="u-av"></span><b>أهلًا، <span id="u-name"></span></b></div>
     </header>
 
     <!-- dashboard -->
@@ -443,8 +491,60 @@ a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
       </div>
       <div class="card doctext hidden" id="doctext"></div>
     </section>
+
+    <!-- my account -->
+    <section class="page hidden" id="v-account">
+      <div class="card me-hero">
+        <div class="me-band"></div>
+        <div class="me-id">
+          <span class="avatar me-av" id="a-av"></span>
+          <div class="me-who">
+            <h1 id="a-name"></h1>
+            <div class="me-mail"><span data-i="mail"></span><span class="ltr" id="a-email"></span></div>
+          </div>
+          <span class="pill done me-role"><i></i>موظف امتثال</span>
+        </div>
+      </div>
+      <div class="err hidden" id="a-err"></div>
+
+      <div class="me-grid">
+        <form class="card me-box" id="f-name" novalidate>
+          <div class="me-bh"><span class="me-ic" data-i="user"></span><div><h2>المعلومات الشخصية</h2><p>اسمك كما يظهر في ميثاق</p></div></div>
+          <div class="field"><label>الاسم الكامل</label><input class="input" name="name" autocomplete="name"><span class="ic" data-i="user"></span></div>
+          <div class="field"><label>الإيميل</label><input class="input ltr" name="email" disabled><span class="ic" data-i="mail"></span></div>
+          <div class="hint">الإيميل هو وسيلة دخولك ولا يمكن تغييره.</div>
+          <div class="err hidden"></div>
+          <div class="me-act"><button class="btn primary" type="submit" disabled>حفظ التغييرات</button></div>
+        </form>
+
+        <form class="card me-box" id="f-pass" novalidate>
+          <div class="me-bh"><span class="me-ic" data-i="shield"></span><div><h2>الأمان</h2><p>تغيير كلمة المرور</p></div></div>
+          <div class="field"><label>كلمة المرور الحالية</label><input class="input" name="current" type="password" autocomplete="current-password"><span class="ic" data-i="lock"></span></div>
+          <div class="field"><label>كلمة المرور الجديدة</label><input class="input" name="new" type="password" autocomplete="new-password"><span class="ic" data-i="lock"></span></div>
+          <div class="field"><label>تأكيد كلمة المرور الجديدة</label><input class="input" name="confirm" type="password" autocomplete="new-password"><span class="ic" data-i="lock"></span></div>
+          <div class="hint">8 خانات على الأقل، تجمع بين حروف وأرقام. سيُسجَّل خروجك من أجهزتك الأخرى.</div>
+          <div class="err hidden"></div>
+          <div class="me-act"><button class="btn primary" type="submit">تغيير كلمة المرور</button></div>
+        </form>
+      </div>
+
+      <div class="card me-danger" id="me-danger">
+        <div class="me-dh">
+          <span class="me-ic red" data-i="trash"></span>
+          <div><h2>حذف الحساب</h2><p>يُحذف حسابك وجميع مستنداتك ونتائج مراجعتها نهائيًا، ولا يمكن التراجع عن ذلك.</p></div>
+          <button class="btn ghost-red" type="button" id="del-open">حذف الحساب</button>
+        </div>
+        <form class="me-dform" id="f-delete" novalidate>
+          <div class="field"><label>اكتب كلمة المرور للتأكيد</label><input class="input" name="password" type="password" autocomplete="current-password"><span class="ic" data-i="lock"></span></div>
+          <div class="err hidden"></div>
+          <div class="me-act"><button class="btn ghost" type="button" id="del-cancel">إلغاء</button><button class="btn danger" type="submit">حذف حسابي نهائيًا</button></div>
+        </form>
+      </div>
+    </section>
   </main>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 const $ = s => document.querySelector(s);
@@ -453,7 +553,7 @@ const fmtDate = t => new Date(t*1000).toLocaleDateString("en-CA");
 const pages = (a,b) => a==null ? "" : (a===b||b==null ? `صفحة ${a}` : `صفحة ${a}–${b}`);
 const STATUS = {received:"قيد المراجعة",extracting:"قيد المراجعة",segmenting:"قيد المراجعة",retrieving:"قيد المراجعة",done:"اكتملت",failed:"تعذّرت"};
 const ROLE = {governing:"حكم نظامي", disclosure:"متطلب إفصاح", related:"ذات صلة", other:"مواد مرتبطة"};
-let current = null, poll = null, result = null, VIEW = "clauses", CUR = 0, LIST = [];
+let ME = null, current = null, poll = null, result = null, VIEW = "clauses", CUR = 0, LIST = [];
 let OPEN = new Set(), OPENART = new Set(), CLOSEDSEC = new Set();
 
 // ───────── icons (simple line icons, filled in wherever data-i="name" appears)
@@ -507,7 +607,7 @@ function showAuth(){
 }
 function enter(u){
   $("#auth").classList.add("hidden"); $("#app").classList.remove("hidden");
-  $("#u-name").textContent = u.name.trim().split(/\s+/).slice(0,2).join(" "); $("#u-av").textContent = u.name.trim()[0];
+  setUser(u);
   document.querySelectorAll("#auth form").forEach(f=>f.reset());
   result = null; show("dash");
 }
@@ -564,18 +664,91 @@ $("#code-resend").addEventListener("click", async () => {
 });
 $("#code-back").addEventListener("click", () => tab("signup"));
 $("#logout").addEventListener("click", async () => { await post("/api/auth/logout"); showAuth(); });
+function setUser(u){   // the name and initial in the header
+  ME = {...u};
+  $("#u-name").textContent = u.name.trim().split(/\s+/).slice(0,2).join(" "); $("#u-av").textContent = u.name.trim()[0];
+}
+
+// ───────── my account: name and email; change the name or the password, delete the account
+async function api(url, body){   // a request whose failure always ends in a message, never a stuck page
+  try {
+    const r = await _fetch(url, body===undefined ? {} : {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+    if (r.status===401) { showAuth(); return {ok:false, detail:"انتهت الجلسة، سجّل الدخول من جديد."}; }
+    let j = {}; try { j = await r.json(); } catch {}
+    const msg = typeof j.detail==="string" && /[\u0600-\u06FF]/.test(j.detail) ? j.detail : "تعذّر تنفيذ الطلب، حاول مرة أخرى.";
+    return r.ok ? {ok:true, data:j} : {ok:false, detail:msg};
+  } catch { return {ok:false, detail:"تعذّر الاتصال بالخادم. تأكد أنه يعمل ثم حاول مرة أخرى."}; }
+}
+const busy = (b, on) => { b.classList.toggle("busy", on); b.disabled = on; };
+function errOf(f, msg){ const e = f.querySelector(".err"); e.textContent = msg || ""; e.classList.toggle("hidden", !msg); }
+let toastT = null;
+function toast(msg){
+  const t = $("#toast"); t.innerHTML = ic("check", 18) + esc(msg); t.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2800);
+}
+function paintMe(u){
+  $("#a-av").textContent = (u.name || "").trim()[0] || ""; $("#a-name").textContent = u.name || ""; $("#a-email").textContent = u.email || "";
+}
+function closeDelete(){ $("#me-danger").classList.remove("open"); $("#f-delete").reset(); errOf($("#f-delete")); }
+async function loadAccount(){
+  const fn = $("#f-name"), fp = $("#f-pass");
+  if (ME) paintMe(ME);                                     // what the header knows, at once
+  fn.elements.name.value = ME?.name || ""; fn.elements.email.value = ME?.email || "";
+  fn.querySelector("[type=submit]").disabled = true;
+  fp.reset(); [fn, fp].forEach(f => errOf(f)); closeDelete();
+  const r = await api("/api/account");
+  $("#a-err").textContent = r.ok ? "" : r.detail; $("#a-err").classList.toggle("hidden", r.ok);
+  if (!r.ok) return;
+  const a = r.data; ME = {...ME, ...a}; paintMe(a);
+  if (document.activeElement !== fn.elements.name) fn.elements.name.value = a.name;
+  fn.elements.email.value = a.email;
+}
+$("#f-name").addEventListener("input", e => {
+  const f = e.currentTarget, v = f.elements.name.value.trim();
+  f.querySelector("[type=submit]").disabled = v.length < 2 || v === (ME?.name || "");
+  errOf(f);
+});
+$("#f-name").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target, b = f.querySelector("[type=submit]"); errOf(f);
+  busy(b, true); const r = await api("/api/account/name", {name: f.elements.name.value}); busy(b, false);
+  if (!r.ok) return errOf(f, r.detail);
+  setUser({...ME, ...r.data}); paintMe(ME); f.elements.name.value = ME.name; b.disabled = true;
+  toast("تم حفظ الاسم");
+});
+$("#f-pass").addEventListener("input", e => errOf(e.currentTarget));
+$("#f-pass").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target, el = f.elements, b = f.querySelector("[type=submit]"); errOf(f);
+  if (!el.current.value || !el.new.value) return errOf(f, "اكتب كلمة المرور الحالية والجديدة.");
+  if (el.new.value !== el.confirm.value) return errOf(f, "كلمتا المرور الجديدتان غير متطابقتين.");
+  busy(b, true); const r = await api("/api/account/password", {current: el.current.value, new: el.new.value}); busy(b, false);
+  if (!r.ok) return errOf(f, r.detail);
+  f.reset(); toast("تم تغيير كلمة المرور");
+});
+$("#del-open").addEventListener("click", () => {
+  $("#me-danger").classList.add("open"); setTimeout(() => $("#f-delete").elements.password.focus(), 250);
+});
+$("#del-cancel").addEventListener("click", closeDelete);
+$("#f-delete").addEventListener("input", e => errOf(e.currentTarget));
+$("#f-delete").addEventListener("submit", async e => {
+  e.preventDefault(); const f = e.target, b = f.querySelector("[type=submit]"); errOf(f);
+  if (!f.elements.password.value) return errOf(f, "اكتب كلمة المرور للتأكيد.");
+  busy(b, true); const r = await api("/api/account/delete", {password: f.elements.password.value}); busy(b, false);
+  if (!r.ok) return errOf(f, r.detail);
+  ME = null; LIST = []; result = null; showAuth(); toast("تم حذف حسابك");
+});
 
 // ───────── navigation
-const TITLES = {dash:"لوحة المتابعة", upload:"رفع مستند", results:"نتائج المراجعة"};
+const TITLES = {dash:"لوحة المتابعة", upload:"رفع مستند", results:"نتائج المراجعة", account:"حسابي"};
 function show(view){
   if (view==="results" && !result){ const d = LIST.find(r=>r.status==="done"); if (d) openReview(d.id); return; }
-  for (const v of ["dash","upload","results"]) $("#v-"+v).classList.toggle("hidden", v!==view);
+  for (const v of ["dash","upload","results","account"]) $("#v-"+v).classList.toggle("hidden", v!==view);
   $(".main").classList.toggle("dash-bg", view==="dash");
   document.querySelectorAll(".nav button[data-view]").forEach(b => b.classList.toggle("on", b.dataset.view===view));
   $("#nav-results").disabled = !result && !LIST.some(r=>r.status==="done");
   $("#crumb").innerHTML = "ميثاق ‹ <b>" + TITLES[view] + "</b>";
   if (view==="dash") loadDash();
   if (view==="upload" && !poll) resetUpload();
+  if (view==="account") loadAccount();
   scrollTo(0,0);
 }
 document.addEventListener("click", e => {

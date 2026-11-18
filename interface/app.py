@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import shutil
 import sys
 import threading
 import time
@@ -266,6 +267,19 @@ class Verify(BaseModel):
     code: str
 
 
+class Name(BaseModel):
+    name: str
+
+
+class Password(BaseModel):
+    password: str
+
+
+class NewPassword(BaseModel):
+    current: str
+    new: str
+
+
 def start_session(response, session, user):
     response.set_cookie(COOKIE, session, httponly=True, samesite="lax", max_age=auth.SESSION_TTL)
     return user
@@ -305,6 +319,35 @@ def logout(request: Request, response: Response):
 @app.get("/api/auth/me")
 def me(user=Depends(current_user)):
     return ACCOUNTS.public(user)
+
+
+# ─────────── my account: the officer's own details; nothing new is stored for it
+@app.get("/api/account")
+def account(user=Depends(current_user)):
+    """The officer's name and email (the counts of their documents are on the dashboard)."""
+    return ACCOUNTS.public(user)
+
+
+@app.post("/api/account/name")
+def rename(body: Name, user=Depends(current_user)):
+    return ACCOUNTS.rename(user["id"], body.name)
+
+
+@app.post("/api/account/password")
+def change_password(body: NewPassword, request: Request, user=Depends(current_user)):
+    """The current password, then the new one; the officer's other devices are logged out."""
+    return ACCOUNTS.change_password(user["id"], body.current, body.new, request.cookies.get(COOKIE))
+
+
+@app.post("/api/account/delete")
+def delete_account(body: Password, response: Response, user=Depends(current_user)):
+    """Deletes the account, its sessions and reviews (after the password), and the reviews' uploaded files."""
+    with LOCK:                                          # no progress update writes a review meanwhile
+        review_ids = ACCOUNTS.delete_account(user["id"], body.password)
+    for review_id in review_ids:
+        shutil.rmtree(UPLOADS / review_id, ignore_errors=True)
+    response.delete_cookie(COOKIE)
+    return {"ok": True}
 
 
 @app.get("/")
