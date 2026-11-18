@@ -21,14 +21,15 @@ are listed and the exit code is 2 (re-run: answers already received come from th
 
 Output: output/09_agent_eval/report_<tag>.json + .md (docproc/testset/eval/ for sets that include mulkia)
 Usage : python3 test_agent.py [--mode dense|hybrid|bm25] [--no-rerank] [--llm [--model NAME] [--no-cache]]
-                              [--sets blom kb mulkia] [--tag NAME]
+                              [--sets blom kb mulkia] [--tag NAME] [--ablate NAME]
+        --ablate switches off one part of the agent (retrieval_agent.ABLATIONS); its name is added to the tag
         (bm25 without --llm needs no models and no API — use it to check the logic)
 """
 import argparse, json, sys, time
 from pathlib import Path
 
 from retriever import RegulationRetriever
-from retrieval_agent import LLM, POOL_SIZE, SEARCH_DEPTH, RetrievalAgent
+from retrieval_agent import ABLATIONS, LLM, POOL_SIZE, SEARCH_DEPTH, RetrievalAgent
 
 ROOT = Path(__file__).resolve().parent.parent
 SETS = {"blom": (ROOT / "output" / "08_tc_evaluation" / "blom_clauses.json", "private", True),
@@ -96,15 +97,17 @@ def main():
     ap.add_argument("--no-cache", action="store_true", help="ask the LLM again even when an answer is cached")
     ap.add_argument("--sets", nargs="+", default=["blom", "kb"], choices=list(SETS))
     ap.add_argument("--tag", default="", help="suffix for the report file names (to keep runs apart)")
+    ap.add_argument("--ablate", choices=sorted(ABLATIONS), help="switch off one part of the agent (added to the tag)")
     a = ap.parse_args()
     rerank = not a.no_rerank and a.mode != "bm25"
     r = RegulationRetriever()
     llm = LLM(a.model) if a.llm else None
     if llm and a.no_cache:
         llm.cache = False
-    agent = RetrievalAgent(r, llm=llm)
+    agent = RetrievalAgent(r, llm=llm, ablate=[a.ablate] if a.ablate else [])
     report = {"config": {"mode": a.mode, "rerank": rerank, "llm": llm.model if llm else None,
-                         "search_depth": SEARCH_DEPTH, "pool_size": POOL_SIZE}, "sets": {}}
+                         "search_depth": SEARCH_DEPTH, "pool_size": POOL_SIZE, "ablate": a.ablate,
+                         "llm_cache": bool(llm and llm.cache)}, "sets": {}}
     invalid = []
     for name in a.sets:
         path, fund_type, use_title = SETS[name]
@@ -123,6 +126,7 @@ def main():
                 "agent_secs": sections(hits), "agent_pool": sections(hits), "selected": sel,
                 "llm_ok": "understand" in steps and "select" in steps and "llm_error" not in steps,
                 "cache_hits": sum(bool(s.get("cached")) for s in out["steps"]),
+                "llm_answers": sum(s["action"] in ("understand", "select") for s in out["steps"]),
                 "steps": out["steps"]})
         s = {"n": len(rows), "seconds_per_clause": round((time.time() - t0) / len(rows), 1),
              "all": summarise(rows, "expected"), "reachable_only": summarise(rows, "reachable"),
@@ -132,6 +136,8 @@ def main():
         if llm:
             s["llm_failed"] = [x["id"] for x in rows if not x["llm_ok"]]
             s["cache_hits"] = sum(x["cache_hits"] for x in rows)
+            s["llm_answers"] = sum(x["llm_answers"] for x in rows)          # successful LLM answers (cached or not)
+            s["llm_api_calls"] = s["llm_answers"] - s["cache_hits"]       # answers that came from the API this run
             invalid += [f"{name}:{i}" for i in s["llm_failed"]]
         report["sets"][name] = s
     report["valid"] = not invalid
@@ -139,10 +145,11 @@ def main():
     out = LOCAL_OUT if "mulkia" in a.sets else OUT
     tag = f"{a.mode}{'_rerank' if rerank else ''}{'_llm' if llm else ''}"
     tag += ("" if a.sets == ["blom", "kb"] else "_" + "_".join(a.sets)) + (f"_{a.tag}" if a.tag else "")
+    tag += f"_{a.ablate}" if a.ablate else ""
     out.mkdir(parents=True, exist_ok=True)
     (out / f"report_{tag}.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     lines = [f"# Retrieval agent vs plain search — mode={a.mode}, rerank={rerank}, llm={report['config']['llm']}, "
-             f"depth={SEARCH_DEPTH}, pool={POOL_SIZE}", ""]
+             f"depth={SEARCH_DEPTH}, pool={POOL_SIZE}" + (f", ablate={a.ablate}" if a.ablate else ""), ""]
     if llm and invalid:
         lines += [f"**INVALID RUN: {len(invalid)} clause(s) fell back to the rules (LLM error):** {', '.join(invalid)}", ""]
     for name, s in report["sets"].items():

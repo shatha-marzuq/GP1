@@ -1,0 +1,7 @@
+run,set,clauses,pool_recall,selection_recall,selection_precision,hit1,hit3,mrr,seconds_per_clause,llm_answers,llm_api_calls,valid,source
+plain,blom,33,0.924,,,0.727,0.909,0.838,,,,,report_dense_rerank_llm_blom_kb_mulkia_full.json
+full,blom,33,0.965,0.899,0.659,0.848,1.0,0.919,8.5,66,66,True,report_dense_rerank_llm_blom_kb_mulkia_full.json
+plain,kb,36,0.98,,,0.889,0.972,0.933,,,,,report_dense_rerank_llm_blom_kb_mulkia_full.json
+full,kb,36,0.994,0.8,0.563,0.944,0.972,0.965,8.4,72,72,True,report_dense_rerank_llm_blom_kb_mulkia_full.json
+plain,mulkia,37,0.905,,,0.514,0.784,0.661,,,,,report_dense_rerank_llm_blom_kb_mulkia_full.json
+full,mulkia,37,0.959,0.905,0.573,0.757,0.946,0.86,12.5,74,74,True,report_dense_rerank_llm_blom_kb_mulkia_full.json

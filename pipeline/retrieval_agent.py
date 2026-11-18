@@ -74,6 +74,16 @@ CLAUSE_CHARS = 3000
 CACHE_VERSION = "3"     # bump when the meaning of a cached answer changes without the request changing
 CATALOGUE_EXTRA = {"CMIR-art031", "CMIR-art063"}   # CMIR provisions listed in the step-1 catalogue
 LETTER_ITEM = re.compile(r"^\s*\(?[\u0621-\u064A]{1,2}\)\s")   # "أ) " "هـ) " starts a paragraph of an article
+# Ablations (evaluation only, test_agent.py --ablate): each switches off one part of the agent to measure its value.
+# The default (none) is the agent as described above.
+ABLATIONS = {
+    "no_rerank_clause": "clause search without the cross-encoder rerank",
+    "no_lexical": "no BM25 search on the clause text",
+    "no_topics": "no hybrid search per LLM topic query (topics still shown to the select step)",
+    "no_title": "no article-title match",
+    "no_named": "articles named by the LLM in step 1 not added to the pool",
+    "no_annex_item": "Annex 11 item named by the LLM in step 1 not added to the pool",
+}
 
 UNDERSTAND_PROMPT = """You help the Regulatory Retrieval Agent of MITHAQ find the Capital Market Authority (CMA)
 regulations that apply to one clause of the Terms and Conditions (الشروط والأحكام) of a Saudi PRIVATE investment fund.
@@ -273,10 +283,15 @@ def _body(text):
 
 
 class RetrievalAgent:
-    def __init__(self, retriever, *, llm=None, pool_size=POOL_SIZE):
+    def __init__(self, retriever, *, llm=None, pool_size=POOL_SIZE, ablate=()):
         """llm: a chat model answering in JSON (LLM()); it plans the searches and selects the provisions.
-        None = rules only. It can also be attached later (agent.llm = LLM()), as the interface does."""
+        None = rules only. It can also be attached later (agent.llm = LLM()), as the interface does.
+        ablate: names from ABLATIONS to switch off (evaluation only; default: none)."""
         self.r, self.llm, self.pool_size = retriever, llm, pool_size
+        unknown = set(ablate) - set(ABLATIONS)
+        if unknown:
+            raise ValueError(f"unknown ablation(s): {sorted(unknown)}; known: {sorted(ABLATIONS)}")
+        self.ablate = frozenset(ablate)
         self.sections = defaultdict(list)                       # section_key → chunk ids in order
         for i, m in zip(self.r.ids, self.r.metas):
             self.sections[m["section_key"]].append(i)
@@ -378,13 +393,15 @@ class RetrievalAgent:
                 log("llm_error", stage="understand", error=f"{type(e).__name__}: {e}"[:300])
 
         # 2) retrieve: one candidate pool from several searches, all inside the fund-type scope
-        lists = {"clause": self.r.search(text, k=depth, **{**kw, "pin_annex11": False})}
-        if mode != "bm25":
+        off = self.ablate
+        clause_kw = {**kw, "pin_annex11": False, **({"rerank": False} if "no_rerank_clause" in off else {})}
+        lists = {"clause": self.r.search(text, k=depth, **clause_kw)}
+        if mode != "bm25" and "no_lexical" not in off:
             lists["lexical"] = self.r.search(text, k=depth, mode="bm25", fund_type=fund_type, rerank=False,
                                              pin_annex11=False, **search_kw)
-        for n, t in enumerate((plan or {}).get("topics", []), 1):
+        for n, t in enumerate((plan or {}).get("topics", []) if "no_topics" not in off else [], 1):
             lists[f"topic{n}"] = self.r.search(t["query"], k=depth, **quick)
-        titled = self.title_match(title, fund_type) if title else []
+        titled = self.title_match(title, fund_type) if title and "no_title" not in off else []
         log("retrieve", searches=list(lists), depth=depth, top={name: self._units(hits)[:3] for name, hits in lists.items()})
         topics = (plan or {}).get("topics", [])
         qtext = "\n".join([_body(text)[:CLAUSE_CHARS]] + [t["query"] for t in topics])   # what excerpts are scored against
@@ -392,8 +409,10 @@ class RetrievalAgent:
 
         named = [a for a in (plan or {}).get("articles", []) if a in self.sections and a != PIN_SECTION
                  and self.r._allowed(self.section_meta[a], None, None, None, fund_type)][:MAX_NAMED]
+        if "no_named" in off:
+            named = []
         annex = ([self.annex_items[plan["annex11_item"]]]
-                 if plan and private and plan["annex11_item"] in self.annex_items else [])
+                 if plan and private and plan["annex11_item"] in self.annex_items and "no_annex_item" not in off else [])
         sources = self._sources(lists, titled, cited, named, annex)
         if plan is None:                                       # rules only: the measured fallback ranking
             hits = self._rules_ranking(lists["clause"], cited, private)

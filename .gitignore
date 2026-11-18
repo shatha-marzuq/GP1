@@ -26,3 +26,6 @@ output/vllm.log
 
 # accounts (old phone-number accounts; accounts are in the database now)
 interface/accounts/
+
+# report test raw runs (may contain text from the test T&Cs)
+output/10_report_tests/raw/
