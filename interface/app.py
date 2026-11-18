@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import argparse
 import re
-import socket
+import shutil
 import sys
 import threading
 import time
@@ -43,7 +43,6 @@ import auth  # noqa: E402
 import db  # noqa: E402
 
 UPLOADS = HERE / "uploads"      # uploaded files stay on the device that processed them; reviews go to the database
-HOST = socket.gethostname()
 ALLOWED = {".pdf", ".docx"}
 K = 5
 
@@ -93,42 +92,55 @@ def attach_llm(agent):
 
 
 # ─────────────────────────────────────────── reviews ───────────────────────────────────────────
-# Reviews live in the database (db.py). LOCK keeps this server's progress updates for one review in order.
+# The database keeps only the finished result of a review (db.py). While a review is processed, its progress
+# (status, done/total) lives in PROGRESS, in this server's memory: it means something only during the
+# processing. A review that is not in PROGRESS is done if it has an output, else it failed (the reason of a
+# failure goes to the server log, not to the database). LOCK keeps the progress updates in order.
 LOCK = threading.Lock()
-RUNNING = ("received", "extracting", "segmenting", "retrieving")
+PROGRESS: dict[str, dict] = {}      # review_id -> {"status", "done", "total"} while it is processed
 
 
 def init_db():
-    """Create the tables, bring in the old JSON files, and close reviews this device was processing when it
-    stopped (they would otherwise stay "in progress" forever)."""
+    """Create the tables (dropping the columns no longer kept) and bring in the old JSON files."""
     db.init()
-    with db.session() as s:
-        for r in s.scalars(select(db.Review).where(db.Review.host == HOST, db.Review.status.in_(RUNNING))):
-            r.status, r.error, r.finished = "failed", "توقف الخادم أثناء المعالجة. ارفع الملف مرة ثانية.", time.time()
-        for r in s.scalars(select(db.Review).where(db.Review.stats.is_(None), db.Review.status == "done")):
-            r.stats = output_stats(r.output)                                   # reviews from the JSON files
 
 
 def on_status(review_id, status, **info):
-    with LOCK, db.session() as s:
-        r = s.get(db.Review, review_id)
-        if r is None:                                       # deleted while it was running
+    if status == "failed":
+        print(f"  review {review_id} failed: {info.get('reason')}", flush=True)
+    if status == "done":                                    # done = its output is saved (run_review)
+        return
+    with LOCK:
+        p = PROGRESS.get(review_id)
+        if p is None:
             return
-        r.status = status
+        p["status"] = status
         if status == "retrieving":
             if "total" in info:                             # first update: done 0 of total
-                r.total, r.done = info["total"], info.get("done", 0)
+                p["total"], p["done"] = info["total"], info.get("done", 0)
             else:                                           # parallel branches can report out of order
-                r.done = max(r.done or 0, info.get("done", 0))
-        if status == "failed":
-            r.error = info.get("reason")
+                p["done"] = max(p["done"], info.get("done", 0))
 
 
 def run_review(review_id, path):
+    try:
+        output = process(review_id, path)
+        if output:
+            with LOCK, db.session() as s:
+                r = s.get(db.Review, review_id)
+                if r is not None:                           # not deleted while it was running
+                    r.output = enrich(output)
+    finally:
+        with LOCK:                                          # after the output is saved: the review is done
+            PROGRESS.pop(review_id, None)
+
+
+def process(review_id, path):
+    """Runs the orchestrator on the file: its output, or None when the review failed."""
     while not ENGINE["ready"]:
         if ENGINE["error"]:
             on_status(review_id, "failed", reason="تعذر تشغيل محرك البحث في الأنظمة: " + ENGINE["error"])
-            return
+            return None
         time.sleep(0.5)
     try:
         segment = SegmentationAgent(use_llm=USE_LLM) if SEG_AGENT else default_segment
@@ -138,18 +150,12 @@ def run_review(review_id, path):
                              {"max_concurrency": 8})
     except Exception as e:
         on_status(review_id, "failed", reason=f"{type(e).__name__}: {e}")
-        state = {}
-    with LOCK, db.session() as s:
-        r = s.get(db.Review, review_id)
-        if r is None:
-            return
-        if state.get("output"):
-            r.output = enrich(state["output"])
-            r.stats = output_stats(r.output)
-            r.status = "done"
-        elif r.status != "failed":
-            r.status, r.error = "failed", state.get("error") or "لم يُستخرج نص أو بنود من الملف."
-        r.finished = time.time()
+        return None
+    with LOCK:
+        reported = PROGRESS.get(review_id, {}).get("status") == "failed"
+    if not state.get("output") and not reported:
+        on_status(review_id, "failed", reason=state.get("error") or "لم يُستخرج نص أو بنود من الملف.")
+    return state.get("output")
 
 
 def cma_pages(pdf_pages):
@@ -193,7 +199,7 @@ def enrich(output):
 
 
 def output_stats(out):
-    """Counts shown in the reviews list, saved with the review so the list doesn't load every result."""
+    """Counts shown in the reviews list, computed from the result (not stored)."""
     out = out or {}
     clauses = out.get("clauses", [])
     return {
@@ -206,9 +212,16 @@ def output_stats(out):
     }
 
 
-def summary(r):
-    return {k: r.get(k) for k in ("id", "filename", "size", "created", "finished", "status", "done", "total",
-                                  "error", "mode")} | (r.get("stats") or output_stats(None))
+def running_now():
+    """A copy of PROGRESS. Taken before reading the reviews: a review it lacks had its output saved already."""
+    with LOCK:
+        return {k: dict(v) for k, v in PROGRESS.items()}
+
+
+def summary(r, running):
+    progress = running.get(r["id"]) or {"status": "done" if r.get("output") else "failed", "done": 0, "total": 0}
+    return ({k: r.get(k) for k in ("id", "filename", "created")} | progress
+            | {"mode": MODE} | output_stats(r.get("output")))       # mode: the page warns in stub mode
 
 
 # ─────────────────────────────────────────── API ───────────────────────────────────────────
@@ -254,6 +267,19 @@ class Verify(BaseModel):
     code: str
 
 
+class Name(BaseModel):
+    name: str
+
+
+class Password(BaseModel):
+    password: str
+
+
+class NewPassword(BaseModel):
+    current: str
+    new: str
+
+
 def start_session(response, session, user):
     response.set_cookie(COOKIE, session, httponly=True, samesite="lax", max_age=auth.SESSION_TTL)
     return user
@@ -295,6 +321,35 @@ def me(user=Depends(current_user)):
     return ACCOUNTS.public(user)
 
 
+# ─────────── my account: the officer's own details; nothing new is stored for it
+@app.get("/api/account")
+def account(user=Depends(current_user)):
+    """The officer's name and email (the counts of their documents are on the dashboard)."""
+    return ACCOUNTS.public(user)
+
+
+@app.post("/api/account/name")
+def rename(body: Name, user=Depends(current_user)):
+    return ACCOUNTS.rename(user["id"], body.name)
+
+
+@app.post("/api/account/password")
+def change_password(body: NewPassword, request: Request, user=Depends(current_user)):
+    """The current password, then the new one; the officer's other devices are logged out."""
+    return ACCOUNTS.change_password(user["id"], body.current, body.new, request.cookies.get(COOKIE))
+
+
+@app.post("/api/account/delete")
+def delete_account(body: Password, response: Response, user=Depends(current_user)):
+    """Deletes the account, its sessions and reviews (after the password), and the reviews' uploaded files."""
+    with LOCK:                                          # no progress update writes a review meanwhile
+        review_ids = ACCOUNTS.delete_account(user["id"], body.password)
+    for review_id in review_ids:
+        shutil.rmtree(UPLOADS / review_id, ignore_errors=True)
+    response.delete_cookie(COOKIE)
+    return {"ok": True}
+
+
 @app.get("/")
 def index():
     # no-cache: the browser always asks for the latest page (an old copy kept the old sign-up screen)
@@ -334,16 +389,18 @@ def find_review(s, review_id, user, with_output=False):
 
 @app.get("/api/reviews")
 def list_reviews(user=Depends(current_user)):
+    running = running_now()
     with db.session() as s:
         rows = s.scalars(select(db.Review).where(owned_by(user)).order_by(db.Review.created.desc()))
-        return [summary(r.as_dict()) for r in rows]
+        return [summary(r.as_dict(with_output=True), running) for r in rows]
 
 
 @app.get("/api/reviews/{review_id}")
 def get_review(review_id: str, user=Depends(current_user)):
+    running = running_now()
     with db.session() as s:
         r = find_review(s, review_id, user, with_output=True)
-    return summary(r) | {"output": for_browser(r.get("output"))}
+    return summary(r, running) | {"output": for_browser(r.get("output"))}
 
 
 def for_browser(output):
@@ -379,11 +436,11 @@ async def upload(file: UploadFile = File(...), user=Depends(current_user)):
     review_id = uuid.uuid4().hex[:8]
     dest = UPLOADS / review_id / name
     dest.parent.mkdir(parents=True, exist_ok=True)
-    data = await file.read()
-    dest.write_bytes(data)
+    dest.write_bytes(await file.read())
+    with LOCK:
+        PROGRESS[review_id] = {"status": "received", "done": 0, "total": 0}
     with db.session() as s:
-        s.add(db.Review(id=review_id, owner=user["id"], filename=name, size=len(data), file_path=str(dest),
-                        host=HOST, created=time.time(), status="received", done=0, total=0, mode=MODE))
+        s.add(db.Review(id=review_id, owner=user["id"], filename=name, created=time.time()))
     threading.Thread(target=run_review, args=(review_id, dest), daemon=True).start()
     return {"id": review_id}
 

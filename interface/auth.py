@@ -68,7 +68,7 @@ def password_problem(pw):
 
 
 def _as_dict(u: db.User) -> dict:
-    return {"id": u.id, "name": u.name, "email": u.email, "password": u.password, "created": u.created}
+    return {"id": u.id, "name": u.name, "email": u.email, "password": u.password}
 
 
 class Accounts:
@@ -120,8 +120,7 @@ class Accounts:
             with db.session() as s:
                 if s.scalar(select(db.User).where(db.User.email == email)):
                     raise TAKEN
-                user = db.User(id=uuid.uuid4().hex[:10], name=name, email=email, password=password_hash,
-                               created=time.time())
+                user = db.User(id=uuid.uuid4().hex[:10], name=name, email=email, password=password_hash)
                 s.add(user)
                 s.flush()                         # the user row first, then its session (foreign key)
                 return self._session(s, user)
@@ -157,7 +156,7 @@ class Accounts:
                 if s.scalar(select(db.User).where(db.User.email == email)):
                     raise TAKEN
                 user = db.User(id=uuid.uuid4().hex[:10], name=pending.name, email=email,
-                               password=pending.password, created=time.time())
+                               password=pending.password)
                 s.add(user)
                 s.delete(pending)
                 s.flush()                         # the user row first, then its session (foreign key)
@@ -168,20 +167,85 @@ class Accounts:
     # ─────────── log in / out
     def login(self, email_raw, password):
         email = normalize_email(email_raw)
-        with self.lock:
-            fails, until = self.fails.get(email, [0, 0])
-            if until > time.time():
-                raise AuthError(f"محاولات كثيرة خاطئة. حاول بعد {int((until - time.time()) // 60) + 1} دقائق.", 429)
+        self._check_lock(email)
         with db.session() as s:
             user = s.scalar(select(db.User).where(db.User.email == email)) if email else None
             if not user or not check_password(password or "", user.password):
-                with self.lock:
-                    fails += 1
-                    self.fails[email] = [0, time.time() + LOCK_FOR] if fails >= LOGIN_FAILS else [fails, 0]
+                self._wrong_password(email)
                 raise AuthError("الإيميل أو كلمة المرور غير صحيحة.", 401)
             with self.lock:
                 self.fails.pop(email, None)
             return self._session(s, user)
+
+    def _check_lock(self, email):
+        with self.lock:
+            until = self.fails.get(email, [0, 0])[1]
+        if until > time.time():
+            raise AuthError(f"محاولات كثيرة خاطئة. حاول بعد {int((until - time.time()) // 60) + 1} دقائق.", 429)
+
+    def _wrong_password(self, email):
+        """Counts a wrong password; after LOGIN_FAILS of them the email is locked for LOCK_FOR seconds."""
+        with self.lock:
+            fails = self.fails.get(email, [0, 0])[0] + 1
+            self.fails[email] = [0, time.time() + LOCK_FOR] if fails >= LOGIN_FAILS else [fails, 0]
+
+    # ─────────── my account: change the name, delete the account
+    def rename(self, user_id, name):
+        name = (name or "").strip()
+        if len(name) < 2:
+            raise AuthError("اكتب الاسم الكامل.")
+        if len(name) > 200:
+            raise AuthError("الاسم طويل جدًا.")
+        with db.session() as s:
+            user = s.get(db.User, user_id)
+            if user is None:
+                raise AuthError("الحساب غير موجود.", 404)
+            user.name = name
+            return self.public(_as_dict(user))
+
+    def change_password(self, user_id, current, new, keep_session):
+        """Checks the current password, saves the new one (hashed), and logs out the officer's other devices;
+        the session in use (keep_session) stays logged in."""
+        with db.session() as s:
+            user = s.get(db.User, user_id)
+            if user is None:
+                raise AuthError("الحساب غير موجود.", 404)
+            email = user.email
+            self._check_lock(email)
+            if not check_password(current or "", user.password):
+                self._wrong_password(email)
+                raise AuthError("كلمة المرور الحالية غير صحيحة.", 403)   # not 401: that would log the page out
+            if problem := password_problem(new):
+                raise AuthError(problem)
+            if check_password(new, user.password):
+                raise AuthError("كلمة المرور الجديدة هي نفس الحالية.")
+            user.password = hash_password(new)
+            s.execute(delete(db.LoginSession).where(db.LoginSession.user_id == user_id,
+                                                    db.LoginSession.token != (keep_session or "")))
+        with self.lock:
+            self.fails.pop(email, None)
+        return {"ok": True}
+
+    def delete_account(self, user_id, password):
+        """Deletes the account, its login sessions and its reviews for good, once the password is confirmed.
+        A wrong password counts like a wrong login (the email is locked after 5). Returns the ids of the
+        deleted reviews, so app.py can remove their uploaded files."""
+        with db.session() as s:
+            user = s.get(db.User, user_id)
+            if user is None:
+                raise AuthError("الحساب غير موجود.", 404)
+            email = user.email
+            self._check_lock(email)
+            if not check_password(password or "", user.password):
+                self._wrong_password(email)
+                raise AuthError("كلمة المرور غير صحيحة.", 403)   # not 401: that would log the page out
+            review_ids = list(s.scalars(select(db.Review.id).where(db.Review.owner == user_id)))
+            s.execute(delete(db.Review).where(db.Review.owner == user_id))
+            s.execute(delete(db.LoginSession).where(db.LoginSession.user_id == user_id))
+            s.delete(user)
+        with self.lock:
+            self.fails.pop(email, None)
+        return review_ids
 
     def user_for(self, session):
         if not session:
