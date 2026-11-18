@@ -68,7 +68,7 @@ def password_problem(pw):
 
 
 def _as_dict(u: db.User) -> dict:
-    return {"id": u.id, "name": u.name, "email": u.email, "password": u.password, "created": u.created}
+    return {"id": u.id, "name": u.name, "email": u.email, "password": u.password}
 
 
 class Accounts:
@@ -120,8 +120,7 @@ class Accounts:
             with db.session() as s:
                 if s.scalar(select(db.User).where(db.User.email == email)):
                     raise TAKEN
-                user = db.User(id=uuid.uuid4().hex[:10], name=name, email=email, password=password_hash,
-                               created=time.time())
+                user = db.User(id=uuid.uuid4().hex[:10], name=name, email=email, password=password_hash)
                 s.add(user)
                 s.flush()                         # the user row first, then its session (foreign key)
                 return self._session(s, user)
@@ -157,7 +156,7 @@ class Accounts:
                 if s.scalar(select(db.User).where(db.User.email == email)):
                     raise TAKEN
                 user = db.User(id=uuid.uuid4().hex[:10], name=pending.name, email=email,
-                               password=pending.password, created=time.time())
+                               password=pending.password)
                 s.add(user)
                 s.delete(pending)
                 s.flush()                         # the user row first, then its session (foreign key)

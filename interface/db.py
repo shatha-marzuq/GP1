@@ -13,7 +13,7 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 
-from sqlalchemy import JSON, Float, ForeignKey, Integer, String, Text, create_engine, inspect, text
+from sqlalchemy import JSON, Float, ForeignKey, Integer, String, create_engine, inspect, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
@@ -58,7 +58,6 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(200))
     email: Mapped[str] = mapped_column(String(254), unique=True, index=True)  # lower-case
     password: Mapped[str] = mapped_column(String(200))                        # salt$pbkdf2 hash
-    created: Mapped[float] = mapped_column(Float, default=time.time)
 
 
 class PendingSignup(Base):
@@ -82,26 +81,17 @@ class LoginSession(Base):
 
 
 class Review(Base):
+    """Only what a finished review needs. While a review is processed, its progress (status, done/total) is
+    kept in the server's memory (app.py), not here; a review without an output after that has failed.
+    The counts in the reviews list are computed from the output, not stored."""
     __tablename__ = "reviews"
     id: Mapped[str] = mapped_column(String(16), primary_key=True)
-    owner: Mapped[str | None] = mapped_column(String(16), index=True, nullable=True)
-    filename: Mapped[str] = mapped_column(String(300))
-    size: Mapped[int] = mapped_column(Integer, default=0)
-    file_path: Mapped[str | None] = mapped_column(Text, nullable=True)   # on the device that processed it
-    host: Mapped[str | None] = mapped_column(String(200), nullable=True)  # that device
-    created: Mapped[float] = mapped_column(Float, default=time.time)
-    finished: Mapped[float | None] = mapped_column(Float, nullable=True)
-    status: Mapped[str] = mapped_column(String(20), default="received")
-    done: Mapped[int] = mapped_column(Integer, default=0)
-    total: Mapped[int] = mapped_column(Integer, default=0)
-    error: Mapped[str | None] = mapped_column(Text, nullable=True)
-    mode: Mapped[str | None] = mapped_column(String(20), nullable=True)
-    stats: Mapped[dict | None] = mapped_column(JsonType, nullable=True)      # counts for the reviews list
-    # the full result (clauses + regulations) is large: loaded only when one review is opened
-    output: Mapped[dict | None] = mapped_column(JsonType, nullable=True, deferred=True)
+    owner: Mapped[str | None] = mapped_column(String(16), index=True, nullable=True)   # each user sees their own
+    filename: Mapped[str] = mapped_column(String(300))                               # shown in the list
+    created: Mapped[float] = mapped_column(Float, default=time.time)                 # orders the list
+    output: Mapped[dict | None] = mapped_column(JsonType, nullable=True)             # the result: clauses + regulations
 
-    FIELDS = ("id", "owner", "filename", "size", "file_path", "host", "created", "finished", "status",
-              "done", "total", "error", "mode", "stats")
+    FIELDS = ("id", "owner", "filename", "created")
 
     def as_dict(self, with_output: bool = False) -> dict:
         d = {f: getattr(self, f) for f in self.FIELDS}
@@ -127,8 +117,31 @@ def session():
 def init():
     """Create the tables (if missing) and bring in reviews saved by the older file-based version."""
     drop_phone_accounts()
+    drop_removed_columns()
     Base.metadata.create_all(engine)
     import_legacy_files()
+
+
+# Columns the tables no longer keep (only what is needed is stored). A database made by the older version
+# still has them, and some are NOT NULL without a default there, so new rows would fail: they are dropped.
+REMOVED_COLUMNS = {
+    "users": ("created",),
+    "reviews": ("size", "file_path", "host", "finished", "status", "done", "total", "error", "mode", "llm",
+                "stats"),
+}
+
+
+def drop_removed_columns():
+    insp = inspect(engine)
+    tables = set(insp.get_table_names())
+    with engine.begin() as c:
+        for table, cols in REMOVED_COLUMNS.items():
+            if table not in tables:
+                continue
+            have = {col["name"] for col in insp.get_columns(table)}
+            for col in cols:
+                if col in have:
+                    c.execute(text(f"ALTER TABLE {table} DROP COLUMN {col}"))
 
 
 def drop_phone_accounts():
