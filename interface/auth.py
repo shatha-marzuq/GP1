@@ -147,7 +147,7 @@ class Accounts:
                 pending = self._pending(s, email)
                 if pending.attempts >= CODE_TRIES:
                     raise AuthError("أدخلت رمزًا خاطئًا مرات كثيرة. اطلب رمزًا جديدًا.", 429)
-                if pending.code_expires < time.time():
+                if pending.last_sent + CODE_TTL < time.time():      # the code was sent at last_sent
                     raise AuthError("انتهت صلاحية الرمز. اطلب رمزًا جديدًا.")
                 if not check_password(code, pending.code):
                     pending.attempts += 1
@@ -272,7 +272,7 @@ class Accounts:
             mailer.send_code(pending.email, pending.name, code, CODE_TTL // 60)
         except mailer.MailError as e:
             raise AuthError(e.message_ar, e.status)
-        pending.code, pending.code_expires = hash_password(code), time.time() + CODE_TTL
+        pending.code = hash_password(code)      # it expires CODE_TTL after last_sent (not stored separately)
         pending.attempts, pending.last_sent = 0, time.time()
 
     @staticmethod

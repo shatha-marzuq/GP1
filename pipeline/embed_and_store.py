@@ -29,11 +29,16 @@ COLLECTION = "cma_regulations"
 MODEL = "BAAI/bge-m3"
 MAX_SEQ_TOKENS = 1024   # longest chunk is ≈ 2.6k chars; BGE-M3 supports 8192, 1024 keeps batches fast
 
-# scalar metadata copied as-is (None values are dropped: Chroma rejects them)
-SCALAR = ["doc_id", "doc_title", "doc_title_en", "doc_type", "issuer", "source_file", "version_decision",
-          "version_date_gregorian", "section_type", "part_number", "part_title", "chapter_number",
-          "chapter_title", "article_number", "article_label", "annex_number", "section_title",
-          "chunk_index", "chunk_count", "binding_status", "citation", "breadcrumb", "word_count", "char_count"]
+# scalar metadata copied as-is (None values are dropped: Chroma rejects them). Only what the system reads is
+# stored: values that can be derived are left out — chunk position (the "-cNN" suffix of the id), number of
+# chunks (count of the section_key), breadcrumb (it starts the document), first page (first of pdf_pages),
+# footnotes (they end the document), BM25 text (search_normalize(document), computed by the retriever) — and so
+# are document-level details that are never read (English title, type, issuer, file, part / chapter: in the
+# breadcrumb). All of them stay in output/04_chunks/chunks.jsonl.
+# version_date_gregorian is kept: the Compliance Analysis Agent may need the regulation's version date
+# (a T&C issued before an amendment).
+SCALAR = ["doc_id", "doc_title", "version_date_gregorian", "section_type", "article_number", "article_label",
+          "annex_number", "section_title", "binding_status", "citation"]
 REQUIRED = ["chunk_id", "doc_id", "doc_title", "section_type", "citation", "text", "content", "binding_status"]
 
 # انواع الصناديق وكل chunk تتطبق على اي صندوق؟
@@ -69,14 +74,7 @@ def to_metadata(c):
     m = {k: c[k] for k in SCALAR if c.get(k) is not None}
     m["section_key"] = c["chunk_id"].rsplit("-", 1)[0]          # e.g. CMIR-art043 — groups split articles
     m["fund_scope"] = fund_scope(c)
-    m["paragraphs"] = "، ".join(c["paragraphs"])                  # "أ، ب" — readable
     m["pdf_pages"] = ",".join(map(str, c["pdf_pages"]))
-    m["pdf_page_start"] = c["pdf_pages"][0] if c["pdf_pages"] else 0
-    m["guidance_paragraphs"] = json.dumps(c["guidance_paragraphs"], ensure_ascii=False)
-    m["has_guidance_paragraphs"] = bool(c["guidance_paragraphs"])
-    m["footnotes"] = json.dumps(c["footnotes"], ensure_ascii=False)
-    m["has_footnotes"] = bool(c["footnotes"])
-    m["text_search"] = c["text_search"]                           # lets the BM25 side rebuild from Chroma alone
     return m
 
 #يتاكد من صحة كل قطعة من البيانات ويحول بياناتها الوصفية إلى صيغ متوافقة مع Chroma . إذا كانت هناك مشاكل، فإنه يرفع خطأ ويخرج من البرنامج

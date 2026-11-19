@@ -2,7 +2,7 @@
 Retrieval over the CMA regulatory knowledge base (Chroma collection built by embed_and_store.py).
 
   dense  : BGE-M3 cosine similarity (Chroma HNSW)
-  bm25   : lexical BM25 over the normalised `text_search` field (أ/إ/آ→ا، ى→ي، ة→ه + light prefix stripping)
+  bm25   : lexical BM25 over the normalised chunk text, search_normalize(document) (أ/إ/آ→ا، ى→ي، ة→ه + light prefix stripping)
   hybrid : reciprocal-rank fusion of the two lists
 Default is dense: on the step-12 evaluation set it scored best (Hit@1 0.92, Hit@5 1.00, MRR 0.94);
 hybrid/bm25 are kept for comparison (see output/07_retrieval_eval/report.md).
@@ -78,7 +78,8 @@ class RegulationRetriever:
         data = self.col.get(include=["metadatas", "documents"])
         self.ids, self.docs, self.metas = data["ids"], data["documents"], data["metadatas"]
         self.index = {i: n for n, i in enumerate(self.ids)}
-        self.bm25 = BM25([tokenize(m["text_search"]) for m in self.metas])
+        # BM25 text = the normalised document (not stored in Chroma: it is derived from the document)
+        self.bm25 = BM25([tokenize(search_normalize(d)) for d in self.docs])
 
     @property
     def model(self):

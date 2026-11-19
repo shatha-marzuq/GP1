@@ -67,7 +67,6 @@ class PendingSignup(Base):
     name: Mapped[str] = mapped_column(String(200))
     password: Mapped[str] = mapped_column(String(200))                        # already hashed
     code: Mapped[str] = mapped_column(String(200), default="")                # hashed, like passwords
-    code_expires: Mapped[float] = mapped_column(Float, default=0.0)
     attempts: Mapped[int] = mapped_column(Integer, default=0)                 # wrong codes so far
     created: Mapped[float] = mapped_column(Float, default=time.time)
     last_sent: Mapped[float] = mapped_column(Float, default=0.0)
@@ -126,6 +125,7 @@ def init():
 # still has them, and some are NOT NULL without a default there, so new rows would fail: they are dropped.
 REMOVED_COLUMNS = {
     "users": ("created",),
+    "pending_signups": ("code_expires",),          # = last_sent + 10 minutes (auth.CODE_TTL)
     "reviews": ("size", "file_path", "host", "finished", "status", "done", "total", "error", "mode", "llm",
                 "stats"),
 }
