@@ -18,9 +18,9 @@ upload ─► Document Processing (OCR) ─► Segmentation ─► Regulatory Re
 
 | Path | What it is |
 |---|---|
-| `docproc/mithaq_docproc/` | Document Processing Agent: PDF/Word → clean items with page numbers (PyMuPDF, Tesseract, Surya OCR). Own README. |
-| `backend/segmentation.py` | Rule-based splitting of the items into clauses (each clause keeps a breadcrumb and its pages). |
-| `backend/segmentation_agent.py`, `segmentation_tools.py` | LLM tool-using version of segmentation (checks and fixes the rule split). Not wired into the graph yet. |
+| `docproc/mithaq_docproc/` | Document Processing Agent, step 1 (extraction): PDF/Word → clean items with page numbers (PyMuPDF, Tesseract, Surya OCR). Own README. |
+| `backend/segmentation.py` | Document Processing Agent, step 2 (segmentation): rule-based splitting of the items into clauses (each clause keeps a breadcrumb and its pages). |
+| `backend/segmentation_agent.py`, `segmentation_tools.py` | Step 2 with the LLM: it uses tools to check and fix the rule split (`--seg-agent`). |
 | `backend/orchestrator/` | LangGraph pipeline: extract → segment → retrieve × N clauses (parallel) → collect. Own README. |
 | `pipeline/` | Regulatory knowledge base (steps 3–12 below), `retriever.py` (search) and `retrieval_agent.py` (the agent). |
 | `interface/` | FastAPI + single-page web app (Arabic, RTL): upload, live progress, clauses with their regulations. |

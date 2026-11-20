@@ -22,7 +22,9 @@ RUNS = ["full"] + list(ABLATIONS)
 LABEL = {"full": "Full agent", "plain": "Plain search (no agent)",
          "no_rerank_clause": "− clause rerank", "no_lexical": "− BM25 on clause", "no_topics": "− topic searches",
          "no_title": "− title match", "no_named": "− LLM-named articles", "no_annex_item": "− Annex 11 item"}
-STAGES = [("extract_s", "Extraction (docproc / OCR)"), ("segment_s", "Segmentation (agent)"),
+STAGES = [("extract_s", "Document Processing — extraction (docproc / OCR)"),
+          ("segment_s", "Document Processing — segmentation (LLM review)"),
+          ("docproc_s", "Document Processing Agent (extraction + segmentation)"),
           ("retrieve_s", "Retrieval (all clauses, parallel)"), ("collect_s", "Collection"), ("total_s", "Total")]
 
 
@@ -127,17 +129,21 @@ def stats(xs):
 def timing_rows(recs):
     return [{"file": r["file"], "pages": r["pages"], "type": r["kind"], "ocr_pages": r["ocr_pages"],
              "clauses": r["clauses"], "total_s": r["total_s"], "extract_s": r["extract_s"],
-             "segment_s": r["segment_s"], "retrieve_s": r["retrieve_s"], "collect_s": r["collect_s"],
+             "segment_s": r["segment_s"],
+             "docproc_s": round(r["extract_s"] + r["segment_s"], 3) if r["extract_s"] is not None
+             and r["segment_s"] is not None else None,
+             "retrieve_s": r["retrieve_s"], "collect_s": r["collect_s"],
              "retrieve_per_clause_s": r["retrieve_per_clause_s"], "total_per_clause_s": r["total_per_clause_s"],
              "llm_api_answers": r["llm_api_answers"], "clauses_llm_fallback": r["clauses_llm_fallback"],
              "segmentation_status": r["segmentation_status"], "failed": r["failed"]} for r in recs]
 
 
 def timing_file_md(rows):
-    return table(["File", "Pages", "Type", "OCR pages", "Clauses", "Total", "Extraction", "Segmentation", "Retrieval",
-                  "Collection", "Total per clause", "Failures"],
+    return table(["File", "Pages", "Type", "OCR pages", "Clauses", "Total", "Document Processing (extraction + "
+                  "segmentation)", "Retrieval", "Collection", "Total per clause", "Failures"],
                  [[r["file"], r["pages"], r["type"], r["ocr_pages"], r["clauses"], secs(r["total_s"]),
-                   secs(r["extract_s"]), secs(r["segment_s"]), secs(r["retrieve_s"]), secs(r["collect_s"]),
+                   f"{secs(r['docproc_s'])} ({secs(r['extract_s'])} + {secs(r['segment_s'])})",
+                   secs(r["retrieve_s"]), secs(r["collect_s"]),
                    secs(r["total_per_clause_s"]),
                    "failed" if r["failed"] else (f"{r['clauses_llm_fallback']} clause(s) without LLM"
                                                  if r["clauses_llm_fallback"] else "none")] for r in rows])
@@ -151,6 +157,7 @@ def timing_summary_md(rows):
         s = stats([r[k] for r in rows])
         if s:
             share = f"{100 * s['mean'] / mean_total:.1f} %" if mean_total and k in dict(STAGES) else "–"
+            name = f"**{name}**" if k == "docproc_s" else name
             body.append([name, secs(s["mean"]), secs(s["median"]), secs(s["min"]), secs(s["max"]), share])
     return table(["Stage", "Mean", "Median", "Min", "Max", "Share of mean total"], body)
 
@@ -221,15 +228,16 @@ def report_tables(acc, trows, env, acc_cfg):
         types = ", ".join(f"{r['file']} ({r['pages']} pages, {r['type']})" for r in trows)
         L += ["## Table: Processing time per file", "", timing_file_md(trows), "",
               "End-to-end time of one review, from the start of the pipeline (file uploaded) to the final results: "
-              "text extraction, clause segmentation by the Segmentation Agent, regulation retrieval for every clause by "
-              "the Regulatory Retrieval Agent (8 clauses in parallel), and collection of the results.", "",
+              "the Document Processing Agent (text extraction, with OCR for scanned pages, then clause segmentation reviewed "
+              "by its LLM), regulation retrieval for every clause by the Regulatory Retrieval Agent (8 clauses in "
+              "parallel), and collection of the results.", "",
               f"*Method:* {n} T&C file(s) — {types}; each file processed once; LLM answer cache off; embedding and "
               f"reranker models loaded before timing (load time {secs(env['model_load_seconds']) if env else '–'}, "
               f"excluded); hardware: {hw}; retrieval LLM {env['retrieval_llm'] if env else '–'}, segmentation LLM "
               f"{env['segmentation_llm'] if env else '–'}.", "",
               "## Table: Average processing time per stage", "", timing_summary_md(trows), ""]
         s = {k: stats([r[k] for r in trows]) for k, _ in STAGES}
-        slow = max((k for k, _ in STAGES if k != "total_s" and s[k]), key=lambda k: s[k]["mean"], default=None)
+        slow = max((k for k, _ in STAGES if k not in ("total_s", "docproc_s") and s[k]), key=lambda k: s[k]["mean"], default=None)
         if slow:
             L += [f"The {dict(STAGES)[slow].split(' (')[0].lower()} stage takes the largest share of the processing time "
                   f"({100 * s[slow]['mean'] / s['total_s']['mean']:.1f} % of the mean total of "

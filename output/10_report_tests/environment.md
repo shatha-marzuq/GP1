@@ -17,11 +17,11 @@
 | retrieval llm | openai / gpt-4o |
 | segmentation llm | gpt-5-mini |
 | retrieval mode | dense |
-| llm cache | off (RETRIEVAL_CACHE=0); the Segmentation Agent has no cache |
+| llm cache | off (RETRIEVAL_CACHE=0); the segmentation LLM has no cache |
 | max concurrency | 8 |
 | model load seconds | 15.33 |
 | warmup seconds | 4.31 |
-| setup | Segmentation Agent (LLM) + Regulatory Retrieval Agent (LLM), as in run.py --seg-agent --agent --llm |
+| setup | Document Processing Agent (segmentation with LLM) + Regulatory Retrieval Agent (LLM), as in run.py --seg-agent --agent --llm |
 
 ## Retrieval accuracy runs (pipeline/test_agent.py)
 

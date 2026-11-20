@@ -3,9 +3,12 @@
     extract ─► segment ─► retrieve × N (parallel, one per clause) ─► collect
        └──────────┴─► failed
 
-extract  = Document Processing Agent (docproc OCR, items with page numbers)
-segment  = segmentation.segment_clauses (paragraphs -> clauses), or the Segmentation Agent
-           (segmentation_agent.py: the LLM checks the rule-based clauses and fixes their starts)
+The Document Processing Agent turns the T&C file into clauses, in two steps (two nodes, so the interface can
+show each one and its time is measured apart):
+extract  = step 1, extraction: docproc (PDF/Word -> items with page numbers; OCR for scanned pages)
+segment  = step 2, segmentation: segmentation.segment_clauses (rules, items -> clauses), and with
+           SegmentationAgent the agent's LLM checks the rule-based clauses and fixes their starts
+           (segmentation_agent.py)
 retrieve = plain search (pipeline/retriever.py over the Chroma vector DB) or the Regulatory Retrieval Agent
            (pipeline/retrieval_agent.py: the LLM plans the searches and selects the applicable provisions)
 
@@ -29,7 +32,7 @@ def print_status(review_id: str, status: str, **info):
 
 # ocr شذي يربطه مع الاوركسترا
 def docproc_extract(path: str) -> dict:
-    """Document Processing Agent: the team's docproc pipeline (PDF/Word -> items with page numbers)."""
+    """Document Processing Agent, step 1 (extraction): the team's docproc pipeline (PDF/Word -> items with page numbers)."""
     from . import paths  # noqa: F401
     from mithaq_docproc import build_output, process_document
     return build_output(process_document(path), path)
@@ -42,7 +45,8 @@ def default_segment(items: list[dict]) -> list[dict]:
 
 
 class SegmentationAgent:
-    """Segmentation Agent (backend/segmentation_agent.py): the rule-based segmentation, then the LLM checks it
+    """Document Processing Agent, step 2 (segmentation) with its LLM (backend/segmentation_agent.py; the class keeps
+    its old name): the rule-based segmentation, then the LLM checks it
     and moves clause starts where it is wrong. Same clauses as segment_clauses, plus fixed_by_agent / agent_note,
     and a report (status ok / fixed / needs_review). use_llm=False runs the rules and the check only (no API call).
     If the agent fails (no key, the API is down …) the review goes on with the rule-based clauses."""
@@ -81,7 +85,7 @@ def build_graph(retriever, *,
 
     def segment_node(state: ReviewState):
         on_status(state["review_id"], "segmenting")
-        if isinstance(segment, SegmentationAgent):   # وكيل التقسيم: يحتاج اسم الملف ويرجع تقريره مع البنود
+        if isinstance(segment, SegmentationAgent):   # خطوة التقسيم بالـ LLM: تحتاج اسم الملف وترجع تقريرها مع البنود
             clauses, report = segment(state["items"], state.get("document"))
             return {"clauses": clauses, "segmentation": report}
         return {"clauses": segment(state["items"])}
@@ -124,7 +128,7 @@ def build_graph(retriever, *,
             "filename": doc.get("filename"),
             "document_needs_review": bool(doc.get("needs_review")),
             "document_warnings": doc.get("warnings", []),
-            "segmentation": state.get("segmentation"),   # Segmentation Agent's report (None with the rules only)
+            "segmentation": state.get("segmentation"),   # the segmentation step's report (None with the rules only)
             "clauses": results,
         }
         on_status(rid, "done", clauses=len(results))
@@ -153,7 +157,7 @@ def _result(clause: dict, hits: list[dict], agent: dict | None = None) -> dict:
         "page_end": clause.get("page_end"),
         "line_pages": clause.get("line_pages"),   # page of each line of the clause text
         "from_ocr": clause.get("from_ocr"),
-        "fixed_by_agent": clause.get("fixed_by_agent", False),   # the Segmentation Agent moved this clause's start
+        "fixed_by_agent": clause.get("fixed_by_agent", False),   # the segmentation step's LLM moved this clause's start
         "agent_note": clause.get("agent_note"),
         "text": clause["text"],
         "regulations": [{"id": h["id"], "score": h["score"], "citation": h["citation"],

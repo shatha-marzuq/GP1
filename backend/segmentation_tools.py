@@ -1,4 +1,4 @@
-# the tools that the segmentation agent can use
+# the tools that the LLM segmentation step (Document Processing Agent) can use
 import os
 import re
 import sys

@@ -1,4 +1,4 @@
-# Segmentation Agent
+# Document Processing Agent — step 2, segmentation with the LLM (step 1, extraction, is docproc)
 # the LLM gets the goal (split the Terms and Conditions file into its real clauses) and a set of tools.
 # it decides by itself which tool to use. it runs the rule based segmentation, checks it,
 # looks at the lines when something looks wrong, fixes it, checks again, then finishes.

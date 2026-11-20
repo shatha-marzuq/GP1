@@ -1,6 +1,6 @@
 """Processing time per T&C file, from upload to results, for the project report.
 
-Runs the same graph as the interface (build_graph) with the report's setup: Segmentation Agent (LLM) +
+Runs the same graph as the interface (build_graph) with the report's setup: Document Processing Agent (segmentation with LLM) +
 Regulatory Retrieval Agent with its LLM steps, on every T&C file, once each, and records:
   total     : wall time of graph.invoke (the main number)
   per stage : from the on_status messages — extract (extracting → segmenting), segment (segmenting → first
@@ -9,7 +9,7 @@ Regulatory Retrieval Agent with its LLM steps, on every T&C file, once each, and
               agent error, clauses whose LLM step fell back to the rules)
 
 Honest timing:
-  - the retrieval agent's LLM cache is off (RETRIEVAL_CACHE=0, set here); the Segmentation Agent has no cache
+  - the retrieval agent's LLM cache is off (RETRIEVAL_CACHE=0, set here); the segmentation LLM has no cache
   - BGE-M3 + the reranker are loaded once before timing (like the interface at start-up); load time is recorded apart
   - a short warm-up (one clause, rules only, no API call) runs before the first file
   - max_concurrency=8, the value both run.py and interface/app.py use
@@ -80,7 +80,7 @@ def environment(retriever, llm, seg_model, load_s, warm_s, args):
         "retrieval_llm": f"{llm.backend} / {llm.model}" if llm else None,
         "segmentation_llm": seg_model,
         "retrieval_mode": args.mode,
-        "llm_cache": "off (RETRIEVAL_CACHE=0); the Segmentation Agent has no cache",
+        "llm_cache": "off (RETRIEVAL_CACHE=0); the segmentation LLM has no cache",
         "max_concurrency": CONCURRENCY,
         "model_load_seconds": round(load_s, 2),
         "warmup_seconds": round(warm_s, 2),
@@ -192,8 +192,8 @@ def main():
         agent.llm = llm
     segment = SegmentationAgent(use_llm=not a.no_llm)
     env = environment(r, llm, None if a.no_llm else segmentation_agent.MODEL, load_s, warm_s, a)
-    env["setup"] = ("Segmentation Agent (rules only) + Retrieval Agent (rules only) — zero-cost check" if a.no_llm
-                    else "Segmentation Agent (LLM) + Regulatory Retrieval Agent (LLM), as in run.py --seg-agent --agent --llm")
+    env["setup"] = ("Document Processing Agent (rules only) + Retrieval Agent (rules only) — zero-cost check" if a.no_llm
+                    else "Document Processing Agent (segmentation with LLM) + Regulatory Retrieval Agent (LLM), as in run.py --seg-agent --agent --llm")
     print(json.dumps(env, ensure_ascii=False, indent=1), flush=True)
 
     RAW.mkdir(parents=True, exist_ok=True)

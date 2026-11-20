@@ -5,7 +5,7 @@
     python -m orchestrator.run path/to/terms.pdf --stub     # real OCR + segmentation, stand-in retrieval
     python -m orchestrator.run path/to/terms.pdf --agent    # retrieval through the Regulatory Retrieval Agent
     python -m orchestrator.run path/to/terms.pdf --agent --llm   # … with its LLM step (OPENAI_API_KEY in .env)
-    python -m orchestrator.run path/to/terms.pdf --seg-agent     # segment through the Segmentation Agent (LLM)
+    python -m orchestrator.run path/to/terms.pdf --seg-agent     # segmentation step with the LLM review (Document Processing Agent)
 """
 import argparse
 import json
@@ -22,7 +22,7 @@ def main():
     ap.add_argument("--stub", action="store_true", help="stand-in retriever")
     ap.add_argument("--agent", action="store_true", help="Regulatory Retrieval Agent (pipeline/retrieval_agent.py)")
     ap.add_argument("--llm", action="store_true", help="with --agent: add the LLM step")
-    ap.add_argument("--seg-agent", action="store_true", help="Segmentation Agent (backend/segmentation_agent.py)")
+    ap.add_argument("--seg-agent", action="store_true", help="segmentation with the LLM review (backend/segmentation_agent.py)")
     ap.add_argument("--seg-rules-only", action="store_true", help="with --seg-agent: rules + check, no LLM call")
     ap.add_argument("--mode", default="dense", choices=["dense", "bm25", "hybrid"])
     ap.add_argument("-k", type=int, default=5)
@@ -48,7 +48,7 @@ def main():
         print("clauses:", len(state["output"]["clauses"]), "->", a.out)
         if state["output"].get("segmentation"):
             seg = state["output"]["segmentation"]
-            print("segmentation agent:", seg["status"], "|", seg["summary"], "| changes:", len(seg["changes"]))
+            print("LLM segmentation:", seg["status"], "|", seg["summary"], "| changes:", len(seg["changes"]))
 
 
 if __name__ == "__main__":

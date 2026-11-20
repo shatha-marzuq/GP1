@@ -64,7 +64,7 @@ def test_failed_extraction_ends_without_output():
 
 
 class FakeSegmentationAgent(SegmentationAgent):
-    """The Segmentation Agent's interface without the LLM: moves one clause and reports it."""
+    """The LLM segmentation step's interface (Document Processing Agent) without the LLM: moves one clause and reports it."""
     def __call__(self, items, document=None):
         self.document = document
         fixed = [dict(CLAUSES[0], fixed_by_agent=True, agent_note="نُقلت بداية البند"), CLAUSES[1]]

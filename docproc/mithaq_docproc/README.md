@@ -3,7 +3,8 @@
 **MITHAQ · وكيل معالجة المستندات (Document Processing Agent)**
 
 يحوّل ملف الشروط والأحكام (PDF أو Word، نصي أو ممسوح ضوئياً) إلى **نص نظيف ومنظم** بصيغة JSON ثابتة،
-جاهز لوكيل التقسيم (Segmentation) ووكيل الاسترجاع (RAG) ووكيل التحقق من الامتثال.
+جاهز لخطوة التقسيم (Segmentation)، وهي الخطوة الثانية من نفس الوكيل، ثم وكيل الاسترجاع (RAG) ووكيل التحقق من الامتثال.
+هذه الحزمة هي الخطوة الأولى (الاستخراج) من وكيل معالجة المستندات.
 
 ```
 Document (PDF/DOCX)  ──►  mithaq_docproc  ──►  JSON: items (عناوين / بنود / فقرات / جداول) + رقم الصفحة + تحذيرات
@@ -76,7 +77,7 @@ except DocProcError as e:          # ملف تالف/محمي/فارغ/غير م
     print(e.code, e.message_ar)
 
 data = res.to_json()               # الناتج الرسمي (schema 1.0)
-res.items                          # العناصر المنظمة — مدخل وكيل التقسيم
+res.items                          # العناصر المنظمة — مدخل خطوة التقسيم
 res.needs_review, res.warnings     # هل يحتاج مراجعة بشرية؟ ولماذا
 write_outputs(res, "out/", "terms.pdf")   # terms.json + terms.txt + terms.md
 ```
@@ -130,8 +131,8 @@ uvicorn mithaq_docproc.api:app
 | `items[].text` | **الاقتباس في تقرير المخالفة** | وفيّ للأصل (تشكيل، همزات). لا تقارنوه مباشرة بنص اللوائح |
 | `items[].text_norm` | **البحث والـ embeddings** (وكيل الاسترجاع) | بدون تشكيل، ألف موحدة، أرقام لاتينية |
 | `items[].page` | **رقم الصفحة في التقرير** | ترتيب الصفحة في الملف (مو الرقم المطبوع عليها) |
-| `items[].type` | وكيل التقسيم | `heading` / `list_item` / `paragraph` / `table` |
-| `items[].marker`, `level` | وكيل التقسيم | رقم البند: `6.2.1` → level 3، `أ`، `•`، `المادة 5` |
+| `items[].type` | خطوة التقسيم | `heading` / `list_item` / `paragraph` / `table` |
+| `items[].marker`, `level` | خطوة التقسيم | رقم البند: `6.2.1` → level 3، `أ`، `•`، `المادة 5` |
 | `items[].table.rows` | التحقق من الجداول (رسوم، حدود) | الأعمدة من اليمين لليسار. `continues` = تكملة جدول من الصفحة السابقة |
 | `items[].source` | وكيل التحقق | `native` (قراءة مباشرة، موثوقة) أو `ocr` |
 | `document.needs_review` | الكل | `true` = فيه تحذير يحتاج انتباه |

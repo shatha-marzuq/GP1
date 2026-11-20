@@ -5,7 +5,7 @@ sent to the email) and log in with email + password (auth.py); each sees their o
     cd interface
     python app.py                    # Regulatory Retrieval Agent + its LLM step (OpenAI, key in .env)
     python app.py --no-llm           # the agent with its rule-based steps only
-    python app.py --seg-agent        # + the Segmentation Agent (its LLM checks/fixes the clauses; with --no-llm: rules + check)
+    python app.py --seg-agent        # + the LLM segmentation step of the Document Processing Agent (checks/fixes the clauses; with --no-llm: rules + check)
     python app.py --retriever full   # plain search: BGE-M3 + reranker over the Chroma store, no agent
     python app.py --retriever bm25   # real regulations, lexical search only (no models to download)
     python app.py --retriever stub   # stand-in regulation (OCR + segmentation only)
@@ -49,7 +49,7 @@ K = 5
 # ─────────────────────────── retriever (built once, warmed in the background) ───────────────────────────
 MODE = "agent"
 USE_LLM = True
-SEG_AGENT = False   # --seg-agent: segment through the Segmentation Agent instead of the rules only
+SEG_AGENT = False   # --seg-agent: the Document Processing Agent's segmentation with its LLM instead of the rules only
 ENGINE = {"ready": False, "error": None, "retriever": None, "llm": None}
 
 
@@ -450,7 +450,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--retriever", default="agent", choices=["agent", "full", "bm25", "stub"])
     ap.add_argument("--no-llm", action="store_true", help="agent without its LLM step")
-    ap.add_argument("--seg-agent", action="store_true", help="segment through the Segmentation Agent")
+    ap.add_argument("--seg-agent", action="store_true", help="segmentation with the LLM review (Document Processing Agent)")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8000)
     a = ap.parse_args()
@@ -458,7 +458,7 @@ def main():
     init_db()
     threading.Thread(target=load_engine, daemon=True).start()
     import uvicorn
-    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'}{', segmentation agent' if SEG_AGENT else ''}"
+    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'}{', LLM segmentation' if SEG_AGENT else ''}"
           f" | database: {db.describe()})\n")
     uvicorn.run(app, host=a.host, port=a.port, log_level="warning")
 

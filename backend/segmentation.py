@@ -426,7 +426,7 @@ def segment_clauses(items, max_words=MAX_WORDS, doc_title="الشروط والأ
     # find how this file writes its main clauses
     main, style = find_main_clauses(items)
 
-    # the segmentation agent can give the clause starts itself
+    # the LLM segmentation step can give the clause starts itself
     if main_starts is not None:
         main = dict(main_starts)
         if style is None:
