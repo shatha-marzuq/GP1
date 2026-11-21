@@ -5,7 +5,7 @@ sent to the email) and log in with email + password (auth.py); each sees their o
     cd interface
     python app.py                    # Regulatory Retrieval Agent + its LLM step (OpenAI, key in .env)
     python app.py --no-llm           # the agent with its rule-based steps only
-    python app.py --seg-agent        # + the LLM segmentation step of the Document Processing Agent (checks/fixes the clauses; with --no-llm: rules + check)
+    python app.py --seg-agent        # + the Segmentation Agent (its LLM checks/fixes the clauses; with --no-llm: rules + check)
     python app.py --retriever full   # plain search: BGE-M3 + reranker over the Chroma store, no agent
     python app.py --retriever bm25   # real regulations, lexical search only (no models to download)
     python app.py --retriever stub   # stand-in regulation (OCR + segmentation only)
@@ -49,7 +49,7 @@ K = 5
 # ─────────────────────────── retriever (built once, warmed in the background) ───────────────────────────
 MODE = "agent"
 USE_LLM = True
-SEG_AGENT = False   # --seg-agent: the Document Processing Agent's segmentation with its LLM instead of the rules only
+SEG_AGENT = False   # --seg-agent: segment through the Segmentation Agent instead of the rules only
 ENGINE = {"ready": False, "error": None, "retriever": None, "llm": None}
 
 
@@ -94,26 +94,10 @@ def attach_llm(agent):
 # ─────────────────────────────────────────── reviews ───────────────────────────────────────────
 # The database keeps only the finished result of a review (db.py). While a review is processed, its progress
 # (status, done/total) lives in PROGRESS, in this server's memory: it means something only during the
-# processing. A review that is not in PROGRESS is done if it has an output, else it failed: the review keeps a
-# short Arabic reason for the officer (db.Review.error), and the technical details go to the server log only.
-# LOCK keeps the progress updates in order.
+# processing. A review that is not in PROGRESS is done if it has an output, else it failed (the reason of a
+# failure goes to the server log, not to the database). LOCK keeps the progress updates in order.
 LOCK = threading.Lock()
 PROGRESS: dict[str, dict] = {}      # review_id -> {"status", "done", "total"} while it is processed
-
-ARABIC = re.compile(r"[؀-ۿ]")
-NO_CLAUSES = "لم يُستخرج نص أو بنود من الملف."
-UNEXPECTED = "حدث خطأ غير متوقع أثناء مراجعة المستند. حاول رفعه مرة أخرى."
-ENGINE_DOWN = "تعذّر تشغيل محرك البحث في الأنظمة. حاول مرة أخرى لاحقًا."
-INTERRUPTED = "توقفت المراجعة قبل اكتمالها. ارفع الملف مرة أخرى."   # e.g. the server restarted mid-review
-
-
-def officer_message(reason):
-    """A failure reason as the officer sees it. The Document Processing Agent's reasons are already short Arabic
-    messages (e.g. the file is password-protected) and are kept; anything technical (an exception, an English
-    message) becomes a general message, and its details stay in the server log."""
-    if not reason or reason == "no text or clauses found":
-        return NO_CLAUSES
-    return reason if ARABIC.search(reason) else UNEXPECTED
 
 
 def init_db():
@@ -124,10 +108,6 @@ def init_db():
 def on_status(review_id, status, **info):
     if status == "failed":
         print(f"  review {review_id} failed: {info.get('reason')}", flush=True)
-        with db.session() as s:                             # the reason the officer will see
-            r = s.get(db.Review, review_id)
-            if r is not None and r.output is None:
-                r.error = info.get("message") or officer_message(info.get("reason"))
     if status == "done":                                    # done = its output is saved (run_review)
         return
     with LOCK:
@@ -159,8 +139,7 @@ def process(review_id, path):
     """Runs the orchestrator on the file: its output, or None when the review failed."""
     while not ENGINE["ready"]:
         if ENGINE["error"]:
-            on_status(review_id, "failed", reason="search engine failed to start: " + ENGINE["error"],
-                      message=ENGINE_DOWN)
+            on_status(review_id, "failed", reason="تعذر تشغيل محرك البحث في الأنظمة: " + ENGINE["error"])
             return None
         time.sleep(0.5)
     try:
@@ -170,12 +149,12 @@ def process(review_id, path):
         state = graph.invoke({"review_id": review_id, "file_path": str(path), "results": []},
                              {"max_concurrency": 8})
     except Exception as e:
-        on_status(review_id, "failed", reason=f"{type(e).__name__}: {e}", message=UNEXPECTED)
+        on_status(review_id, "failed", reason=f"{type(e).__name__}: {e}")
         return None
     with LOCK:
         reported = PROGRESS.get(review_id, {}).get("status") == "failed"
     if not state.get("output") and not reported:
-        on_status(review_id, "failed", reason=state.get("error") or NO_CLAUSES)
+        on_status(review_id, "failed", reason=state.get("error") or "لم يُستخرج نص أو بنود من الملف.")
     return state.get("output")
 
 
@@ -241,10 +220,7 @@ def running_now():
 
 def summary(r, running):
     progress = running.get(r["id"]) or {"status": "done" if r.get("output") else "failed", "done": 0, "total": 0}
-    error = None
-    if progress["status"] == "failed":                      # never a raw error; no reason = stopped mid-way
-        error = officer_message(r["error"]) if r.get("error") else INTERRUPTED
-    return ({k: r.get(k) for k in ("id", "filename", "created")} | progress | {"error": error}
+    return ({k: r.get(k) for k in ("id", "filename", "created")} | progress
             | {"mode": MODE} | output_stats(r.get("output")))       # mode: the page warns in stub mode
 
 
@@ -400,6 +376,80 @@ def article(chunk_id: str, user=Depends(current_user)):
     return {"id": chunk_id, "section_key": key, "full_text": "\n\n".join(strip(base.docs[base.index[i]]) for i in ids)}
 
 
+# ───────── regulations page: a whole CMA regulation, laid out by part, chapter and article, so a clause's
+# matched provisions can be shown (and highlighted) in their place. Built once per regulation from the
+# knowledge base itself (the same chunks the agent searches), so the chunk IDs in a review point into it.
+REG_DOCS: dict[str, dict] = {}
+REG_ORDER = {"art": 0, "anx": 1}
+
+
+def knowledge_base():
+    base = ENGINE["retriever"]
+    base = getattr(base, "r", base)                       # the agent wraps the retriever
+    if not hasattr(base, "metas"):
+        raise HTTPException(503, "قاعدة اللوائح غير جاهزة بعد، حاول بعد قليل.")
+    return base
+
+
+def _section_order(key):
+    """'IFR-art093' → (0, 93); 'IFR-anx11' → (1, 11): articles first, then annexes, in number order."""
+    m = re.match(r"[A-Z]+-([a-z]+)(\d+)", key)
+    return (REG_ORDER.get(m.group(1), 2), int(m.group(2))) if m else (3, 0)
+
+
+def build_regulation(doc_id):
+    base = knowledge_base()
+    title, sections = None, {}
+    for cid, text, m in zip(base.ids, base.docs, base.metas):
+        if m.get("doc_id") != doc_id:
+            continue
+        title = title or m.get("doc_title")
+        crumb = ""
+        if text.startswith("[") and "]" in text:
+            crumb, text = text[1:text.index("]")], text[text.index("]") + 1:].strip()
+        parts = [PART.sub("", x).strip() for x in crumb.split("›") if x.strip()]
+        s = sections.setdefault(m["section_key"], {"key": m["section_key"], "pdf_pages": [], "chunks": []})
+        s["pdf_pages"] += [int(p) for p in str(m.get("pdf_pages") or "").split(",") if p.strip().isdigit()]
+        s["chunks"].append({"id": cid, "parts": parts, "text": text})
+    if not sections:
+        raise HTTPException(404, "اللائحة غير موجودة")
+    out = []
+    for key in sorted(sections, key=_section_order):
+        s = sections[key]
+        s["chunks"].sort(key=lambda c: c["id"])
+        # breadcrumb: regulation › part › chapter › article; the parts all chunks share give the article's
+        # heading and place, the rest names a sub-item (Annex 11: "البند (3): …")
+        common = s["chunks"][0]["parts"]
+        for c in s["chunks"][1:]:
+            n = 0
+            while n < min(len(common), len(c["parts"])) and common[n] == c["parts"][n]:
+                n += 1
+            common = common[:n]
+        s["heading"] = common[-1] if common else key
+        s["path"] = common[1:-1] or (["الملاحق"] if "-anx" in key else [])
+        for c in s["chunks"]:
+            c["sub"] = " › ".join(c.pop("parts")[len(common):]) or None
+        s["page_start"], s["page_end"] = cma_pages(s.pop("pdf_pages"))
+        out.append(s)
+    return {"id": doc_id, "title": title, "sections": out}
+
+
+@app.get("/api/regulations")
+def regulations(user=Depends(current_user)):
+    """The regulations in the knowledge base: id, title and the short code their chunk IDs start with."""
+    base, docs = knowledge_base(), {}
+    for cid, m in zip(base.ids, base.metas):
+        docs.setdefault(m["doc_id"], {"id": m["doc_id"], "title": m.get("doc_title"), "short": cid.split("-")[0]})
+    return list(docs.values())
+
+
+@app.get("/api/regulations/{doc_id}")
+def regulation(doc_id: str, user=Depends(current_user)):
+    if doc_id not in REG_DOCS:
+        REG_DOCS[doc_id] = build_regulation(doc_id)
+    return REG_DOCS[doc_id]
+
+
 def owned_by(user):
     return db.Review.owner == user["id"]
 
@@ -474,7 +524,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--retriever", default="agent", choices=["agent", "full", "bm25", "stub"])
     ap.add_argument("--no-llm", action="store_true", help="agent without its LLM step")
-    ap.add_argument("--seg-agent", action="store_true", help="segmentation with the LLM review (Document Processing Agent)")
+    ap.add_argument("--seg-agent", action="store_true", help="segment through the Segmentation Agent")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8000)
     a = ap.parse_args()
@@ -482,7 +532,7 @@ def main():
     init_db()
     threading.Thread(target=load_engine, daemon=True).start()
     import uvicorn
-    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'}{', LLM segmentation' if SEG_AGENT else ''}"
+    print(f"\n  MITHAQ  ➜  http://{a.host}:{a.port}   (retriever: {MODE}{'' if USE_LLM else ', no LLM'}{', segmentation agent' if SEG_AGENT else ''}"
           f" | database: {db.describe()})\n")
     uvicorn.run(app, host=a.host, port=a.port, log_level="warning")
 
