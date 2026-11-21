@@ -254,14 +254,32 @@ a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
 .none{color:var(--faint);padding:16px;border:1px dashed var(--line);border-radius:14px;text-align:center}
 .banner{display:flex;align-items:flex-start;gap:10px;padding:13px 18px;border-radius:14px;background:var(--amber-50);border:1px solid #F3DFB1;color:#7A5413;font-size:13.5px;margin-bottom:12px}
 .banner svg{color:var(--amber);margin-top:2px}
-.doctext{padding:28px 32px;line-height:2.1}
-.doctext .pg{display:flex;align-items:center;gap:12px;color:var(--gold-600);font-size:12px;font-weight:600;margin:22px 0 10px}
-.doctext .pg::after{content:"";flex:1;height:1px;background:var(--line)}
-.doctext .pg:first-child{margin-top:0}
-.doctext h4{color:var(--g-900);margin-top:10px}
-.doctext .pg,.doctext .dc{scroll-margin-top:24px}
-.doctext .dc{border-radius:10px;transition:background .6s}
-.doctext .hl{background:var(--gold-50);box-shadow:0 0 0 8px var(--gold-50)}
+.regdoc{padding:0;overflow:hidden}
+.regdoc .rd-h{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 22px;background:#fff;border-bottom:1px solid var(--line)}
+.regdoc .rd-h h2{font-size:18px;color:var(--g-900)}
+.regdoc .rd-h select{height:38px;border:1px solid var(--line);border-radius:10px;background:#FCFBF8;padding:0 10px;font:inherit;font-size:13px}
+.regdoc .rd-b{padding:10px 32px 40px;line-height:2.1;max-height:calc(100vh - 120px);overflow:auto}
+.regdoc .rp{color:var(--gold-600);font-size:13px;font-weight:700;margin:26px 0 4px;display:flex;align-items:center;gap:12px}
+.regdoc .rp::after{content:"";flex:1;height:1px;background:var(--line)}
+.regdoc .rs,.regdoc .rc{border-radius:12px;padding:6px 14px;margin:6px -14px;scroll-margin-top:16px;transition:background .6s,box-shadow .6s}
+.regdoc .rs h4{color:var(--g-900);font-size:15px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.regdoc .rs h4 small{color:var(--faint);font-weight:500;font-size:12px}
+.regdoc .rs h5{color:var(--g-700);font-size:13.5px;margin-top:6px}
+.regdoc .rs p{margin:0}
+.regdoc .rc{margin:0;padding:2px 0}
+.regdoc .rc.focus{padding:6px 12px;margin:4px -12px}
+.regdoc .rs.focus,.regdoc .rc.focus{background:var(--gold-50);box-shadow:inset 3px 0 0 var(--gold-500)}
+.regdoc .rs.flash,.regdoc .rc.flash{box-shadow:inset 3px 0 0 var(--gold-500),0 0 0 3px var(--gold-300)}
+.regdoc mark{background:#F6E2A8;color:inherit;border-radius:4px;padding:1px 2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.regdoc .rd-empty{padding:40px;text-align:center;color:var(--faint)}
+.reglinks .rl-c{padding:0 10px 12px;color:var(--muted);font-size:13px;border-bottom:1px solid var(--line-2);margin-bottom:8px}
+.reglinks .rl-c b{display:block;color:var(--g-900);font-size:14px}
+.reglinks .rl-g{font-size:12px;font-weight:700;color:var(--faint);padding:8px 10px 2px}
+.reglinks button{width:100%;text-align:start;padding:8px 10px;border-radius:10px;font-size:13px;line-height:1.6;display:block}
+.reglinks button small{display:block;color:var(--faint);font-size:11.5px}
+.reglinks button:hover{background:#FCFBF8}
+.reglinks button.on{background:var(--gold-50);color:var(--g-900);font-weight:600;box-shadow:inset -3px 0 0 var(--gold-500)}
+a.tag.go.reg{margin-top:8px}
 
 /* ─── my account ─── */
 .user[data-go]{cursor:pointer;transition:border-color .15s}
@@ -333,7 +351,7 @@ a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
   .me-id{flex-wrap:wrap;padding:0 18px}
   .me-box,.me-danger{padding:20px}
   .me-dh{flex-wrap:wrap}
-  .pane,.up-main,.doctext{padding:20px 18px}
+  .pane,.up-main,.regdoc .rd-b{padding:20px 18px}
   .vtabs button{padding:0 12px;font-size:13px}
   .vtabs button svg{display:none}
 }
@@ -482,14 +500,20 @@ a.tag.go:hover{text-decoration:underline;text-underline-offset:3px}
       <div class="banner hidden" id="r-seg"><span data-i="info"></span><div id="r-seg-t"></div></div>
       <div class="chips" id="r-chips"></div>
       <div class="card toolbar">
-        <div class="vtabs" id="vtabs"><button data-v="clauses" class="on"><span data-i="list"></span>البنود والمواد النظامية</button><button data-v="text"><span data-i="doc"></span>النص المستخرج</button></div>
+        <div class="vtabs" id="vtabs"><button data-v="clauses" class="on"><span data-i="list"></span>البنود والمواد النظامية</button><button data-v="regs"><span data-i="book"></span>اللوائح النظامية</button></div>
         <label class="search"><span data-i="search"></span><input id="q" placeholder="ابحث في البنود..."></label>
       </div>
       <div class="ws" id="clauses">
         <aside class="card tree"><h3>أقسام المستند</h3><div id="navitems"></div></aside>
         <section class="card pane" id="pane"></section>
       </div>
-      <div class="card doctext hidden" id="doctext"></div>
+      <div class="ws hidden" id="regs">
+        <aside class="card tree reglinks"><h3>مواد البند في اللوائح</h3><div id="reglinks"></div></aside>
+        <section class="card regdoc" id="regdoc">
+          <div class="rd-h"><h2 id="rd-title">اللوائح النظامية</h2><select id="rd-pick" aria-label="اللائحة"></select></div>
+          <div class="rd-b" id="rd-body"><div class="rd-empty">جارٍ تحميل اللائحة…</div></div>
+        </section>
+      </div>
     </section>
 
     <!-- my account -->
@@ -570,6 +594,7 @@ const P = {
   cloud:'<path d="M7 18a4.5 4.5 0 0 1-.9-8.9A6 6 0 0 1 17.7 8 4.5 4.5 0 0 1 17 18"/><path d="M12 12v8M9 15l3-3 3 3"/>',
   file:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
   doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7M8 11h7"/>',
   chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
   logout:'<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
@@ -870,11 +895,11 @@ async function renderResults(r){
   const errs = cl.filter(c=>c.llm_error).length;
   $("#r-llm").classList.toggle("hidden", !errs);
   $("#r-llm-t").innerHTML = `لم يكن النموذج اللغوي متاحًا لـ <b>${errs}</b> بند، فعُرضت لها نتائج البحث مباشرة.`;
-  // report of the Document Processing Agent's LLM segmentation (absent when the document was split by the rules only)
+  // Segmentation Agent's report (absent when the document was split by the rules only)
   const seg = o.segmentation, fixedN = cl.filter(c=>c.fixed_by_agent).length;
-  const segMsg = !seg ? "" : seg.status==="fixed" ? `راجع وكيل معالجة المستندات تقسيم البنود وصحّح <b>${fixedN || seg.changes.length}</b> منها.`
-    : seg.status==="needs_review" ? `<b>وكيل معالجة المستندات:</b> تقسيم بعض بنود المستند يحتاج مراجعة. ${esc(seg.summary||"")}`
-    : seg.status==="error" ? "تعذّرت مراجعة التقسيم بالنموذج اللغوي، فقُسّم المستند بالطريقة المعتادة." : "";
+  const segMsg = !seg ? "" : seg.status==="fixed" ? `راجع وكيل التقسيم بنود المستند وصحّح <b>${fixedN || seg.changes.length}</b> منها.`
+    : seg.status==="needs_review" ? `<b>وكيل التقسيم:</b> تقسيم بعض بنود المستند يحتاج مراجعة. ${esc(seg.summary||"")}`
+    : seg.status==="error" ? "تعذّر تشغيل وكيل التقسيم، فقُسّم المستند بالطريقة المعتادة." : "";
   $("#r-seg").classList.toggle("hidden", !segMsg); $("#r-seg-t").innerHTML = segMsg;
   const pg = cl.map(c=>c.page_end).filter(x=>x!=null);
   $("#r-chips").innerHTML = [
@@ -882,44 +907,17 @@ async function renderResults(r){
     ["مواد نظامية مرتبطة", new Set(cl.flatMap(c=>chosen(c).map(g=>g.section_key||g.id))).size],
     ...(cl.some(c=>c.from_ocr) ? [["بنود من صفحات ممسوحة", cl.filter(c=>c.from_ocr).length]] : []),
   ].map(([k,v])=>`<span class="chip">${k}: <b>${v}</b></span>`).join("");
-  $("#q").value = ""; CUR = 0; drawNav(""); openClause(0); drawText(); view("clauses");
+  $("#q").value = ""; CUR = 0; drawNav(""); openClause(0); view("clauses");
 }
 $("#r-pick").addEventListener("change", e => openReview(e.target.value));
 
 function view(v){
   VIEW = v; document.querySelectorAll("#vtabs button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
-  $("#clauses").classList.toggle("hidden", v!=="clauses"); $("#doctext").classList.toggle("hidden", v!=="text");
+  $("#clauses").classList.toggle("hidden", v!=="clauses"); $("#regs").classList.toggle("hidden", v!=="regs");
   $(".search").classList.toggle("hidden", v!=="clauses");
 }
-$("#vtabs").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (b) view(b.dataset.v); });
-
-function drawText(){
-  // the document's text as OCR read it, in reading order, with its page numbers
-  let page = null, h = "";
-  const mark = p => `<div class="pg" id="pg-${p}">صفحة ${p}</div>`;
-  result.output.clauses.forEach((c,i) => {
-    const runs = pageRuns(c);
-    if (runs[0][0]!=null && runs[0][0]!==page){ page = runs[0][0]; h += mark(page); }
-    h += `<div class="dc" id="dc-${i}">${c.title && !c.body.startsWith(c.title)?`<h4>${esc(c.title)}</h4>`:""}`;
-    runs.forEach(([p,t]) => {   // a clause that goes on to the next page gets that page's marker inside it
-      if (p!=null && p!==page){ page = p; h += mark(p); }
-      h += `<p>${esc(t)}</p>`;
-    });
-    h += `</div>`;
-  });
-  $("#doctext").innerHTML = h || `<div class="empty">لا يوجد نص.</div>`;
-}
-
-// the clause text cut where it moves to another page: [[page, text], …]
-// older reviews have no line_pages: the whole text is under its first page
-function pageRuns(c){
-  const lines = c.body.split("\n"), lp = c.line_pages;
-  if (!lp || lp.length !== lines.length) return [[c.page_start, c.body]];
-  const runs = [];
-  lines.forEach((l,k) => { const p = lp[k] ?? runs.at(-1)?.[0] ?? c.page_start;
-    runs.length && runs.at(-1)[0]===p ? runs.at(-1)[1] += "\n"+l : runs.push([p, l]); });
-  return runs;
-}
+$("#vtabs").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (!b) return;
+  b.dataset.v==="regs" ? gotoRegs(CUR) : view(b.dataset.v); });
 
 // clause tree: the T&C sections, each one folds open / closed
 function drawNav(q){
@@ -964,7 +962,8 @@ function artRow(g, key){
     <div class="bd"><div class="hd">${esc(g.heading||g.citation)}${g.cited?`<span class="cited">يحيل إليها البند</span>`:""}</div>
     <div class="sb">${esc(g.regulation||g.document)}${g.page_start!=null?` · ${pages(g.page_start,g.page_end)}`:""}</div></div>${ic("chev",16)}</button>
     <div class="more">${g.reason?`<div class="why"><b>سبب الربط:</b><span>${esc(g.reason)}</span></div>`:""}
-    <div class="rtx" data-id="${esc(g.id)}">${esc(g.full_text||g.excerpt||g.body||"…")}</div></div></div>`;
+    <div class="rtx" data-id="${esc(g.id)}">${esc(g.full_text||g.excerpt||g.body||"…")}</div>
+    <a class="tag go reg" data-reg="${key}" title="افتح المادة في مكانها من اللائحة مع تظليل النص المرتبط">${ic("book",14)}اعرضها في مكانها من اللائحة</a></div></div>`;
 }
 
 function drawClause(){
@@ -978,13 +977,14 @@ function drawClause(){
       ${c.breadcrumb?`<div class="crumbs">${esc(c.breadcrumb)}</div>`:""}
       <div class="meta">
         ${c.from_ocr?`<span class="tag ocr">مستخرج من صفحة ممسوحة</span>`:""}
-        ${c.fixed_by_agent?`<span class="tag ocr" title="${esc(c.agent_note||"")}">صحّح وكيل معالجة المستندات تقسيم هذا البند</span>`:""}
+        ${c.fixed_by_agent?`<span class="tag ocr" title="${esc(c.agent_note||"")}">صحّح وكيل التقسيم هذا البند</span>`:""}
       </div></div>
       <div class="stepper"><button data-step="-1" title="البند السابق"${CUR===0?" disabled":""}>${ic("prev",18)}</button><button data-step="1" title="البند التالي"${CUR===cl.length-1?" disabled":""}>${ic("next",18)}</button></div>
     </div>
     <div class="ctext">${esc(c.body)}</div>
-    ${c.page_start!=null?`<div class="src"><a class="tag go" data-goto="${CUR}" title="اعرض هذا البند في النص المستخرج">${ic("doc",14)}${pages(c.page_start,c.page_end)} من المستند</a></div>`:""}
-    <div class="arts-h"><h3>المواد النظامية المرتبطة</h3><span>${sel.length ? `(${sel.length})` : ""}</span></div>
+    ${c.page_start!=null?`<div class="src"><span class="tag">${ic("doc",14)}${pages(c.page_start,c.page_end)} من المستند</span></div>`:""}
+    <div class="arts-h"><h3>المواد النظامية المرتبطة</h3><span>${sel.length ? `(${sel.length})` : ""}</span>
+      ${sel.length?`<a class="tag go" data-goto="${CUR}" style="margin-inline-start:auto" title="اعرض مواد هذا البند في نص اللوائح مع تظليل النص المرتبط">${ic("book",14)}اعرضها في اللوائح</a>`:""}</div>
     ${order.length ? order.map(k => `<div class="acc ${k}${OPEN.has(k)?" open":""}">
         <button class="ah" data-acc="${k}"><i class="dot"></i><span class="nm">${ROLE[k]}</span><span class="n">${groups[k].length}</span>${ic("chev",17)}</button>
         <div class="ab">${groups[k].map(([g,j]) => artRow(g, j)).join("")}</div></div>`).join("")
@@ -997,20 +997,98 @@ $("#navitems").addEventListener("click", e => {
   const b = e.target.closest("[data-ci]"); if (b) openClause(+b.dataset.ci);
 });
 $("#pane").addEventListener("click", e => {
-  const go = e.target.closest("[data-goto]"); if (go){ gotoText(+go.dataset.goto); return; }
+  const go = e.target.closest("[data-goto]"); if (go){ gotoRegs(+go.dataset.goto); return; }
+  const rg = e.target.closest("[data-reg]"); if (rg){ gotoRegs(CUR, +rg.dataset.reg); return; }
   const s = e.target.closest("[data-step]"); if (s){ openClause(CUR + +s.dataset.step); return; }
   const a = e.target.closest("[data-acc]"); if (a){ const k = a.dataset.acc; OPEN.has(k) ? OPEN.delete(k) : OPEN.add(k); drawClause(); return; }
   const r = e.target.closest("[data-art]"); if (r){ const k = +r.dataset.art; OPENART.has(k) ? OPENART.delete(k) : OPENART.add(k); drawClause(); }
 });
 $("#q").addEventListener("input", e => drawNav(e.target.value));
-function gotoText(i){
-  // jump from a clause to its exact place (and page) in the extracted text, and flash it
-  view("text");
-  const el = document.getElementById("dc-"+i); if (!el) return;
-  const pg = el.previousElementSibling?.classList.contains("pg") ? el.previousElementSibling : el;   // show the page number too
-  pg.scrollIntoView({block:"start", behavior:"smooth"});
-  el.classList.add("hl"); setTimeout(() => el.classList.remove("hl"), 1800);
+// ───────── regulations page: the whole regulation, with the clause's matched provisions highlighted in place
+let REGLIST = null, REGDOC = null, REGSEL = 0;
+const REGCACHE = {};
+const normT = t => (t||"").replace(/[ًٌٍَُِّْـ]/g,"").replace(/\s+/g," ").trim();
+async function regList(){
+  if (!REGLIST){ const r = await fetch("/api/regulations"); if (!r.ok) throw new Error((await r.json()).detail||"");
+    REGLIST = await r.json(); }
+  return REGLIST;
 }
+async function regDoc(id){
+  if (!REGCACHE[id]){ const r = await fetch("/api/regulations/"+encodeURIComponent(id)); if (!r.ok) throw new Error((await r.json()).detail||"");
+    REGCACHE[id] = await r.json(); }
+  return REGCACHE[id];
+}
+const docOf = g => (REGLIST||[]).find(d => d.short === String(g.id).split("-")[0])?.id;
+
+function drawRegLinks(){
+  const c = result.output.clauses[CUR], sel = chosen(c), groups = {};
+  sel.forEach((g,j) => (groups[ROLE[g.role] ? g.role : "other"] ??= []).push([g,j]));
+  $("#reglinks").innerHTML = `<div class="rl-c">البند المعروض<b>${esc(c.title||c.body.slice(0,70))}</b></div>` +
+    (["governing","disclosure","related","other"].filter(k=>groups[k]).map(k => `<div class="rl-g">${ROLE[k]}</div>` +
+      groups[k].map(([g,j]) => `<button data-rl="${j}" class="${j===REGSEL?"on":""}">${esc(g.heading||g.citation)}<small>${esc(g.regulation||g.document)}</small></button>`).join("")).join("")
+    || `<div class="none">لا توجد مواد مرتبطة بهذا البند.</div>`);
+}
+
+function drawRegDoc(d){
+  let path = "", h = "";
+  d.sections.forEach(s => {
+    const p = s.path.join(" › ");
+    if (p && p !== path){ path = p; h += `<div class="rp">${esc(p)}</div>`; }
+    h += `<section class="rs" id="rs-${esc(s.key)}"><h4>${esc(s.heading)}${s.page_start!=null?`<small>${pages(s.page_start,s.page_end)}</small>`:""}</h4>` +
+      s.chunks.map((c,k) => `<div class="rc" id="rc-${esc(c.id)}">${c.sub && c.sub!==s.chunks[k-1]?.sub?`<h5>${esc(c.sub)}</h5>`:""}` +
+        c.text.split("\n").filter(l=>l.trim()).map(l => `<p>${esc(l)}</p>`).join("") + `</div>`).join("") + `</section>`;
+  });
+  $("#rd-body").innerHTML = h || `<div class="rd-empty">لا يوجد نص.</div>`;
+  $("#rd-title").textContent = d.title || "اللوائح النظامية";
+  $("#rd-pick").value = d.id;
+  REGDOC = d.id;
+}
+
+// the part of a provision the agent kept for the clause (its excerpt) is marked inside the provision itself
+function markProvision(g){
+  const sec = document.getElementById("rs-"+g.section_key); if (!sec) return null;
+  const scope = g.section_key === "IFR-anx11" ? document.getElementById("rc-"+g.id) || sec : sec;   // an Annex 11 item alone
+  scope.classList.add("focus");
+  const paras = (g.excerpt||"").split("\n").map(normT).filter(p => p && p !== "…");
+  scope.querySelectorAll("p").forEach(p => {
+    const t = normT(p.textContent);
+    if (t && paras.some(x => x.includes(t) || (x.length > 30 && t.includes(x)))) p.innerHTML = `<mark>${esc(p.textContent)}</mark>`;
+  });
+  return scope;
+}
+
+async function gotoRegs(i, j){
+  // from a clause to its provisions, in their place in the regulation, with the related text highlighted
+  view("regs"); CUR = i;
+  const sel = chosen(result.output.clauses[CUR]);
+  const order = ["governing","disclosure","related"];        // by default: the first provision as the list shows it
+  const rank = g => { const k = order.indexOf(g.role); return k < 0 ? order.length : k; };
+  REGSEL = j ?? sel.map((g,k) => [rank(g), k]).sort((a,b) => a[0]-b[0] || a[1]-b[1])[0]?.[1] ?? 0;
+  drawRegLinks();
+  try {
+    const list = await regList();
+    $("#rd-pick").innerHTML = list.map(d => `<option value="${esc(d.id)}">${esc(d.title)}</option>`).join("");
+    const g = sel[REGSEL], id = (g && docOf(g)) || REGDOC || list[0]?.id;
+    if (!id) return;
+    if (REGDOC !== id || !$("#rd-body .rs")) { $("#rd-body").innerHTML = `<div class="rd-empty">جارٍ تحميل اللائحة…</div>`; drawRegDoc(await regDoc(id)); }
+    else drawRegDoc(REGCACHE[id]);                                   // redraw: clears the marks of another clause
+    sel.filter(x => docOf(x) === id).forEach(markProvision);         // every provision of this clause in this regulation
+    const target = g && docOf(g) === id && markProvision(g), box = $("#rd-body");
+    if (target){   // scroll the regulation only (the page and its tabs stay in place)
+      const first = target.querySelector("mark") || target;
+      const top = first.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
+      box.scrollTo({top: Math.max(0, top - box.clientHeight/3), behavior:"smooth"});
+      target.classList.add("flash"); setTimeout(() => target.classList.remove("flash"), 1800);
+    } else box.scrollTop = 0;
+  } catch (e) {
+    $("#rd-body").innerHTML = `<div class="rd-empty">${esc(e.message || "تعذّر تحميل اللائحة.")}</div>`;
+  }
+}
+$("#reglinks").addEventListener("click", e => { const b = e.target.closest("[data-rl]"); if (b) gotoRegs(CUR, +b.dataset.rl); });
+$("#rd-pick").addEventListener("change", async e => {   // browse another regulation: the clause's provisions in it stay marked
+  const d = await regDoc(e.target.value); drawRegDoc(d); $("#rd-body").scrollTop = 0;
+  chosen(result.output.clauses[CUR]).filter(x => docOf(x) === d.id).forEach(markProvision);
+});
 document.addEventListener("keydown", e => {   // ← next, → previous (right-to-left reading order)
   if (!result || VIEW!=="clauses" || $("#v-results").classList.contains("hidden") || e.target.closest("input,textarea,select")) return;
   if (e.key==="ArrowLeft") openClause(CUR+1);
