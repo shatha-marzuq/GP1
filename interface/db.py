@@ -13,7 +13,7 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 
-from sqlalchemy import JSON, Float, ForeignKey, Integer, String, create_engine, inspect, text
+from sqlalchemy import JSON, Float, ForeignKey, Integer, String, Text, create_engine, inspect, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
@@ -81,16 +81,19 @@ class LoginSession(Base):
 
 class Review(Base):
     """Only what a finished review needs. While a review is processed, its progress (status, done/total) is
-    kept in the server's memory (app.py), not here; a review without an output after that has failed.
-    The counts in the reviews list are computed from the output, not stored."""
+    kept in the server's memory (app.py), not here; a review without an output after that has failed, and
+    `error` tells the officer why. The counts in the reviews list are computed from the output, not stored."""
     __tablename__ = "reviews"
     id: Mapped[str] = mapped_column(String(16), primary_key=True)
     owner: Mapped[str | None] = mapped_column(String(16), index=True, nullable=True)   # each user sees their own
     filename: Mapped[str] = mapped_column(String(300))                               # shown in the list
     created: Mapped[float] = mapped_column(Float, default=time.time)                 # orders the list
     output: Mapped[dict | None] = mapped_column(JsonType, nullable=True)             # the result: clauses + regulations
+    # why a review failed, as a short Arabic message for the officer (e.g. the file is password-protected),
+    # so they know what to fix before uploading again; technical details go to the server log only
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    FIELDS = ("id", "owner", "filename", "created")
+    FIELDS = ("id", "owner", "filename", "created", "error")
 
     def as_dict(self, with_output: bool = False) -> dict:
         d = {f: getattr(self, f) for f in self.FIELDS}
@@ -118,6 +121,7 @@ def init():
     drop_phone_accounts()
     drop_removed_columns()
     Base.metadata.create_all(engine)
+    add_missing_columns()
     import_legacy_files()
 
 
@@ -126,9 +130,22 @@ def init():
 REMOVED_COLUMNS = {
     "users": ("created",),
     "pending_signups": ("code_expires",),          # = last_sent + 10 minutes (auth.CODE_TTL)
-    "reviews": ("size", "file_path", "host", "finished", "status", "done", "total", "error", "mode", "llm",
-                "stats"),
+    "reviews": ("size", "file_path", "host", "finished", "status", "done", "total", "mode", "llm", "stats"),
 }
+
+# Columns added after a table was first made: create_all() does not change existing tables, so they are added
+# here. (reviews.error was dropped for a short while, then kept again for the officer's failure message.)
+ADDED_COLUMNS = {"reviews": {"error": "TEXT"}}
+
+
+def add_missing_columns():
+    insp = inspect(engine)
+    with engine.begin() as c:
+        for table, cols in ADDED_COLUMNS.items():
+            have = {col["name"] for col in insp.get_columns(table)}
+            for col, sql_type in cols.items():
+                if col not in have:
+                    c.execute(text(f"ALTER TABLE {table} ADD COLUMN {col} {sql_type}"))
 
 
 def drop_removed_columns():

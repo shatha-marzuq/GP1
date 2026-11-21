@@ -94,10 +94,26 @@ def attach_llm(agent):
 # ─────────────────────────────────────────── reviews ───────────────────────────────────────────
 # The database keeps only the finished result of a review (db.py). While a review is processed, its progress
 # (status, done/total) lives in PROGRESS, in this server's memory: it means something only during the
-# processing. A review that is not in PROGRESS is done if it has an output, else it failed (the reason of a
-# failure goes to the server log, not to the database). LOCK keeps the progress updates in order.
+# processing. A review that is not in PROGRESS is done if it has an output, else it failed: the review keeps a
+# short Arabic reason for the officer (db.Review.error), and the technical details go to the server log only.
+# LOCK keeps the progress updates in order.
 LOCK = threading.Lock()
 PROGRESS: dict[str, dict] = {}      # review_id -> {"status", "done", "total"} while it is processed
+
+ARABIC = re.compile(r"[؀-ۿ]")
+NO_CLAUSES = "لم يُستخرج نص أو بنود من الملف."
+UNEXPECTED = "حدث خطأ غير متوقع أثناء مراجعة المستند. حاول رفعه مرة أخرى."
+ENGINE_DOWN = "تعذّر تشغيل محرك البحث في الأنظمة. حاول مرة أخرى لاحقًا."
+INTERRUPTED = "توقفت المراجعة قبل اكتمالها. ارفع الملف مرة أخرى."   # e.g. the server restarted mid-review
+
+
+def officer_message(reason):
+    """A failure reason as the officer sees it. The Document Processing Agent's reasons are already short Arabic
+    messages (e.g. the file is password-protected) and are kept; anything technical (an exception, an English
+    message) becomes a general message, and its details stay in the server log."""
+    if not reason or reason == "no text or clauses found":
+        return NO_CLAUSES
+    return reason if ARABIC.search(reason) else UNEXPECTED
 
 
 def init_db():
@@ -108,6 +124,10 @@ def init_db():
 def on_status(review_id, status, **info):
     if status == "failed":
         print(f"  review {review_id} failed: {info.get('reason')}", flush=True)
+        with db.session() as s:                             # the reason the officer will see
+            r = s.get(db.Review, review_id)
+            if r is not None and r.output is None:
+                r.error = info.get("message") or officer_message(info.get("reason"))
     if status == "done":                                    # done = its output is saved (run_review)
         return
     with LOCK:
@@ -139,7 +159,8 @@ def process(review_id, path):
     """Runs the orchestrator on the file: its output, or None when the review failed."""
     while not ENGINE["ready"]:
         if ENGINE["error"]:
-            on_status(review_id, "failed", reason="تعذر تشغيل محرك البحث في الأنظمة: " + ENGINE["error"])
+            on_status(review_id, "failed", reason="search engine failed to start: " + ENGINE["error"],
+                      message=ENGINE_DOWN)
             return None
         time.sleep(0.5)
     try:
@@ -149,12 +170,12 @@ def process(review_id, path):
         state = graph.invoke({"review_id": review_id, "file_path": str(path), "results": []},
                              {"max_concurrency": 8})
     except Exception as e:
-        on_status(review_id, "failed", reason=f"{type(e).__name__}: {e}")
+        on_status(review_id, "failed", reason=f"{type(e).__name__}: {e}", message=UNEXPECTED)
         return None
     with LOCK:
         reported = PROGRESS.get(review_id, {}).get("status") == "failed"
     if not state.get("output") and not reported:
-        on_status(review_id, "failed", reason=state.get("error") or "لم يُستخرج نص أو بنود من الملف.")
+        on_status(review_id, "failed", reason=state.get("error") or NO_CLAUSES)
     return state.get("output")
 
 
@@ -220,7 +241,10 @@ def running_now():
 
 def summary(r, running):
     progress = running.get(r["id"]) or {"status": "done" if r.get("output") else "failed", "done": 0, "total": 0}
-    return ({k: r.get(k) for k in ("id", "filename", "created")} | progress
+    error = None
+    if progress["status"] == "failed":                      # never a raw error; no reason = stopped mid-way
+        error = officer_message(r["error"]) if r.get("error") else INTERRUPTED
+    return ({k: r.get(k) for k in ("id", "filename", "created")} | progress | {"error": error}
             | {"mode": MODE} | output_stats(r.get("output")))       # mode: the page warns in stub mode
 
 
