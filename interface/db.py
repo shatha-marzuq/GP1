@@ -7,13 +7,12 @@ Tables are created on first start.
 """
 from __future__ import annotations
 
-import json
 import os
 import time
 from contextlib import contextmanager
 from pathlib import Path
 
-from sqlalchemy import JSON, Float, ForeignKey, Integer, String, Text, create_engine, inspect, text
+from sqlalchemy import JSON, Float, ForeignKey, Integer, String, Text, create_engine, event, inspect, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
@@ -43,6 +42,13 @@ URL = database_url()
 engine = create_engine(URL, pool_pre_ping=True,   # pre_ping: reconnect after an idle cloud connection drops
                        connect_args={"check_same_thread": False} if URL.startswith("sqlite") else {})
 Session = sessionmaker(engine, expire_on_commit=False)
+
+if URL.startswith("sqlite"):
+    @event.listens_for(engine, "connect")
+    def _foreign_keys_on(dbapi_connection, _record):
+        """SQLite checks foreign keys (and ON DELETE CASCADE) only when asked, per connection;
+        PostgreSQL always does."""
+        dbapi_connection.execute("PRAGMA foreign_keys = ON")
 
 # JSONB on PostgreSQL, plain JSON on SQLite
 JsonType = JSON().with_variant(JSONB(), "postgresql")
@@ -85,7 +91,8 @@ class Review(Base):
     `error` tells the officer why. The counts in the reviews list are computed from the output, not stored."""
     __tablename__ = "reviews"
     id: Mapped[str] = mapped_column(String(16), primary_key=True)
-    owner: Mapped[str | None] = mapped_column(String(16), index=True, nullable=True)   # each user sees their own
+    # every review belongs to one user, and only that user sees it; deleting the user deletes their reviews
+    owner: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     filename: Mapped[str] = mapped_column(String(300))                               # shown in the list
     created: Mapped[float] = mapped_column(Float, default=time.time)                 # orders the list
     output: Mapped[dict | None] = mapped_column(JsonType, nullable=True)             # the result: clauses + regulations
@@ -117,12 +124,38 @@ def session():
 
 
 def init():
-    """Create the tables (if missing) and bring in reviews saved by the older file-based version."""
+    """Create the tables (if missing) and bring a database made by an older version up to date."""
     drop_phone_accounts()
     drop_removed_columns()
     Base.metadata.create_all(engine)
     add_missing_columns()
-    import_legacy_files()
+    require_review_owner()
+
+
+def require_review_owner():
+    """reviews.owner used to be optional and unchecked; now every review must belong to an existing user
+    (NOT NULL + foreign key to users.id, ON DELETE CASCADE). A database made before keeps working: its reviews
+    without an existing owner (which no one could see) are removed, then the constraint is added. If that
+    fails, the server still starts and works as before (the application checks the owner itself)."""
+    insp = inspect(engine)
+    if any(fk.get("referred_table") == "users" for fk in insp.get_foreign_keys("reviews")):
+        return                                              # already done
+    try:
+        with engine.begin() as c:                           # one transaction: all of it or nothing
+            c.execute(text("DELETE FROM reviews WHERE owner IS NULL OR owner NOT IN (SELECT id FROM users)"))
+            if URL.startswith("sqlite"):                   # SQLite cannot add a constraint: rebuild the table
+                c.execute(text("DROP INDEX IF EXISTS ix_reviews_owner"))
+                c.execute(text("ALTER TABLE reviews RENAME TO reviews_old"))
+                Review.__table__.create(c)
+                c.execute(text("INSERT INTO reviews (id, owner, filename, created, output, error) "
+                               "SELECT id, owner, filename, created, output, error FROM reviews_old"))
+                c.execute(text("DROP TABLE reviews_old"))
+            else:
+                c.execute(text("ALTER TABLE reviews ALTER COLUMN owner SET NOT NULL"))
+                c.execute(text("ALTER TABLE reviews ADD CONSTRAINT reviews_owner_fkey FOREIGN KEY (owner) "
+                               "REFERENCES users (id) ON DELETE CASCADE"))
+    except Exception as e:                                   # noqa: BLE001 (logged, the app works without it)
+        print(f"  could not add the reviews.owner foreign key: {type(e).__name__}: {e}", flush=True)
 
 
 # Columns the tables no longer keep (only what is needed is stored). A database made by the older version
@@ -173,16 +206,6 @@ def drop_phone_accounts():
             c.execute(text("DELETE FROM reviews WHERE owner IN (SELECT id FROM users)"))
         c.execute(text("DROP TABLE IF EXISTS sessions"))
         c.execute(text("DROP TABLE users"))
-
-
-def import_legacy_files():
-    """data/<id>.json reviews from before the database: added once, existing rows kept.
-    (accounts/users.json is not imported: those accounts were by phone number.)"""
-    with session() as s:
-        for f in (HERE / "data").glob("*.json"):
-            r = json.loads(f.read_text(encoding="utf-8"))
-            if "id" in r and s.get(Review, r["id"]) is None:
-                s.add(Review(**{k: r[k] for k in Review.FIELDS + ("output",) if k in r}))
 
 
 def describe() -> str:
