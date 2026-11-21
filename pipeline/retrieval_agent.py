@@ -282,6 +282,31 @@ def _body(text):
     return BREADCRUMB.sub("", text, count=1).strip()
 
 
+# a sub-heading that opens a part: "د) صلاحيات الاقتراض:" "(ب) سياسة التوزيعات" "10. مخاطر التركز:" "▪ مخاطر التمويل:"
+SUB_MARKER = re.compile(r"^\s*(?:[▪•]\s*)?(?:\(?[\u0621-\u064A]{1,2}\)|\(\d{1,2}\)|\d{1,2}\s*[.)-]|[\u0621-\u064A]\s*[.-])\s*\S")
+SUB_HEADING = re.compile(r"^([^:\n|]{3,90}):")
+
+
+def part_heading(text, fallback=None):
+    """Title of a clause given to the agent: the clause heading from the segmentation breadcrumb, plus the
+    sub-heading the part opens with, if any ("الاشتراك › ع) الاشتراك الإضافي"). A long clause is split into
+    parts, and the first line of a later part is either such a sub-heading or a sentence cut in the middle.
+    Without a breadcrumb (a set without segmentation): the fallback."""
+    m = BREADCRUMB.match(text)
+    if not m:
+        return fallback
+    heading = PART_SUFFIX.sub("", m.group(1).split("›")[-1]).strip().rstrip(":").strip()
+    first = _body(text).split("\n", 1)[0].strip()
+    if not first or LEAD_NUMBERING.sub("", first).strip() == LEAD_NUMBERING.sub("", heading).strip():
+        return heading                                           # the part starts with the clause heading itself
+    sub = SUB_HEADING.match(first)
+    sub = sub.group(1).strip() if sub else (first if len(first.split()) <= 10 and not first.endswith(".") else None)
+    list_item = re.search(r"[؛،,]\s*و?$", first)                # "1. بموافقة خطية مسبقة؛ و" is an item, not a heading
+    if sub and not list_item and "|" not in first and len(sub.split()) <= 12 and (SUB_MARKER.match(sub) or first.rstrip().endswith(":")):
+        return f"{heading} › {sub}"
+    return heading
+
+
 class RetrievalAgent:
     def __init__(self, retriever, *, llm=None, pool_size=POOL_SIZE, ablate=()):
         """llm: a chat model answering in JSON (LLM()); it plans the searches and selects the provisions.

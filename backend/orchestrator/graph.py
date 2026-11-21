@@ -108,7 +108,11 @@ def build_graph(retriever, *,
         clause = task["clause"]
         agent = None
         if hasattr(retriever, "run"):  # وكيل الاسترجاع: يرجع المواد المختارة + موضوعات البند وخطواته
-            out = retriever.run(clause["text"], title=clause.get("title"), k=k, **search_kwargs)
+            # the clause heading (from the breadcrumb) + the sub-heading the part opens with, not "title": a long
+            # clause is split into parts and a later part's title is only its first line. "title" stays for display.
+            from retrieval_agent import part_heading
+            title = part_heading(clause["text"], clause.get("section_title") or clause.get("title"))
+            out = retriever.run(clause["text"], title=title, k=k, **search_kwargs)
             hits, agent = out["hits"], {"topics": out.get("topics", []), "steps": out["steps"]}
         else:
             hits = retriever.search(clause["text"], k=k, **search_kwargs)

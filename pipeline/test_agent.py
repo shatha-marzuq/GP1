@@ -23,13 +23,17 @@ Output: output/09_agent_eval/report_<tag>.json + .md (docproc/testset/eval/ for 
 Usage : python3 test_agent.py [--mode dense|hybrid|bm25] [--no-rerank] [--llm [--model NAME] [--no-cache]]
                               [--sets blom kb mulkia] [--tag NAME] [--ablate NAME]
         --ablate switches off one part of the agent (retrieval_agent.ABLATIONS); its name is added to the tag
+        --title-from-crumb: the clause title is built as the orchestrator now builds it (retrieval_agent.part_heading:
+          the breadcrumb's clause heading + the sub-heading the part opens with), not the set's "section" field —
+          for sets built from the automatic segmentation, whose "section" is the first line of a part. Labels are
+          unchanged. Added to the tag.
         (bm25 without --llm needs no models and no API — use it to check the logic)
 """
 import argparse, json, sys, time
 from pathlib import Path
 
 from retriever import RegulationRetriever
-from retrieval_agent import ABLATIONS, LLM, POOL_SIZE, SEARCH_DEPTH, RetrievalAgent
+from retrieval_agent import ABLATIONS, LLM, POOL_SIZE, SEARCH_DEPTH, RetrievalAgent, part_heading
 
 ROOT = Path(__file__).resolve().parent.parent
 SETS = {"blom": (ROOT / "output" / "08_tc_evaluation" / "blom_clauses.json", "private", True),
@@ -98,6 +102,8 @@ def main():
     ap.add_argument("--sets", nargs="+", default=["blom", "kb"], choices=list(SETS))
     ap.add_argument("--tag", default="", help="suffix for the report file names (to keep runs apart)")
     ap.add_argument("--ablate", choices=sorted(ABLATIONS), help="switch off one part of the agent (added to the tag)")
+    ap.add_argument("--title-from-crumb", action="store_true",
+                    help="clause title from the breadcrumb in the clause text, else the set's section (added to the tag)")
     a = ap.parse_args()
     rerank = not a.no_rerank and a.mode != "bm25"
     r = RegulationRetriever()
@@ -107,7 +113,7 @@ def main():
     agent = RetrievalAgent(r, llm=llm, ablate=[a.ablate] if a.ablate else [])
     report = {"config": {"mode": a.mode, "rerank": rerank, "llm": llm.model if llm else None,
                          "search_depth": SEARCH_DEPTH, "pool_size": POOL_SIZE, "ablate": a.ablate,
-                         "llm_cache": bool(llm and llm.cache)}, "sets": {}}
+                         "llm_cache": bool(llm and llm.cache), "title_from_crumb": a.title_from_crumb}, "sets": {}}
     invalid = []
     for name in a.sets:
         path, fund_type, use_title = SETS[name]
@@ -115,7 +121,10 @@ def main():
         for q in json.loads(path.read_text(encoding="utf-8")):
             kw = dict(mode=a.mode, fund_type=fund_type, rerank=rerank)
             base = r.search(q["query"], k=SEARCH_DEPTH, **kw)
-            out = agent.run(q["query"], title=q.get("section") if use_title else None, k=5, **kw)
+            title = q.get("section") if use_title else None
+            if use_title and a.title_from_crumb:
+                title = part_heading(q["query"], title)         # as the orchestrator passes it
+            out = agent.run(q["query"], title=title, k=5, **kw)
             steps = {s["action"]: s for s in out["steps"]}
             hits = out["hits"]
             sel = [h["section_key"] for h in hits if h["selected"]] if any(h["selected"] is not None for h in hits) else None
@@ -146,6 +155,7 @@ def main():
     tag = f"{a.mode}{'_rerank' if rerank else ''}{'_llm' if llm else ''}"
     tag += ("" if a.sets == ["blom", "kb"] else "_" + "_".join(a.sets)) + (f"_{a.tag}" if a.tag else "")
     tag += f"_{a.ablate}" if a.ablate else ""
+    tag += "_crumbtitle" if a.title_from_crumb else ""
     out.mkdir(parents=True, exist_ok=True)
     (out / f"report_{tag}.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     lines = [f"# Retrieval agent vs plain search — mode={a.mode}, rerank={rerank}, llm={report['config']['llm']}, "

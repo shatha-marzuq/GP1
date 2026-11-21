@@ -101,3 +101,19 @@ def test_segmentation_agent_failure_falls_back_to_the_rules(monkeypatch):
     out = graph.invoke({"review_id": "t", "file_path": "t.pdf", "results": []})["output"]
     assert out["segmentation"]["status"] == "error" and "no API key" in out["segmentation"]["summary"]
     assert [c["clause_id"] for c in out["clauses"]] == ["C001", "C002"]
+
+
+def test_agent_gets_the_clause_heading_not_the_first_line_of_a_part():
+    """A long clause is split into parts; a later part's "title" is only its first line. The Retrieval Agent must
+    get the clause's own heading (section_title); the output keeps "title" for display."""
+    seen = []
+
+    class AgentSpy(StubRetriever):
+        def run(self, text, title=None, k=5, **kwargs):
+            seen.append(title)
+            return {"hits": super().search(text, k), "topics": [], "steps": []}
+    part2 = {**CLAUSES[0], "title": "لتجنب دفع توزيعات ضئيلة على مالكي الوحدات",
+             "section_title": "5. وصف لغرض الصندوق وأهدافه، وسياسة توزيع الأرباح على مالكي الوحدات:"}
+    out = run(AgentSpy(), clauses=[part2, CLAUSES[1]])["output"]
+    assert sorted(seen) == sorted([part2["section_title"], "الاسترداد"])   # no section_title: falls back to title
+    assert out["clauses"][0]["title"] == part2["title"]

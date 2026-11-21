@@ -32,26 +32,27 @@ The table compares the full Regulatory Retrieval Agent with plain vector search 
 
 | File | Pages | Type | OCR pages | Clauses | Total | Document Processing (extraction + segmentation) | Retrieval | Collection | Total per clause | Failures |
 |---|---|---|---|---|---|---|---|---|---|---|
+| A00112-232.pdf | 28 | text | 0 | 67 | 240.65 s (4.01 min) | 10.12 s (2.29 s + 7.83 s) | 230.48 s (3.84 min) | 0.01 s | 3.59 s | none |
 | T&C - Blominvest IPO Fund.pdf | 22 | text | 0 | 52 | 203.08 s (3.38 min) | 9.61 s (1.81 s + 7.80 s) | 193.47 s (3.22 min) | 0.00 s | 3.90 s | none |
 | mulkia.pdf | 35 | text | 0 | 80 | 308.50 s (5.14 min) | 13.77 s (3.25 s + 10.51 s) | 294.72 s (4.91 min) | 0.00 s | 3.86 s | none |
 
 End-to-end time of one review, from the start of the pipeline (file uploaded) to the final results: the Document Processing Agent (text extraction, with OCR for scanned pages, then clause segmentation reviewed by its LLM), regulation retrieval for every clause by the Regulatory Retrieval Agent (8 clauses in parallel), and collection of the results.
 
-*Method:* 2 T&C file(s) — T&C - Blominvest IPO Fund.pdf (22 pages, text), mulkia.pdf (35 pages, text); each file processed once; LLM answer cache off; embedding and reranker models loaded before timing (load time 15.33 s, excluded); hardware: Mac17,2 (Apple M5, 16.0 GB RAM, Apple MPS (GPU)); retrieval LLM openai / gpt-4o, segmentation LLM gpt-5-mini.
+*Method:* 3 T&C file(s) — A00112-232.pdf (28 pages, text), T&C - Blominvest IPO Fund.pdf (22 pages, text), mulkia.pdf (35 pages, text); each file processed once; LLM answer cache off; embedding and reranker models loaded before timing (load time 15.33 s, excluded); hardware: Mac17,2 (Apple M5, 16.0 GB RAM, Apple MPS (GPU)); retrieval LLM openai / gpt-4o, segmentation LLM gpt-5-mini.
 
 ## Table: Average processing time per stage
 
 | Stage | Mean | Median | Min | Max | Share of mean total |
 |---|---|---|---|---|---|
-| Document Processing — extraction (docproc / OCR) | 2.53 s | 2.53 s | 1.81 s | 3.25 s | 1.0 % |
-| Document Processing — segmentation (LLM review) | 9.16 s | 9.16 s | 7.80 s | 10.51 s | 3.6 % |
-| **Document Processing Agent (extraction + segmentation)** | 11.69 s | 11.69 s | 9.61 s | 13.77 s | 4.6 % |
-| Retrieval (all clauses, parallel) | 244.09 s (4.07 min) | 244.09 s (4.07 min) | 193.47 s (3.22 min) | 294.72 s (4.91 min) | 95.4 % |
-| Collection | 0.00 s | 0.00 s | 0.00 s | 0.00 s | 0.0 % |
-| Total | 255.79 s (4.26 min) | 255.79 s (4.26 min) | 203.08 s (3.38 min) | 308.50 s (5.14 min) | 100.0 % |
-| Retrieval per clause (wall time / clauses) | 3.70 s | 3.70 s | 3.68 s | 3.72 s | – |
-| Total per clause | 3.88 s | 3.88 s | 3.86 s | 3.90 s | – |
+| Document Processing — extraction (docproc / OCR) | 2.45 s | 2.29 s | 1.81 s | 3.25 s | 1.0 % |
+| Document Processing — segmentation (LLM review) | 8.71 s | 7.83 s | 7.80 s | 10.51 s | 3.5 % |
+| **Document Processing Agent (extraction + segmentation)** | 11.17 s | 10.12 s | 9.61 s | 13.77 s | 4.5 % |
+| Retrieval (all clauses, parallel) | 239.56 s (3.99 min) | 230.48 s (3.84 min) | 193.47 s (3.22 min) | 294.72 s (4.91 min) | 95.5 % |
+| Collection | 0.00 s | 0.00 s | 0.00 s | 0.01 s | 0.0 % |
+| Total | 250.74 s (4.18 min) | 240.65 s (4.01 min) | 203.08 s (3.38 min) | 308.50 s (5.14 min) | 100.0 % |
+| Retrieval per clause (wall time / clauses) | 3.61 s | 3.68 s | 3.44 s | 3.72 s | – |
+| Total per clause | 3.78 s | 3.86 s | 3.59 s | 3.90 s | – |
 
-The retrieval stage takes the largest share of the processing time (95.4 % of the mean total of 255.79 s (4.26 min)). Per-clause times are the stage's wall time divided by the number of clauses (clauses are processed in parallel).
+The retrieval stage takes the largest share of the processing time (95.5 % of the mean total of 250.74 s (4.18 min)). Per-clause times are the stage's wall time divided by the number of clauses (clauses are processed in parallel).
 
-*Method:* mean, median, minimum and maximum over the 2 file(s) of the previous table; same setup.
+*Method:* mean, median, minimum and maximum over the 3 file(s) of the previous table; same setup.
